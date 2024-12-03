@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 
@@ -44,11 +43,9 @@ abstract class ProductRemoteDataSource {
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final FirebaseFirestore firestore;
-  final FirebaseStorage storage;
 
   ProductRemoteDataSourceImpl({
     required this.firestore,
-    required this.storage,
   });
 
   @override
@@ -213,14 +210,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       if (!file.path.toLowerCase().endsWith('.csv')) {
         throw ServerException(message: 'Invalid file format');
       }
-
-      // Upload file ke Firebase Storage untuk backup
-      String fileName =
-          'bulk_uploads/${DateTime.now().millisecondsSinceEpoch}.csv';
-      UploadTask uploadTask = storage.ref(fileName).putFile(file);
-
-      // Tunggu upload selesai
-      await uploadTask;
 
       // Baca konten file CSV
       String csvString = await file.readAsString();

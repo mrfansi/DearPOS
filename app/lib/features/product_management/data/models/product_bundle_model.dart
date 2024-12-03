@@ -3,42 +3,16 @@ import 'package:app/features/product_management/domain/entities/product.dart';
 import 'package:app/features/product_management/data/models/product_model.dart';
 
 class ProductBundleModel extends ProductBundle {
-  @override
-  final String id;
-  @override
-  final String name;
-  @override
-  final String description;
-  @override
-  final double bundlePrice;
-  @override
-  final List<Product> products;
-  @override
-  final bool isActive;
-  @override
-  final DateTime createdAt;
-  @override
-  final DateTime updatedAt;
-
   const ProductBundleModel({
-    required this.id,
-    required this.name,
-    this.description = '',
-    required this.bundlePrice,
-    required this.products,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
-  }) : super(
-          id: id,
-          name: name,
-          description: description,
-          bundlePrice: bundlePrice,
-          products: products,
-          isActive: isActive,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-        );
+    required super.id,
+    required super.name,
+    super.description,
+    required super.bundlePrice,
+    required super.products,
+    required super.isActive,
+    required super.createdAt,
+    required super.updatedAt,
+  });
 
   @override
   void validate() {

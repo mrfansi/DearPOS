@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -16,35 +15,21 @@ import 'product_remote_data_source_test.mocks.dart';
 
 @GenerateMocks([
   FirebaseFirestore, 
-  FirebaseStorage,
 ], customMocks: [
   MockSpec<CollectionReference<Map<String, dynamic>>>(as: #GeneratedMockCollectionReference),
   MockSpec<QuerySnapshot<Map<String, dynamic>>>(as: #GeneratedMockQuerySnapshot),
-  MockSpec<Reference>(as: #MockReference),
-  MockSpec<UploadTask>(as: #MockUploadTask),
 ])
 
 void main() {
   late ProductRemoteDataSourceImpl dataSource;
   late FakeFirebaseFirestore fakeFirestore;
-  late MockFirebaseStorage mockStorage;
-  late MockReference mockReference;
-  late MockUploadTask mockUploadTask;
   const uuid = Uuid();
 
   setUp(() {
     fakeFirestore = FakeFirebaseFirestore();
-    mockStorage = MockFirebaseStorage();
-    mockReference = MockReference();
-    mockUploadTask = MockUploadTask();
-
-    // Configure mock storage to return a mock reference
-    when(mockStorage.ref(any)).thenReturn(mockReference);
-    when(mockReference.putFile(any)).thenReturn(mockUploadTask);
 
     dataSource = ProductRemoteDataSourceImpl(
       firestore: fakeFirestore,
-      storage: mockStorage,
     );
   });
 
@@ -89,9 +74,6 @@ void main() {
 
   group('createProduct', () {
     test('should create a product in Firestore and return the created product', () async {
-      // Arrange
-      when(mockReference.getDownloadURL()).thenAnswer((_) async => 'test_url');
-
       // Act
       final result = await dataSource.createProduct(testProductModel);
 
@@ -106,9 +88,6 @@ void main() {
     });
 
     test('should throw ServerException when product creation fails', () async {
-      // Arrange
-      when(mockReference.getDownloadURL()).thenThrow(Exception('Storage error'));
-
       // Act & Assert
       expect(
         () => dataSource.createProduct(testProductModel), 
@@ -121,7 +100,6 @@ void main() {
     test('should successfully bulk upload products from a CSV file', () async {
       // Arrange
       final csvFile = File('test/fixtures/products_valid.csv');
-      when(mockReference.getDownloadURL()).thenAnswer((_) async => 'test_url');
 
       // Act
       final result = await dataSource.bulkUploadProducts(csvFile);
@@ -134,7 +112,6 @@ void main() {
     test('should handle duplicate products during bulk upload', () async {
       // Arrange
       final csvFile = File('test/fixtures/products_with_duplicates.csv');
-      when(mockReference.getDownloadURL()).thenAnswer((_) async => 'test_url');
 
       // Act
       final result = await dataSource.bulkUploadProducts(csvFile);

@@ -3,7 +3,6 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:app/features/product_management/data/datasources/product_local_data_source.dart';
 import 'package:app/features/product_management/data/datasources/product_remote_data_source.dart';
@@ -75,7 +74,6 @@ Future<void> init() async {
   sl.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(
       firestore: FirebaseFirestore.instance,
-      storage: FirebaseStorage.instance,
     ),
   );
   

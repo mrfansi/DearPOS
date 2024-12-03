@@ -269,7 +269,113 @@ class _VariantManagementCardState extends State<VariantManagementCard> {
   }
 
   void _showEditVariantDialog(ProductVariant variant) {
-    // TODO: Implement variant editing dialog
+    final nameController = TextEditingController(text: variant.name);
+    final priceController = TextEditingController(text: variant.price.toString());
+    final stockController = TextEditingController(text: variant.stock.toString());
+    final minStockController = TextEditingController(text: variant.minStock.toString());
+    final skuController = TextEditingController(text: variant.sku ?? '');
+    final barcodeController = TextEditingController(text: variant.barcode ?? '');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Variant'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: priceController,
+                decoration: const InputDecoration(labelText: 'Price'),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: stockController,
+                decoration: const InputDecoration(labelText: 'Stock'),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: minStockController,
+                decoration: const InputDecoration(labelText: 'Minimum Stock'),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: skuController,
+                decoration: const InputDecoration(labelText: 'SKU'),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: barcodeController,
+                decoration: const InputDecoration(labelText: 'Barcode'),
+              ),
+              const SizedBox(height: 16),
+              Text('Attributes:', style: Theme.of(context).textTheme.titleSmall),
+              ...variant.attributes.entries.map(
+                (entry) => Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 8),
+                  child: Text('${entry.key}: ${entry.value}'),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              final updatedVariant = ProductVariant(
+                id: variant.id,
+                productId: variant.productId,
+                name: nameController.text,
+                attributes: variant.attributes,
+                price: double.tryParse(priceController.text) ?? variant.price,
+                stock: int.tryParse(stockController.text) ?? variant.stock,
+                minStock: int.tryParse(minStockController.text) ?? variant.minStock,
+                sku: skuController.text.isEmpty ? null : skuController.text,
+                barcode: barcodeController.text.isEmpty ? null : barcodeController.text,
+                isActive: variant.isActive,
+                createdAt: variant.createdAt,
+                updatedAt: DateTime.now(),
+              );
+
+              final updatedVariants = widget.product.variants.map(
+                (v) => v.id == variant.id ? updatedVariant : v,
+              ).toList();
+
+              final updatedProduct = widget.product.copyWith(
+                variants: updatedVariants,
+                updatedAt: DateTime.now(),
+              );
+
+              context.read<ProductBloc>().add(UpdateProductEvent(updatedProduct));
+
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    ).then((_) {
+      // Dispose controllers
+      nameController.dispose();
+      priceController.dispose();
+      stockController.dispose();
+      minStockController.dispose();
+      skuController.dispose();
+      barcodeController.dispose();
+    });
   }
 
   void _showDisableVariantsConfirmation() {
