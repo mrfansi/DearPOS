@@ -169,17 +169,11 @@ class ProductFilterDialogState extends State<ProductFilterDialog> {
           onPressed: () {
             // Apply filters
             context.read<ProductBloc>().add(
-                  FilterProducts(
+                  FilterProductsEvent(
+                    categoryId: _selectedCategory == 'All' ? null : _selectedCategory,
                     minPrice: _priceRange.start,
                     maxPrice: _priceRange.end,
-                    minStock: _stockRange.start.toInt(),
-                    maxStock: _stockRange.end.toInt(),
-                    category:
-                        _selectedCategory == 'All' ? null : _selectedCategory,
-                    lowStockOnly: _lowStockOnly,
-                    outOfStockOnly: _outOfStockOnly,
-                    expiryDateFrom: _expiryDateFrom,
-                    expiryDateTo: _expiryDateTo,
+                    isActive: !_outOfStockOnly,
                   ),
                 );
             Navigator.of(context).pop();

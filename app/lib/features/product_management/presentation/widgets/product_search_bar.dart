@@ -25,7 +25,7 @@ class _ProductSearchBarState extends State<ProductSearchBar> {
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      context.read<ProductBloc>().add(SearchProductEvent(query: value));
+      context.read<ProductBloc>().add(SearchProductEvent(value));
     });
   }
 
@@ -42,7 +42,7 @@ class _ProductSearchBarState extends State<ProductSearchBar> {
             icon: const Icon(Icons.clear),
             onPressed: () {
               _searchController.clear();
-              context.read<ProductBloc>().add(LoadProducts());
+              context.read<ProductBloc>().add(const GetProductsEvent());
             },
           ),
           border: OutlineInputBorder(

@@ -215,10 +215,20 @@ class MockProductRemoteDataSource extends _i1.Mock
       ) as _i6.Future<void>);
 
   @override
-  _i6.Future<List<_i4.ProductBundleModel>> getBundles() => (super.noSuchMethod(
+  _i6.Future<List<_i4.ProductBundleModel>> getBundles({
+    int? limit,
+    int? offset,
+    bool? isActive,
+  }) =>
+      (super.noSuchMethod(
         Invocation.method(
           #getBundles,
           [],
+          {
+            #limit: limit,
+            #offset: offset,
+            #isActive: isActive,
+          },
         ),
         returnValue: _i6.Future<List<_i4.ProductBundleModel>>.value(
             <_i4.ProductBundleModel>[]),

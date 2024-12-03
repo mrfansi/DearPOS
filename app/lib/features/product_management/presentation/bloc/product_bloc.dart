@@ -13,7 +13,8 @@ import 'package:app/features/product_management/domain/usecases/create_bundle.da
 import 'package:app/features/product_management/domain/usecases/create_product.dart';
 import 'package:app/features/product_management/domain/usecases/delete_bundle.dart';
 import 'package:app/features/product_management/domain/usecases/delete_product.dart';
-import 'package:app/features/product_management/domain/usecases/get_bundle.dart' as get_bundle_usecase;
+import 'package:app/features/product_management/domain/usecases/get_bundle.dart'
+    as get_bundle_usecase;
 import 'package:app/features/product_management/domain/usecases/get_bundles.dart';
 import 'package:app/features/product_management/domain/usecases/get_products.dart';
 import 'package:app/features/product_management/domain/usecases/get_products_by_category.dart';
@@ -78,9 +79,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         bundlePrice: event.bundle.bundlePrice,
         productIds: event.bundle.products.map((p) => p.id).toList(),
       );
-      
+
       final result = await createBundle(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (bundle) => emit(BundleOperationSuccess(
@@ -105,9 +106,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         productIds: event.bundle.products.map((p) => p.id).toList(),
         isActive: event.bundle.isActive,
       );
-      
+
       final result = await updateBundle(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (bundle) => emit(BundleOperationSuccess(
@@ -125,7 +126,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       emit(const ProductLoading());
       final result = await deleteBundle(DeleteBundleParams(id: event.bundleId));
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (_) => emit(BundleOperationSuccess(
@@ -147,9 +148,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         offset: event.offset,
         isActive: event.isActive,
       );
-      
+
       final result = await getBundles(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (bundles) => emit(BundlesLoadSuccess(
@@ -166,8 +167,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       GetBundleEvent event, Emitter<ProductState> emit) async {
     try {
       emit(const ProductLoading());
-      final result = await getBundle(get_bundle_usecase.GetBundleParams(id: event.bundleId));
-      
+      final result = await getBundle(
+          get_bundle_usecase.GetBundleParams(id: event.bundleId));
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (bundle) => emit(BundleLoadSuccess(bundle: bundle)),
@@ -182,7 +184,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       emit(const ProductLoading());
       final result = await getProducts(NoParams());
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (products) => emit(ProductsLoadSuccess(products: products)),
@@ -198,7 +200,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(const ProductLoading());
       final params = CreateProductParams(product: event.product);
       final result = await createProduct(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (product) => emit(ProductOperationSuccess(
@@ -217,7 +219,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(const ProductLoading());
       final params = UpdateProductParams(product: event.product);
       final result = await updateProduct(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (product) => emit(ProductOperationSuccess(
@@ -236,7 +238,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(const ProductLoading());
       final params = DeleteProductParams(id: event.productId);
       final result = await deleteProduct(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (_) => emit(ProductOperationSuccess(
@@ -255,7 +257,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(const ProductLoading());
       final params = SearchProductsParams(query: event.query);
       final result = await searchProducts(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (products) => emit(ProductsLoadSuccess(products: products)),
@@ -271,7 +273,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(const ProductLoading());
       final params = GetProductsByCategoryParams(category: event.categoryId);
       final result = await getProductsByCategory(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (products) => emit(ProductsLoadSuccess(products: products)),
@@ -287,7 +289,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(const ProductLoading());
       final file = File(event.filePath);
       final result = await bulkUploadProducts(file);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (_) => emit(const ProductOperationSuccess(
@@ -304,12 +306,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       FilterProductsEvent event, Emitter<ProductState> emit) async {
     try {
       emit(const ProductLoading());
-      final params = SearchProductsParams(
+      const params = SearchProductsParams(
         query: '',
       );
 
       final result = await searchProducts(params);
-      
+
       result.fold(
         (failure) => emit(ProductError(message: _mapFailureToMessage(failure))),
         (products) {

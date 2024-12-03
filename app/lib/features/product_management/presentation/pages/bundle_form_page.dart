@@ -219,7 +219,7 @@ class _ProductSelectionDialog extends StatelessWidget {
         builder: (context, state) {
           if (state is ProductLoading) {
             return const CircularProgressIndicator();
-          } else if (state is ProductLoaded) {
+          } else if (state is ProductsLoadSuccess) {
             return SizedBox(
               width: double.maxFinite,
               child: ListView.builder(

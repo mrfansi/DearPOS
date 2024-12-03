@@ -129,7 +129,6 @@ class ProductBundleModel extends ProductBundle {
     );
   }
 
-  @override
   ProductBundle toEntity() {
     return ProductBundle(
       id: id,

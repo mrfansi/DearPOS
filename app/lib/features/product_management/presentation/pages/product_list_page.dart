@@ -50,13 +50,13 @@ class ProductListPage extends StatelessWidget {
             child: BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
                 if (state is ProductInitial) {
-                  context.read<ProductBloc>().add(LoadProducts());
+                  context.read<ProductBloc>().add(const GetProductsEvent());
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state is ProductLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (state is ProductsLoaded) {
+                if (state is ProductsLoadSuccess) {
                   return ListView.builder(
                     itemCount: state.products.length,
                     itemBuilder: (context, index) {

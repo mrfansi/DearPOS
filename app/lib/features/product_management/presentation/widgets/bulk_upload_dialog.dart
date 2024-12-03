@@ -39,7 +39,7 @@ class BulkUploadDialog extends StatelessWidget {
       if (!currentContext.mounted) return;
       
       currentContext.read<ProductBloc>().add(
-        BulkUploadProductsEvent(filePath: filePath)
+        BulkUploadProductsEvent(filePath)
       );
       Navigator.pop(currentContext);
     }

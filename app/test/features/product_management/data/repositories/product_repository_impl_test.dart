@@ -38,23 +38,25 @@ void main() {
     );
   });
 
+  final testDateTime = DateTime(2024, 1, 1);
   final testProductModels = [
     ProductModel(
       id: '1',
       name: 'Test Product',
       description: 'Test Description',
       category: 'Test Category',
+      categoryId: '1',
       price: 10.0,
       stock: 100,
       minStock: 10,
       barcode: '123456',
       imageUrl: 'test_url',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: testDateTime,
+      updatedAt: testDateTime,
     )
   ];
 
-  final List<Product> testProducts = testProductModels;
+  final List<Product> testProducts = testProductModels.map((model) => model.toEntity()).toList();
   final testProductModel = testProductModels[0];
 
   group('GetProducts', () {
@@ -63,7 +65,7 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.getProducts())
           .thenAnswer((_) async => testProductModels);
-      when(mockLocalDataSource.cacheProducts(any)).thenAnswer((_) async {});
+      when(mockLocalDataSource.cacheProducts(testProductModels)).thenAnswer((_) async {});
 
       // Act
       await repository.getProducts();
@@ -77,15 +79,15 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.getProducts())
           .thenAnswer((_) async => testProductModels);
-      when(mockLocalDataSource.cacheProducts(any)).thenAnswer((_) async {});
+      when(mockLocalDataSource.cacheProducts(testProductModels)).thenAnswer((_) async {});
 
       // Act
       final result = await repository.getProducts();
 
       // Assert
       verify(mockRemoteDataSource.getProducts()).called(1);
-      verify(mockLocalDataSource.cacheProducts(any)).called(1);
-      expect(result, equals(Right(testProducts)));
+      verify(mockLocalDataSource.cacheProducts(testProductModels)).called(1);
+      expect(result, equals(Right<Failure, List<Product>>(testProducts)));
     });
 
     test('should return locally cached data when the device is offline',
@@ -101,7 +103,7 @@ void main() {
       // Assert
       verifyZeroInteractions(mockRemoteDataSource);
       verify(mockLocalDataSource.getLastProducts()).called(1);
-      expect(result, equals(Right(testProducts)));
+      expect(result, equals(Right<Failure, List<Product>>(testProducts)));
     });
 
     test(
@@ -109,14 +111,14 @@ void main() {
         () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.getProducts()).thenThrow(ServerException());
+      when(mockRemoteDataSource.getProducts()).thenThrow(ServerException(message: 'Gagal mengambil produk dari server'));
 
       // Act
       final result = await repository.getProducts();
 
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
-      expect(result, equals(const Left(ServerFailure())));
+      expect(result, equals(Left<Failure, List<Product>>(ServerFailure(message: 'Gagal mengambil produk dari server'))));
     });
   });
 
@@ -129,13 +131,13 @@ void main() {
       when(mockLocalDataSource.cacheProduct(any)).thenAnswer((_) async {});
 
       // Act
-      final result = await repository.createProduct(testProductModel);
+      final result = await repository.createProduct(testProductModel.toEntity());
 
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
       verify(mockRemoteDataSource.createProduct(any)).called(1);
       verify(mockLocalDataSource.cacheProduct(any)).called(1);
-      expect(result, equals(Right(testProductModel)));
+      expect(result, equals(Right<Failure, Product>(testProductModel.toEntity())));
     });
 
     test('should return server failure when creating a product fails',
@@ -143,22 +145,22 @@ void main() {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.createProduct(any))
-          .thenThrow(ServerException());
+          .thenThrow(ServerException(message: 'Gagal membuat produk di server'));
 
       // Act
-      final result = await repository.createProduct(testProductModel);
+      final result = await repository.createProduct(testProductModel.toEntity());
 
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
-      expect(result, equals(const Left(ServerFailure())));
+      expect(result, equals(Left<Failure, Product>(ServerFailure(message: 'Gagal membuat produk di server'))));
     });
   });
 
   group('BulkUploadProducts', () {
     final testFile = File('/tmp/test_upload.csv');
     final testBulkUploadResult = BulkUploadResult(
-      totalRows: 2,
-      successfulUploads: 2,
+      totalRows: 1,
+      successfulUploads: 1,
       skippedDuplicates: 0,
       errorMessages: [],
       uploadedProducts: testProductModels,
@@ -169,9 +171,6 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.bulkUploadProducts(testFile))
           .thenAnswer((_) async => testBulkUploadResult);
-      when(mockLocalDataSource
-              .cacheProducts(testBulkUploadResult.uploadedProducts))
-          .thenAnswer((_) async {});
 
       // Act
       final result = await repository.bulkUploadProducts(testFile);
@@ -179,14 +178,14 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
       verify(mockRemoteDataSource.bulkUploadProducts(testFile)).called(1);
-      expect(result, equals(const Right(null)));
+      expect(result, equals(Right<Failure, BulkUploadResult>(testBulkUploadResult)));
     });
 
     test('should return server failure when bulk upload fails', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.bulkUploadProducts(testFile))
-          .thenThrow(ServerException());
+          .thenThrow(ServerException(message: 'Gagal mengunggah produk'));
 
       // Act
       final result = await repository.bulkUploadProducts(testFile);
@@ -194,7 +193,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
       verify(mockRemoteDataSource.bulkUploadProducts(testFile)).called(1);
-      expect(result, equals(const Left(ServerFailure())));
+      expect(result, equals(Left<Failure, BulkUploadResult>(ServerFailure(message: 'Gagal mengunggah produk'))));
     });
   });
 }

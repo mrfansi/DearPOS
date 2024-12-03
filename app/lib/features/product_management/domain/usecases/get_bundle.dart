@@ -4,7 +4,6 @@ import 'package:app/core/usecases/usecase.dart';
 import 'package:app/core/error/failures.dart';
 import 'package:app/features/product_management/domain/entities/product_bundle.dart';
 import 'package:app/features/product_management/domain/repositories/product_repository.dart';
-import 'package:app/features/product_management/domain/usecases/bundle_params.dart';
 
 class GetBundle implements UseCase<ProductBundle, GetBundleParams> {
   final ProductRepository repository;
@@ -19,10 +18,9 @@ class GetBundle implements UseCase<ProductBundle, GetBundleParams> {
 
 class GetBundleParams extends Equatable {
   final String id;
-  final ProductBundle? bundle;
 
-  const GetBundleParams({required this.id, this.bundle});
+  const GetBundleParams({required this.id});
 
   @override
-  List<Object?> get props => [id, bundle];
+  List<Object?> get props => [id];
 }

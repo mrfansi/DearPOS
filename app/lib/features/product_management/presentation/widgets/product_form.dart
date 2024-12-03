@@ -19,28 +19,29 @@ class ProductForm extends StatefulWidget {
 }
 
 class _ProductFormState extends State<ProductForm> {
-  final _formKey = GlobalKey<FormState>();
-  late TextEditingController _nameController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _categoryController;
-  late TextEditingController _priceController;
-  late TextEditingController _stockController;
-  late TextEditingController _barcodeController;
-  late TextEditingController _imageUrlController;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _categoryIdController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _stockController = TextEditingController();
+  final TextEditingController _barcodeController = TextEditingController();
+  final TextEditingController _imageUrlController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.product?.name);
-    _descriptionController =
-        TextEditingController(text: widget.product?.description);
-    _categoryController = TextEditingController(text: widget.product?.category);
-    _priceController =
-        TextEditingController(text: widget.product?.price.toString() ?? '0.0');
-    _stockController =
-        TextEditingController(text: widget.product?.stock.toString() ?? '0');
-    _barcodeController = TextEditingController(text: widget.product?.barcode);
-    _imageUrlController = TextEditingController(text: widget.product?.imageUrl);
+    if (widget.product != null) {
+      _nameController.text = widget.product!.name;
+      _descriptionController.text = widget.product!.description ?? '';
+      _categoryController.text = widget.product!.category;
+      _categoryIdController.text = widget.product!.categoryId;
+      _priceController.text = widget.product!.price.toString();
+      _stockController.text = widget.product!.stock.toString();
+      _barcodeController.text = widget.product!.barcode ?? '';
+      _imageUrlController.text = widget.product!.imageUrl ?? '';
+    }
   }
 
   @override
@@ -48,6 +49,7 @@ class _ProductFormState extends State<ProductForm> {
     _nameController.dispose();
     _descriptionController.dispose();
     _categoryController.dispose();
+    _categoryIdController.dispose();
     _priceController.dispose();
     _stockController.dispose();
     _barcodeController.dispose();
@@ -88,12 +90,24 @@ class _ProductFormState extends State<ProductForm> {
           TextFormField(
             controller: _categoryController,
             decoration: const InputDecoration(
-              labelText: 'Category*',
-              hintText: 'Enter product category',
+              labelText: 'Category',
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter product category';
+                return 'Please enter a category';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _categoryIdController,
+            decoration: const InputDecoration(
+              labelText: 'Category ID',
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a category ID';
               }
               return null;
             },
@@ -174,6 +188,7 @@ class _ProductFormState extends State<ProductForm> {
         name: _nameController.text,
         description: _descriptionController.text,
         category: _categoryController.text,
+        categoryId: _categoryIdController.text,
         price: double.parse(_priceController.text),
         stock: int.parse(_stockController.text),
         barcode: _barcodeController.text,

@@ -1,0 +1,3 @@
+name,description,category,categoryId,price,stock,minStock,barcode,imageUrl
+Test Product,Test Description,Test Category,category_123,100.0,10,5,123456,test_url
+Test Product,Test Description,Test Category,category_123,100.0,10,5,123456,test_url

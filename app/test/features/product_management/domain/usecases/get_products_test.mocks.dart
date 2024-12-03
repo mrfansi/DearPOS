@@ -266,11 +266,20 @@ class MockProductRepository extends _i1.Mock implements _i3.ProductRepository {
       ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>> getBundles() =>
+  _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>> getBundles({
+    int? limit,
+    int? offset,
+    bool? isActive,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #getBundles,
           [],
+          {
+            #limit: limit,
+            #offset: offset,
+            #isActive: isActive,
+          },
         ),
         returnValue:
             _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>>.value(
@@ -279,6 +288,11 @@ class MockProductRepository extends _i1.Mock implements _i3.ProductRepository {
           Invocation.method(
             #getBundles,
             [],
+            {
+              #limit: limit,
+              #offset: offset,
+              #isActive: isActive,
+            },
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>>);
