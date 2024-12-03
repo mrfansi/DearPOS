@@ -9,6 +9,8 @@ import 'dart:io' as _i7;
 import 'package:app/core/error/failures.dart' as _i5;
 import 'package:app/features/product_management/domain/entities/product.dart'
     as _i6;
+import 'package:app/features/product_management/domain/entities/product_bundle.dart'
+    as _i8;
 import 'package:app/features/product_management/domain/repositories/product_repository.dart'
     as _i3;
 import 'package:dartz/dartz.dart' as _i2;
@@ -134,6 +136,24 @@ class MockProductRepository extends _i1.Mock implements _i3.ProductRepository {
       ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
 
   @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> bulkUploadProducts(
+          _i7.File? file) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #bulkUploadProducts,
+          [file],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
+          this,
+          Invocation.method(
+            #bulkUploadProducts,
+            [file],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+
+  @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.Product>>> searchProducts(
           String? query) =>
       (super.noSuchMethod(
@@ -191,20 +211,94 @@ class MockProductRepository extends _i1.Mock implements _i3.ProductRepository {
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Product>>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> bulkUploadProducts(
-          _i7.File? file) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>> createBundle(
+          _i8.ProductBundle? bundle) =>
       (super.noSuchMethod(
         Invocation.method(
-          #bulkUploadProducts,
-          [file],
+          #createBundle,
+          [bundle],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
-            _FakeEither_0<_i5.Failure, void>(
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>>.value(
+                _FakeEither_0<_i5.Failure, _i8.ProductBundle>(
           this,
           Invocation.method(
-            #bulkUploadProducts,
-            [file],
+            #createBundle,
+            [bundle],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>> updateBundle(
+          _i8.ProductBundle? bundle) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateBundle,
+          [bundle],
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>>.value(
+                _FakeEither_0<_i5.Failure, _i8.ProductBundle>(
+          this,
+          Invocation.method(
+            #updateBundle,
+            [bundle],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> deleteBundle(String? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteBundle,
+          [id],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #deleteBundle,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>> getBundles() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getBundles,
+          [],
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i8.ProductBundle>>(
+          this,
+          Invocation.method(
+            #getBundles,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i8.ProductBundle>>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>> getBundle(
+          String? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getBundle,
+          [id],
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>>.value(
+                _FakeEither_0<_i5.Failure, _i8.ProductBundle>(
+          this,
+          Invocation.method(
+            #getBundle,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i8.ProductBundle>>);
 }

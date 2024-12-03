@@ -18,6 +18,10 @@ abstract class ProductRepository {
   Future<Either<Failure, ProductBundle>> createBundle(ProductBundle bundle);
   Future<Either<Failure, ProductBundle>> updateBundle(ProductBundle bundle);
   Future<Either<Failure, bool>> deleteBundle(String id);
-  Future<Either<Failure, List<ProductBundle>>> getBundles();
+  Future<Either<Failure, List<ProductBundle>>> getBundles({
+    int? limit,
+    int? offset,
+    bool? isActive,
+  });
   Future<Either<Failure, ProductBundle>> getBundle(String id);
 }

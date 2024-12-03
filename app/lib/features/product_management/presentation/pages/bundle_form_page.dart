@@ -8,9 +8,9 @@ class BundleFormPage extends StatefulWidget {
   final ProductBundle? bundle;
 
   const BundleFormPage({
-    Key? key,
+    super.key,
     this.bundle,
-  }) : super(key: key);
+  });
 
   @override
   State<BundleFormPage> createState() => _BundleFormPageState();
@@ -53,12 +53,21 @@ class _BundleFormPageState extends State<BundleFormPage> {
       products: _selectedProducts,
       createdAt: widget.bundle?.createdAt ?? DateTime.now(),
       updatedAt: DateTime.now(),
+      isActive: widget.bundle?.isActive ?? true,
     );
 
-    if (widget.bundle == null) {
-      context.read<ProductBloc>().add(CreateBundleEvent(bundle));
-    } else {
-      context.read<ProductBloc>().add(UpdateBundleEvent(bundle));
+    try {
+      bundle.validate();
+      if (widget.bundle == null) {
+        context.read<ProductBloc>().add(CreateBundleEvent(bundle));
+      } else {
+        context.read<ProductBloc>().add(UpdateBundleEvent(bundle));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+      return;
     }
 
     Navigator.pop(context);
@@ -158,6 +167,7 @@ class _BundleFormPageState extends State<BundleFormPage> {
                     showDialog(
                       context: context,
                       builder: (context) => _ProductSelectionDialog(
+                        bundle: widget.bundle,
                         onProductSelected: (product) {
                           if (!_selectedProducts.contains(product)) {
                             setState(() {
@@ -177,7 +187,9 @@ class _BundleFormPageState extends State<BundleFormPage> {
                   child: ElevatedButton(
                     onPressed: _submitForm,
                     child: Text(
-                      widget.bundle == null ? 'Buat Bundle' : 'Simpan Perubahan',
+                      widget.bundle == null
+                          ? 'Buat Bundle'
+                          : 'Simpan Perubahan',
                     ),
                   ),
                 ),
@@ -191,12 +203,13 @@ class _BundleFormPageState extends State<BundleFormPage> {
 }
 
 class _ProductSelectionDialog extends StatelessWidget {
+  final ProductBundle? bundle;
   final Function(Product) onProductSelected;
 
   const _ProductSelectionDialog({
-    Key? key,
+    required this.bundle,
     required this.onProductSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

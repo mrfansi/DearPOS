@@ -70,13 +70,13 @@ void main() {
     test('should return a Failure when getting products fails', () async {
       // Arrange
       when(mockProductRepository.getProducts())
-          .thenAnswer((_) async => Left(ServerFailure()));
+          .thenAnswer((_) async => const Left(ServerFailure()));
 
       // Act
       final result = await useCase(NoParams());
 
       // Assert
-      expect(result, Left(ServerFailure()));
+      expect(result, const Left(ServerFailure()));
       verify(mockProductRepository.getProducts()).called(1);
       verifyNoMoreInteractions(mockProductRepository);
     });
@@ -90,7 +90,7 @@ void main() {
       final result = await useCase(NoParams());
 
       // Assert
-      expect(result, Left(ServerFailure()));
+      expect(result, const Left(ServerFailure()));
       verify(mockProductRepository.getProducts()).called(1);
       verifyNoMoreInteractions(mockProductRepository);
     });

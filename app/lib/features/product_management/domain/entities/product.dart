@@ -6,6 +6,7 @@ class Product extends Equatable {
   final String name;
   final String? description;
   final String category;
+  final String categoryId;
   final double price; // Base price
   final int stock; // Total stock of all variants
   final int minStock;
@@ -14,6 +15,7 @@ class Product extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final bool isDeleted;
+  final bool isActive;
   final List<StockMovement> stockMovements;
   final DateTime? expiryDate;
   final List<ProductVariant> variants;
@@ -25,6 +27,7 @@ class Product extends Equatable {
     required this.name,
     this.description,
     required this.category,
+    required this.categoryId,
     required this.price,
     required this.stock,
     this.minStock = 0,
@@ -33,6 +36,7 @@ class Product extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.isDeleted = false,
+    this.isActive = true,
     this.stockMovements = const [],
     this.expiryDate,
     this.variants = const [],
@@ -46,6 +50,7 @@ class Product extends Equatable {
         name,
         description,
         category,
+        categoryId,
         price,
         stock,
         minStock,
@@ -54,6 +59,7 @@ class Product extends Equatable {
         createdAt,
         updatedAt,
         isDeleted,
+        isActive,
         stockMovements,
         expiryDate,
         variants,
@@ -68,6 +74,7 @@ class Product extends Equatable {
     String? name,
     String? description,
     String? category,
+    String? categoryId,
     double? price,
     int? stock,
     int? minStock,
@@ -76,6 +83,7 @@ class Product extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isDeleted,
+    bool? isActive,
     List<StockMovement>? stockMovements,
     DateTime? expiryDate,
     List<ProductVariant>? variants,
@@ -87,6 +95,7 @@ class Product extends Equatable {
       name: name ?? this.name,
       description: description ?? this.description,
       category: category ?? this.category,
+      categoryId: categoryId ?? this.categoryId,
       price: price ?? this.price,
       stock: stock ?? this.stock,
       minStock: minStock ?? this.minStock,
@@ -95,6 +104,7 @@ class Product extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isDeleted: isDeleted ?? this.isDeleted,
+      isActive: isActive ?? this.isActive,
       stockMovements: stockMovements ?? this.stockMovements,
       expiryDate: expiryDate ?? this.expiryDate,
       variants: variants ?? this.variants,

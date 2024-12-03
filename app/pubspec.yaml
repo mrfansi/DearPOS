@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  meta: ^1.8.0
   barcode: ^2.2.4  # For generating barcode data
   barcode_widget: ^2.0.4  # For displaying barcodes
   # The following adds the Cupertino Icons font to your application.
@@ -37,7 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   equatable: ^2.0.7
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^8.0.0
+  bloc: ^8.0.0
   get_it: ^8.0.2
   internet_connection_checker: ^1.0.0+1
   shared_preferences: ^2.3.3
@@ -48,8 +50,8 @@ dependencies:
   cloud_firestore: ^4.13.6
   firebase_storage: ^11.6.0
   csv: ^5.0.2
+  uuid: ^4.3.3  # For generating unique identifiers
   path_provider: ^2.1.1
-  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

@@ -10,15 +10,17 @@ import 'package:app/features/product_management/data/models/product_bundle_model
 
 // Konstanta header untuk bulk upload
 const List<String> kBulkUploadHeaders = [
-  'name', 
-  'description', 
-  'category', 
-  'price', 
-  'stock', 
-  'minStock', 
+  'name',
+  'description',
+  'category',
+  'categoryId',
+  'price',
+  'stock',
+  'minStock',
   'barcode',
   'imageUrl',
-  'expiryDate'
+  'expiryDate',
+  'isActive'
 ];
 
 abstract class ProductRemoteDataSource {
@@ -32,7 +34,11 @@ abstract class ProductRemoteDataSource {
   Future<ProductBundleModel> createBundle(ProductBundleModel bundle);
   Future<ProductBundleModel> updateBundle(ProductBundleModel bundle);
   Future<void> deleteBundle(String id);
-  Future<List<ProductBundleModel>> getBundles();
+  Future<List<ProductBundleModel>> getBundles({
+    int? limit,
+    int? offset,
+    bool? isActive,
+  });
   Future<ProductBundleModel> getBundle(String id);
 }
 
@@ -59,7 +65,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         return ProductModel.fromJson(data);
       }).toList();
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to fetch products: ${e.toString()}');
     }
   }
 
@@ -70,14 +77,15 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
           await firestore.collection('products').doc(id).get();
 
       if (!doc.exists) {
-        throw ServerException();
+        throw ServerException(message: 'Product not found');
       }
 
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       data['id'] = doc.id;
       return ProductModel.fromJson(data);
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to fetch product: ${e.toString()}');
     }
   }
 
@@ -93,8 +101,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       productData['createdAt'] = FieldValue.serverTimestamp();
       productData['updatedAt'] = FieldValue.serverTimestamp();
 
-      // Default isDeleted ke false
+      // Default values
       productData['isDeleted'] = false;
+      productData['isActive'] = productData['isActive'] ?? true;
+      productData['categoryId'] = productData['categoryId'] ?? '';
 
       // Simpan ke Firestore
       DocumentReference docRef =
@@ -110,7 +120,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
       return ProductModel.fromJson(newProductData);
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to create product: ${e.toString()}');
     }
   }
 
@@ -125,6 +136,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       // Update timestamp
       productData['updatedAt'] = FieldValue.serverTimestamp();
 
+      // Ensure required fields
+      if (!productData.containsKey('categoryId')) {
+        productData['categoryId'] = '';
+      }
+      if (!productData.containsKey('isActive')) {
+        productData['isActive'] = true;
+      }
+
       // Update dokumen di Firestore
       await firestore.collection('products').doc(id).update(productData);
 
@@ -138,7 +157,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
       return ProductModel.fromJson(updatedData);
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to update product: ${e.toString()}');
     }
   }
 
@@ -150,7 +170,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         'updatedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to delete product: ${e.toString()}');
     }
   }
 
@@ -170,7 +191,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         return ProductModel.fromJson(data);
       }).toList();
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to search products: ${e.toString()}');
     }
   }
 
@@ -184,30 +206,32 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     try {
       // Validasi file
       if (!file.existsSync()) {
-        throw ServerException();
+        throw ServerException(message: 'File not found');
       }
 
       // Validasi ekstensi file
       if (!file.path.toLowerCase().endsWith('.csv')) {
-        throw ServerException();
+        throw ServerException(message: 'Invalid file format');
       }
 
       // Upload file ke Firebase Storage untuk backup
-      String fileName = 'bulk_uploads/${DateTime.now().millisecondsSinceEpoch}.csv';
+      String fileName =
+          'bulk_uploads/${DateTime.now().millisecondsSinceEpoch}.csv';
       UploadTask uploadTask = storage.ref(fileName).putFile(file);
-      
+
       // Tunggu upload selesai
       await uploadTask;
-      
+
       // Baca konten file CSV
       String csvString = await file.readAsString();
-      
+
       // Parse CSV
-      List<List<dynamic>> csvTable = const CsvToListConverter().convert(csvString);
-      
+      List<List<dynamic>> csvTable =
+          const CsvToListConverter().convert(csvString);
+
       // Validasi header
       if (csvTable.isEmpty || csvTable[0].length < kBulkUploadHeaders.length) {
-        throw ServerException();
+        throw ServerException(message: 'Invalid CSV header');
       }
 
       // Batch untuk menulis produk
@@ -244,13 +268,13 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
           productData['createdAt'] = FieldValue.serverTimestamp();
           productData['updatedAt'] = FieldValue.serverTimestamp();
           productData['isDeleted'] = false;
-          
+
           // Referensi dokumen baru
           DocumentReference docRef = firestore.collection('products').doc();
-          
+
           // Tambahkan ke batch
           batch.set(docRef, productData);
-          
+
           // Konversi dan simpan untuk return
           productData['id'] = docRef.id;
           uploadedProducts.add(ProductModel.fromJson(productData));
@@ -259,10 +283,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
           errorMessages.add('Baris $rowIndex: ${rowError.toString()}');
         }
       }
-      
+
       // Commit batch
       await batch.commit();
-      
+
       return BulkUploadResult(
         totalRows: csvTable.length - 1,
         successfulUploads: uploadedProducts.length,
@@ -271,7 +295,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         uploadedProducts: uploadedProducts,
       );
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to bulk upload products: ${e.toString()}');
     }
   }
 
@@ -290,6 +315,12 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       // Default isDeleted ke false
       bundleData['isDeleted'] = false;
 
+      // Validasi produk dalam bundle
+      if (bundleData['products'] == null || bundleData['products'].isEmpty) {
+        throw ServerException(
+            message: 'Bundle harus memiliki setidaknya satu produk');
+      }
+
       // Simpan ke Firestore
       DocumentReference docRef =
           await firestore.collection('bundles').add(bundleData);
@@ -304,7 +335,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
       return ProductBundleModel.fromJson(newBundleData);
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to create bundle: ${e.toString()}');
     }
   }
 
@@ -315,6 +347,12 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
       // Hapus ID dari data yang akan diupdate
       final id = bundleData.remove('id');
+
+      // Validasi produk dalam bundle
+      if (bundleData['products'] == null || bundleData['products'].isEmpty) {
+        throw ServerException(
+            message: 'Bundle harus memiliki setidaknya satu produk');
+      }
 
       // Update timestamp
       bundleData['updatedAt'] = FieldValue.serverTimestamp();
@@ -332,7 +370,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
       return ProductBundleModel.fromJson(updatedData);
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to update bundle: ${e.toString()}');
     }
   }
 
@@ -344,25 +383,57 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         'updatedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      throw ServerException();
+      throw ServerException(
+          message: 'Failed to delete bundle: ${e.toString()}');
     }
   }
 
   @override
-  Future<List<ProductBundleModel>> getBundles() async {
+  Future<List<ProductBundleModel>> getBundles({
+    int? limit,
+    int? offset,
+    bool? isActive,
+  }) async {
     try {
-      QuerySnapshot querySnapshot = await firestore
+      Query query = firestore
           .collection('bundles')
           .where('isDeleted', isEqualTo: false)
-          .get();
+          .orderBy('createdAt', descending: true); // Add consistent ordering
+
+      if (isActive != null) {
+        query = query.where('isActive', isEqualTo: isActive);
+      }
+
+      // Handle pagination
+      if (offset != null && offset > 0) {
+        // Get the last document from the previous page
+        final lastDoc = await firestore
+            .collection('bundles')
+            .where('isDeleted', isEqualTo: false)
+            .orderBy('createdAt', descending: true)
+            .limit(offset)
+            .get()
+            .then((snapshot) =>
+                snapshot.docs.isEmpty ? null : snapshot.docs.last);
+
+        if (lastDoc != null) {
+          query = query.startAfter([lastDoc]);
+        }
+      }
+
+      if (limit != null) {
+        query = query.limit(limit);
+      }
+
+      QuerySnapshot querySnapshot = await query.get();
 
       return querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        data['id'] = doc.id;
+        data['id'] = doc.id; // Ensure ID is included
         return ProductBundleModel.fromJson(data);
       }).toList();
     } catch (e) {
-      throw ServerException();
+      throw ServerException(message: 'Error');
     }
   }
 
@@ -373,14 +444,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
           await firestore.collection('bundles').doc(id).get();
 
       if (!doc.exists) {
-        throw ServerException();
+        throw ServerException(message: 'Bundle not found');
       }
 
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       data['id'] = doc.id;
       return ProductBundleModel.fromJson(data);
     } catch (e) {
-      throw ServerException();
+      throw ServerException(message: 'Failed to fetch bundle: ${e.toString()}');
     }
   }
 }

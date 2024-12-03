@@ -16,6 +16,11 @@ import 'package:app/features/product_management/domain/usecases/delete_product.d
 import 'package:app/features/product_management/domain/usecases/search_products.dart';
 import 'package:app/features/product_management/domain/usecases/get_products_by_category.dart';
 import 'package:app/features/product_management/domain/usecases/bulk_upload_products.dart';
+import 'package:app/features/product_management/domain/usecases/get_bundles.dart';
+import 'package:app/features/product_management/domain/usecases/get_bundle.dart';
+import 'package:app/features/product_management/domain/usecases/create_bundle.dart';
+import 'package:app/features/product_management/domain/usecases/update_bundle.dart';
+import 'package:app/features/product_management/domain/usecases/delete_bundle.dart';
 import 'package:app/features/product_management/presentation/bloc/product_bloc.dart';
 import 'package:app/core/network/network_info.dart';
 
@@ -33,6 +38,11 @@ Future<void> init() async {
       searchProducts: sl(),
       getProductsByCategory: sl(),
       bulkUploadProducts: sl(),
+      getBundles: sl(),
+      getBundle: sl(),
+      createBundle: sl(),
+      updateBundle: sl(),
+      deleteBundle: sl(),
     ),
   );
 
@@ -44,6 +54,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SearchProducts(sl()));
   sl.registerLazySingleton(() => GetProductsByCategory(sl()));
   sl.registerLazySingleton(() => BulkUploadProducts(sl()));
+  
+  // Bundle use cases
+  sl.registerLazySingleton(() => GetBundles(sl()));
+  sl.registerLazySingleton(() => GetBundle(sl()));
+  sl.registerLazySingleton(() => CreateBundle(sl()));
+  sl.registerLazySingleton(() => UpdateBundle(sl()));
+  sl.registerLazySingleton(() => DeleteBundle(sl()));
 
   // Repository
   sl.registerLazySingleton<ProductRepository>(

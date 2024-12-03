@@ -1,27 +1,31 @@
 import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:app/core/error/failures.dart';
 import 'package:app/core/usecases/usecase.dart';
 import 'package:app/features/product_management/domain/entities/product_bundle.dart';
 import 'package:app/features/product_management/domain/repositories/product_repository.dart';
+import 'package:app/features/product_management/domain/usecases/bundle_params.dart';
 
 class CreateBundle implements UseCase<ProductBundle, CreateBundleParams> {
   final ProductRepository repository;
 
-  CreateBundle(this.repository);
+  const CreateBundle(this.repository);
 
   @override
   Future<Either<Failure, ProductBundle>> call(CreateBundleParams params) async {
-    return await repository.createBundle(params.bundle);
+    final now = DateTime.now();
+    final bundle = ProductBundle(
+      id: const Uuid().v4(), // Generate a new UUID for the bundle
+      name: params.name,
+      description: params.description ?? '',
+      bundlePrice: params.bundlePrice,
+      products: const [], // Empty list for now, will be populated later
+      isActive: params.isActive ?? true,
+      createdAt: now,
+      updatedAt: now,
+    );
+    
+    return await repository.createBundle(bundle);
   }
-}
-
-class CreateBundleParams extends Equatable {
-  final ProductBundle bundle;
-
-  const CreateBundleParams({required this.bundle});
-
-  @override
-  List<Object> get props => [bundle];
 }

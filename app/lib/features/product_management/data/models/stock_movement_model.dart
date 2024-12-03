@@ -23,6 +23,7 @@ class StockMovementModel extends StockMovement {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,

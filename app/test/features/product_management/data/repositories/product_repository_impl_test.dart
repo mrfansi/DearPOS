@@ -63,8 +63,7 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.getProducts())
           .thenAnswer((_) async => testProductModels);
-      when(mockLocalDataSource.cacheProducts(any))
-          .thenAnswer((_) async {});
+      when(mockLocalDataSource.cacheProducts(any)).thenAnswer((_) async {});
 
       // Act
       await repository.getProducts();
@@ -78,8 +77,7 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.getProducts())
           .thenAnswer((_) async => testProductModels);
-      when(mockLocalDataSource.cacheProducts(any))
-          .thenAnswer((_) async {});
+      when(mockLocalDataSource.cacheProducts(any)).thenAnswer((_) async {});
 
       // Act
       final result = await repository.getProducts();
@@ -118,7 +116,7 @@ void main() {
 
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
-      expect(result, equals(Left(ServerFailure())));
+      expect(result, equals(const Left(ServerFailure())));
     });
   });
 
@@ -128,8 +126,7 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.createProduct(any))
           .thenAnswer((_) async => testProductModel);
-      when(mockLocalDataSource.cacheProduct(any))
-          .thenAnswer((_) async {});
+      when(mockLocalDataSource.cacheProduct(any)).thenAnswer((_) async {});
 
       // Act
       final result = await repository.createProduct(testProductModel);
@@ -153,7 +150,7 @@ void main() {
 
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
-      expect(result, equals(Left(ServerFailure())));
+      expect(result, equals(const Left(ServerFailure())));
     });
   });
 
@@ -172,7 +169,8 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockRemoteDataSource.bulkUploadProducts(testFile))
           .thenAnswer((_) async => testBulkUploadResult);
-      when(mockLocalDataSource.cacheProducts(testBulkUploadResult.uploadedProducts))
+      when(mockLocalDataSource
+              .cacheProducts(testBulkUploadResult.uploadedProducts))
           .thenAnswer((_) async {});
 
       // Act
@@ -181,7 +179,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
       verify(mockRemoteDataSource.bulkUploadProducts(testFile)).called(1);
-      expect(result, equals(Right(null)));
+      expect(result, equals(const Right(null)));
     });
 
     test('should return server failure when bulk upload fails', () async {
@@ -196,7 +194,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected).called(1);
       verify(mockRemoteDataSource.bulkUploadProducts(testFile)).called(1);
-      expect(result, equals(Left(ServerFailure())));
+      expect(result, equals(const Left(ServerFailure())));
     });
   });
 }

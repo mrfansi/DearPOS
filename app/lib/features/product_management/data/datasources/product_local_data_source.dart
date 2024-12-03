@@ -28,7 +28,7 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
         jsonList.map((json) => ProductModel.fromJson(json)).toList(),
       );
     } else {
-      throw CacheException();
+      throw CacheException(message: 'No cached products found');
     }
   }
 
@@ -49,11 +49,11 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
           jsonList.map((json) => ProductModel.fromJson(json)).toList();
       final product = products.firstWhere(
         (product) => product.id == id,
-        orElse: () => throw CacheException(),
+        orElse: () => throw CacheException(message: 'Product not found'),
       );
       return Future.value(product);
     } else {
-      throw CacheException();
+      throw CacheException(message: 'No cached products found');
     }
   }
 

@@ -8,9 +8,9 @@ class BundleManagementCard extends StatefulWidget {
   final Product product;
 
   const BundleManagementCard({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   @override
   State<BundleManagementCard> createState() => _BundleManagementCardState();
@@ -139,9 +139,8 @@ class _ProductSelectionDialog extends StatelessWidget {
   final Function(Product) onProductSelected;
 
   const _ProductSelectionDialog({
-    Key? key,
     required this.onProductSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

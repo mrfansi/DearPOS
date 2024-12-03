@@ -3,29 +3,43 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
-import 'dart:io' as _i15;
+import 'dart:async' as _i6;
+import 'dart:io' as _i16;
 
-import 'package:app/core/error/failures.dart' as _i6;
-import 'package:app/core/usecases/usecase.dart' as _i8;
+import 'package:app/core/error/failures.dart' as _i7;
+import 'package:app/core/usecases/usecase.dart' as _i9;
 import 'package:app/features/product_management/domain/entities/product.dart'
-    as _i7;
+    as _i8;
+import 'package:app/features/product_management/domain/entities/product_bundle.dart'
+    as _i4;
 import 'package:app/features/product_management/domain/repositories/product_repository.dart'
     as _i2;
 import 'package:app/features/product_management/domain/usecases/bulk_upload_products.dart'
-    as _i14;
+    as _i15;
+import 'package:app/features/product_management/domain/usecases/bundle_params.dart'
+    as _i18;
+import 'package:app/features/product_management/domain/usecases/create_bundle.dart'
+    as _i17;
 import 'package:app/features/product_management/domain/usecases/create_product.dart'
-    as _i9;
-import 'package:app/features/product_management/domain/usecases/delete_product.dart'
-    as _i11;
-import 'package:app/features/product_management/domain/usecases/get_products.dart'
-    as _i4;
-import 'package:app/features/product_management/domain/usecases/get_products_by_category.dart'
-    as _i13;
-import 'package:app/features/product_management/domain/usecases/search_products.dart'
-    as _i12;
-import 'package:app/features/product_management/domain/usecases/update_product.dart'
     as _i10;
+import 'package:app/features/product_management/domain/usecases/delete_bundle.dart'
+    as _i20;
+import 'package:app/features/product_management/domain/usecases/delete_product.dart'
+    as _i12;
+import 'package:app/features/product_management/domain/usecases/get_bundle.dart'
+    as _i21;
+import 'package:app/features/product_management/domain/usecases/get_bundles.dart'
+    as _i22;
+import 'package:app/features/product_management/domain/usecases/get_products.dart'
+    as _i5;
+import 'package:app/features/product_management/domain/usecases/get_products_by_category.dart'
+    as _i14;
+import 'package:app/features/product_management/domain/usecases/search_products.dart'
+    as _i13;
+import 'package:app/features/product_management/domain/usecases/update_bundle.dart'
+    as _i19;
+import 'package:app/features/product_management/domain/usecases/update_product.dart'
+    as _i11;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -63,10 +77,20 @@ class _FakeEither_1<L, R> extends _i1.SmartFake implements _i3.Either<L, R> {
         );
 }
 
+class _FakeProductBundle_2 extends _i1.SmartFake implements _i4.ProductBundle {
+  _FakeProductBundle_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [GetProducts].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetProducts extends _i1.Mock implements _i4.GetProducts {
+class MockGetProducts extends _i1.Mock implements _i5.GetProducts {
   MockGetProducts() {
     _i1.throwOnMissingStub(this);
   }
@@ -81,29 +105,29 @@ class MockGetProducts extends _i1.Mock implements _i4.GetProducts {
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>> call(
-          _i8.NoParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>> call(
+          _i9.NoParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue:
-            _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>>.value(
-                _FakeEither_1<_i6.Failure, List<_i7.Product>>(
+            _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i8.Product>>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>>);
 }
 
 /// A class which mocks [CreateProduct].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCreateProduct extends _i1.Mock implements _i9.CreateProduct {
+class MockCreateProduct extends _i1.Mock implements _i10.CreateProduct {
   MockCreateProduct() {
     _i1.throwOnMissingStub(this);
   }
@@ -118,28 +142,28 @@ class MockCreateProduct extends _i1.Mock implements _i9.CreateProduct {
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.Product>> call(
-          _i9.CreateProductParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, _i8.Product>> call(
+          _i10.CreateProductParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.Product>>.value(
-            _FakeEither_1<_i6.Failure, _i7.Product>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.Product>>.value(
+            _FakeEither_1<_i7.Failure, _i8.Product>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Product>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.Product>>);
 }
 
 /// A class which mocks [UpdateProduct].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUpdateProduct extends _i1.Mock implements _i10.UpdateProduct {
+class MockUpdateProduct extends _i1.Mock implements _i11.UpdateProduct {
   MockUpdateProduct() {
     _i1.throwOnMissingStub(this);
   }
@@ -154,28 +178,28 @@ class MockUpdateProduct extends _i1.Mock implements _i10.UpdateProduct {
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.Product>> call(
-          _i10.UpdateProductParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, _i8.Product>> call(
+          _i11.UpdateProductParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.Product>>.value(
-            _FakeEither_1<_i6.Failure, _i7.Product>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.Product>>.value(
+            _FakeEither_1<_i7.Failure, _i8.Product>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Product>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.Product>>);
 }
 
 /// A class which mocks [DeleteProduct].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDeleteProduct extends _i1.Mock implements _i11.DeleteProduct {
+class MockDeleteProduct extends _i1.Mock implements _i12.DeleteProduct {
   MockDeleteProduct() {
     _i1.throwOnMissingStub(this);
   }
@@ -190,28 +214,28 @@ class MockDeleteProduct extends _i1.Mock implements _i11.DeleteProduct {
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> call(
-          _i11.DeleteProductParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, bool>> call(
+          _i12.DeleteProductParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+            _FakeEither_1<_i7.Failure, bool>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, bool>>);
 }
 
 /// A class which mocks [SearchProducts].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSearchProducts extends _i1.Mock implements _i12.SearchProducts {
+class MockSearchProducts extends _i1.Mock implements _i13.SearchProducts {
   MockSearchProducts() {
     _i1.throwOnMissingStub(this);
   }
@@ -226,30 +250,30 @@ class MockSearchProducts extends _i1.Mock implements _i12.SearchProducts {
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>> call(
-          _i12.SearchProductsParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>> call(
+          _i13.SearchProductsParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue:
-            _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>>.value(
-                _FakeEither_1<_i6.Failure, List<_i7.Product>>(
+            _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i8.Product>>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>>);
 }
 
 /// A class which mocks [GetProductsByCategory].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetProductsByCategory extends _i1.Mock
-    implements _i13.GetProductsByCategory {
+    implements _i14.GetProductsByCategory {
   MockGetProductsByCategory() {
     _i1.throwOnMissingStub(this);
   }
@@ -264,30 +288,30 @@ class MockGetProductsByCategory extends _i1.Mock
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>> call(
-          _i13.GetProductsByCategoryParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>> call(
+          _i14.GetProductsByCategoryParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue:
-            _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>>.value(
-                _FakeEither_1<_i6.Failure, List<_i7.Product>>(
+            _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i8.Product>>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, List<_i7.Product>>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Product>>>);
 }
 
 /// A class which mocks [BulkUploadProducts].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockBulkUploadProducts extends _i1.Mock
-    implements _i14.BulkUploadProducts {
+    implements _i15.BulkUploadProducts {
   MockBulkUploadProducts() {
     _i1.throwOnMissingStub(this);
   }
@@ -302,19 +326,198 @@ class MockBulkUploadProducts extends _i1.Mock
       ) as _i2.ProductRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, void>> call(_i15.File? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, void>> call(_i16.File? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, void>>.value(
-            _FakeEither_1<_i6.Failure, void>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, void>>.value(
+            _FakeEither_1<_i7.Failure, void>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, void>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, void>>);
+}
+
+/// A class which mocks [CreateBundle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCreateBundle extends _i1.Mock implements _i17.CreateBundle {
+  MockCreateBundle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ProductRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeProductRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.ProductRepository);
+
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, _i4.ProductBundle>> call(
+          _i18.CreateBundleParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [params],
+        ),
+        returnValue:
+            _i6.Future<_i3.Either<_i7.Failure, _i4.ProductBundle>>.value(
+                _FakeEither_1<_i7.Failure, _i4.ProductBundle>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i4.ProductBundle>>);
+}
+
+/// A class which mocks [UpdateBundle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateBundle extends _i1.Mock implements _i19.UpdateBundle {
+  MockUpdateBundle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ProductRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeProductRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.ProductRepository);
+
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, _i4.ProductBundle>> call(
+          _i18.UpdateBundleParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [params],
+        ),
+        returnValue:
+            _i6.Future<_i3.Either<_i7.Failure, _i4.ProductBundle>>.value(
+                _FakeEither_1<_i7.Failure, _i4.ProductBundle>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i4.ProductBundle>>);
+}
+
+/// A class which mocks [DeleteBundle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDeleteBundle extends _i1.Mock implements _i20.DeleteBundle {
+  MockDeleteBundle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ProductRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeProductRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.ProductRepository);
+
+  @override
+  _i6.Future<_i4.ProductBundle> call(_i18.DeleteBundleParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [params],
+        ),
+        returnValue: _i6.Future<_i4.ProductBundle>.value(_FakeProductBundle_2(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+      ) as _i6.Future<_i4.ProductBundle>);
+}
+
+/// A class which mocks [GetBundle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetBundle extends _i1.Mock implements _i21.GetBundle {
+  MockGetBundle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ProductRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeProductRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.ProductRepository);
+
+  @override
+  _i6.Future<_i4.ProductBundle> call(_i18.GetBundleParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [params],
+        ),
+        returnValue: _i6.Future<_i4.ProductBundle>.value(_FakeProductBundle_2(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+      ) as _i6.Future<_i4.ProductBundle>);
+}
+
+/// A class which mocks [GetBundles].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetBundles extends _i1.Mock implements _i22.GetBundles {
+  MockGetBundles() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ProductRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeProductRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.ProductRepository);
+
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i4.ProductBundle>>> call(
+          _i18.GetBundlesParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [params],
+        ),
+        returnValue:
+            _i6.Future<_i3.Either<_i7.Failure, List<_i4.ProductBundle>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i4.ProductBundle>>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i4.ProductBundle>>>);
 }

@@ -16,4 +16,16 @@ class StockMovement {
     required this.notes,
     required this.timestamp,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'productId': productId,
+      'variantId': variantId,
+      'quantity': quantity,
+      'type': type,
+      'notes': notes,
+      'timestamp': timestamp.toIso8601String(),
+    };
+  }
 }

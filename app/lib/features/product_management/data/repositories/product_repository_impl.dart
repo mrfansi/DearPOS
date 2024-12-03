@@ -29,16 +29,18 @@ class ProductRepositoryImpl implements ProductRepository {
       try {
         final remoteProducts = await remoteDataSource.getProducts();
         localDataSource.cacheProducts(remoteProducts);
-        return Right(remoteProducts);
+        return Right(remoteProducts.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure());
+        return const Left(
+            ServerFailure(message: 'Gagal mengambil produk dari server'));
       }
     } else {
       try {
         final localProducts = await localDataSource.getLastProducts();
         return Right(localProducts);
       } on CacheException {
-        return Left(CacheFailure());
+        return const Left(
+            CacheFailure(message: 'Gagal mengambil produk dari cache'));
       }
     }
   }
@@ -49,16 +51,18 @@ class ProductRepositoryImpl implements ProductRepository {
       try {
         final remoteProduct = await remoteDataSource.getProduct(id);
         localDataSource.cacheProduct(remoteProduct);
-        return Right(remoteProduct);
+        return Right(remoteProduct.toEntity());
       } on ServerException {
-        return Left(ServerFailure());
+        return const Left(
+            ServerFailure(message: 'Gagal mengambil produk dari server'));
       }
     } else {
       try {
         final localProduct = await localDataSource.getProduct(id);
-        return Right(localProduct!);
+        return Right(localProduct!.toEntity());
       } on CacheException {
-        return Left(CacheFailure());
+        return const Left(
+            CacheFailure(message: 'Gagal mengambil produk dari cache'));
       }
     }
   }
@@ -72,6 +76,7 @@ class ProductRepositoryImpl implements ProductRepository {
           name: product.name,
           description: product.description ?? '',
           category: product.category,
+          categoryId: product.categoryId,
           price: product.price,
           stock: product.stock,
           barcode: product.barcode,
@@ -79,16 +84,18 @@ class ProductRepositoryImpl implements ProductRepository {
           createdAt: product.createdAt,
           updatedAt: product.updatedAt,
           isDeleted: product.isDeleted,
+          isActive: product.isActive,
         );
         final remoteProduct =
             await remoteDataSource.createProduct(productModel);
         localDataSource.cacheProduct(remoteProduct);
-        return Right(remoteProduct);
+        return Right(remoteProduct.toEntity());
       } on ServerException {
-        return Left(ServerFailure());
+        return const Left(
+            ServerFailure(message: 'Gagal membuat produk di server'));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 
@@ -101,6 +108,7 @@ class ProductRepositoryImpl implements ProductRepository {
           name: product.name,
           description: product.description ?? '',
           category: product.category,
+          categoryId: product.categoryId,
           price: product.price,
           stock: product.stock,
           barcode: product.barcode,
@@ -108,16 +116,18 @@ class ProductRepositoryImpl implements ProductRepository {
           createdAt: product.createdAt,
           updatedAt: product.updatedAt,
           isDeleted: product.isDeleted,
+          isActive: product.isActive,
         );
         final remoteProduct =
             await remoteDataSource.updateProduct(productModel);
         localDataSource.cacheProduct(remoteProduct);
-        return Right(remoteProduct);
+        return Right(remoteProduct.toEntity());
       } on ServerException {
-        return Left(ServerFailure());
+        return const Left(
+            ServerFailure(message: 'Gagal memperbarui produk di server'));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 
@@ -128,7 +138,8 @@ class ProductRepositoryImpl implements ProductRepository {
       await localDataSource.deleteProduct(id);
       return const Right(true);
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(
+          ServerFailure(message: 'Gagal menghapus produk di server'));
     }
   }
 
@@ -137,13 +148,15 @@ class ProductRepositoryImpl implements ProductRepository {
     try {
       final extension = file.path.split('.').last.toLowerCase();
       if (extension != 'csv' && extension != 'xlsx') {
-        return Left(InvalidFileFailure());
+        return const Left(
+            InvalidFileFailure(message: 'Format file tidak didukung'));
       }
-      
+
       await remoteDataSource.bulkUploadProducts(file);
       return const Right(null);
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(
+          ServerFailure(message: 'Gagal mengunggah produk ke server'));
     }
   }
 
@@ -152,12 +165,13 @@ class ProductRepositoryImpl implements ProductRepository {
     if (await networkInfo.isConnected) {
       try {
         final products = await remoteDataSource.searchProducts(query);
-        return Right(products);
+        return Right(products.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure());
+        return const Left(
+            ServerFailure(message: 'Gagal mencari produk di server'));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 
@@ -173,7 +187,8 @@ class ProductRepositoryImpl implements ProductRepository {
         ),
       );
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure(
+          message: 'Gagal mengambil produk berdasarkan kategori'));
     }
   }
 
@@ -189,106 +204,95 @@ class ProductRepositoryImpl implements ProductRepository {
         ),
       );
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(
+          ServerFailure(message: 'Gagal mengambil produk dengan stok rendah'));
     }
   }
 
-  // Metode untuk mengonversi ProductBundleModel ke ProductBundle
-  ProductBundle _mapBundleModelToEntity(ProductBundleModel model) {
-    return ProductBundle(
-      id: model.id,
-      name: model.name,
-      description: model.description,
-      bundlePrice: model.bundlePrice,
-      products: model.products.map((productModel) => 
-        Product(
-          id: productModel.id,
-          name: productModel.name,
-          price: productModel.price,
-          category: productModel.category,
-          stock: productModel.stock,
-          barcode: productModel.barcode,
-        )
-      ).toList(),
-      createdAt: model.createdAt,
-      updatedAt: model.updatedAt,
-    );
-  }
-
-  // Metode untuk mengonversi ProductBundle ke ProductBundleModel
-  ProductBundleModel _mapBundleEntityToModel(ProductBundle bundle) {
-    return ProductBundleModel(
-      id: bundle.id,
-      name: bundle.name,
-      description: bundle.description,
-      bundlePrice: bundle.bundlePrice,
-      products: bundle.products.map((product) => 
-        ProductModel(
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          category: product.category,
-          stock: product.stock,
-          barcode: product.barcode,
-        )
-      ).toList(),
-      createdAt: bundle.createdAt,
-      updatedAt: bundle.updatedAt,
-    );
+  @override
+  Future<Either<Failure, List<ProductBundle>>> getBundles({
+    int? limit,
+    int? offset,
+    bool? isActive,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteBundles = await remoteDataSource.getBundles(
+          limit: limit,
+          offset: offset,
+          isActive: isActive,
+        );
+        return Right(remoteBundles.map((model) => model.toEntity()).toList());
+      } on ServerException {
+        return const Left(
+            ServerFailure(message: 'Gagal mengambil bundle dari server'));
+      }
+    } else {
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
+    }
   }
 
   @override
   Future<Either<Failure, ProductBundle>> getBundle(String id) async {
-    try {
-      final bundleModel = await remoteDataSource.getBundle(id);
-      return Right(_mapBundleModelToEntity(bundleModel));
-    } catch (error) {
-      return Left(ServerFailure(message: error.toString()));
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteBundle = await remoteDataSource.getBundle(id);
+        return Right(remoteBundle.toEntity());
+      } on ServerException {
+        return const Left(
+            ServerFailure(message: 'Gagal mengambil bundle dari server'));
+      }
+    } else {
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 
   @override
-  Future<Either<Failure, List<ProductBundle>>> getBundles() async {
-    try {
-      final bundleModels = await remoteDataSource.getBundles();
-      final bundles = bundleModels
-          .map((bundleModel) => _mapBundleModelToEntity(bundleModel))
-          .toList();
-      return Right(bundles);
-    } catch (error) {
-      return Left(ServerFailure(message: error.toString()));
+  Future<Either<Failure, ProductBundle>> createBundle(
+      ProductBundle bundle) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final bundleModel = ProductBundleModel.fromEntity(bundle);
+        final remoteBundle = await remoteDataSource.createBundle(bundleModel);
+        return Right(remoteBundle.toEntity());
+      } on ServerException {
+        return const Left(
+            ServerFailure(message: 'Gagal membuat bundle di server'));
+      }
+    } else {
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 
   @override
-  Future<Either<Failure, ProductBundle>> createBundle(ProductBundle bundle) async {
-    try {
-      final bundleModel = _mapBundleEntityToModel(bundle);
-      final createdBundleModel = await remoteDataSource.createBundle(bundleModel);
-      return Right(_mapBundleModelToEntity(createdBundleModel));
-    } catch (error) {
-      return Left(ServerFailure(message: error.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, ProductBundle>> updateBundle(ProductBundle bundle) async {
-    try {
-      final bundleModel = _mapBundleEntityToModel(bundle);
-      final updatedBundleModel = await remoteDataSource.updateBundle(bundleModel);
-      return Right(_mapBundleModelToEntity(updatedBundleModel));
-    } catch (error) {
-      return Left(ServerFailure(message: error.toString()));
+  Future<Either<Failure, ProductBundle>> updateBundle(
+      ProductBundle bundle) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final bundleModel = ProductBundleModel.fromEntity(bundle);
+        final remoteBundle = await remoteDataSource.updateBundle(bundleModel);
+        return Right(remoteBundle.toEntity());
+      } on ServerException {
+        return const Left(
+            ServerFailure(message: 'Gagal memperbarui bundle di server'));
+      }
+    } else {
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 
   @override
   Future<Either<Failure, bool>> deleteBundle(String id) async {
-    try {
-      await remoteDataSource.deleteBundle(id);
-      return const Right(true);
-    } catch (error) {
-      return Left(ServerFailure(message: error.toString()));
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.deleteBundle(id);
+        return const Right(true);
+      } on ServerException {
+        return const Left(
+            ServerFailure(message: 'Gagal menghapus bundle di server'));
+      }
+    } else {
+      return const Left(NetworkFailure(message: 'Tidak ada koneksi internet'));
     }
   }
 }

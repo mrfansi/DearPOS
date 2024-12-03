@@ -55,7 +55,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     if (widget.isEditing && widget.product != null) {
                       context
                           .read<ProductBloc>()
-                          .add(UpdateProductEvent(widget.product!));
+                          .add(UpdateProductEvent(product));
                     } else {
                       context
                           .read<ProductBloc>()
@@ -98,7 +98,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: const Text('Delete'),
             onPressed: () {
               context.read<ProductBloc>().add(
-                    DeleteProductEvent(widget.product!.id),
+                    DeleteProductEvent(
+                      productId: widget.product!.id,
+                      product: widget.product!,
+                    ),
                   );
               Navigator.pop(context); // Close dialog
               Navigator.pop(context); // Return to list

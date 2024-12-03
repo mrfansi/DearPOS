@@ -201,7 +201,9 @@ class StockManagementCard extends StatelessWidget {
             onPressed: () {
               final quantity = int.tryParse(quantityController.text);
               if (quantity != null && quantity > 0) {
-                final updatedProduct = product.copyWith(stock: product.stock + (type == 'in' ? quantity : -quantity));
+                final updatedProduct = product.copyWith(
+                    stock:
+                        product.stock + (type == 'in' ? quantity : -quantity));
                 context.read<ProductBloc>().add(
                       UpdateProductEvent(updatedProduct),
                     );
