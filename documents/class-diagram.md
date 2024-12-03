@@ -63,569 +63,295 @@ Mengelola sumber daya manusia dan informasi terkait:
 
 ```mermaid
 classDiagram
-    %% Internationalization
-    class Language {
-        +String code
-        +String name
-        +String nativeName
-        +String direction
-        +Boolean isDefault
-        +Boolean isActive
+    %% Core Domain Models
+    class BaseModel {
+        +UUID id
+        +DateTime createdAt
+        +DateTime updatedAt
+        +DateTime deletedAt
+        +User createdBy
+        +User updatedBy
+        +User deletedBy
         ---
-        +createLanguage()
-        +updateLanguage()
-        +setAsDefault()
-        +validateCode()
-        +getAvailableLanguages()
-    }
-
-    class Translation {
-        +Language language
-        +String namespace
-        +String key
-        +String value
-        +String contextHint
-        +List~TranslationHistory~ history
-        ---
-        +addTranslation()
-        +updateTranslation()
-        +importTranslations()
-        +exportTranslations()
-        +trackChanges()
-    }
-
-    class RegionalSettings {
-        +Language language
-        +String dateFormat
-        +String timeFormat
-        +String numberFormat
-        +String addressFormat
-        +String phoneFormat
-        +String measurementUnit
-        +String calendarType
-        ---
-        +setFormats()
-        +validateFormats()
-        +applyFormats()
-        +getLocalizedFormats()
-    }
-
-    class TranslatedContent {
-        +String referenceId
-        +String referenceType
-        +Language language
-        +String fieldName
-        +String content
-        ---
-        +setContent()
-        +getContent()
-        +validateContent()
-        +syncTranslations()
-    }
-
-    class LocalizationService {
-        +Language currentLanguage
-        +RegionalSettings currentSettings
-        +List~Translation~ translations
-        ---
-        +translate(key)
-        +formatDate(date)
-        +formatNumber(number)
-        +formatAddress(address)
-        +formatPhone(phone)
-        +switchLanguage(lang)
-        +loadTranslations()
+        +create()
+        +update()
+        +delete()
+        +restore()
     }
 
     %% Product Management
     class Product {
-        +String sku
-        +Currency baseCurrency
-        +Decimal basePrice
-        +Integer stock
-        +String barcode
-        +String imageURL
-        +Boolean isBundle
-        +Date expiryDate
-        +List~Product~ bundleItems
-        +List~String~ recipes
-        +List~ProductPrice~ prices
-        +List~TranslatedContent~ translations
-        ---
-        +createProduct()
-        +updateProduct()
-        +deleteProduct()
-        +manageStock()
-        +generateBarcode()
-        +trackStockHistory()
-        +manageBundles()
-        +trackExpiry()
-        +manageRecipes()
-        +setPriceInCurrency()
-        +getPriceInCurrency()
-        +setTranslation()
-        +getTranslation()
-    }
-
-    %% Currency Management
-    class Currency {
-        +String code
         +String name
-        +String symbol
-        +Integer decimalPlaces
-        +Boolean isBaseCurrency
+        +String sku
+        +String description
+        +Category category
+        +Currency baseCurrency
+        +UnitOfMeasure baseUnit
+        +Boolean isRecipeManaged
+        +Boolean trackExpiry
+        +Boolean trackSerial
+        +List~Price~ prices
+        +List~Attribute~ attributes
+        +List~Variant~ variants
+        +List~Barcode~ barcodes
+        +List~Image~ images
+        +MarketplaceProduct marketplaceInfo
+        ---
+        +addPrice(Price)
+        +updatePrice(Price)
+        +addVariant(Variant)
+        +updateStock(Movement)
+        +checkStock()
+        +generateBarcode()
+        +addImage(Image)
+        +syncWithMarketplace()
+    }
+
+    %% Marketplace Integration
+    class MarketplaceIntegration {
+        +String platformName
+        +String apiKey
+        +String secretKey
         +Boolean isActive
-        ---
-        +createCurrency()
-        +updateCurrency()
-        +setAsBaseCurrency()
-        +validateCode()
-        +getExchangeRates()
-    }
-
-    class ExchangeRate {
-        +Currency fromCurrency
-        +Currency toCurrency
-        +Decimal rate
-        +Date effectiveDate
-        +String source
-        ---
-        +updateRate()
-        +validateRate()
-        +getHistoricalRates()
-        +calculateConversion()
-    }
-
-    class CurrencyConversion {
-        +Currency fromCurrency
-        +Currency toCurrency
-        +Decimal amount
-        +Decimal convertedAmount
-        +Decimal fee
-        ---
-        +convert()
-        +calculateFee()
-        +applyRules()
-        +validateConversion()
-    }
-
-    class ProductPrice {
-        +Product product
-        +Currency currency
-        +Decimal price
-        +Boolean isActive
-        ---
-        +setPrice()
-        +updatePrice()
-        +validatePrice()
-        +calculateMarkup()
-    }
-
-    %% Sales & Payment
-    class SalesTransaction {
-        +String transactionId
-        +Date transactionDate
-        +List~Product~ items
-        +Currency currency
-        +Decimal totalAmount
-        +String status
-        ---
-        +createTransaction()
-        +addItem()
-        +removeItem()
-        +calculateTotal()
-        +processPayment()
-        +generateReceipt()
-    }
-
-    class Payment {
-        +String paymentId
-        +SalesTransaction transaction
-        +Currency currency
-        +Decimal amount
-        +String method
-        +String status
-        ---
-        +processPayment()
-        +validatePayment()
-        +recordPayment()
-        +generateReceipt()
-    }
-
-    %% Integration & Services
-    class APIPlatform {
-        +String version
-        +List~String~ endpoints
-        +Boolean isActive
-        ---
-        +handleRequest()
-        +validateRequest()
-        +generateResponse()
-        +manageEndpoints()
-    }
-
-    class SecurityCompliance {
-        +List~String~ policies
-        +List~String~ permissions
-        +Boolean isEnabled
-        ---
-        +enforcePolicy()
-        +validateAccess()
-        +auditActivity()
-        +managePermissions()
-    }
-
-    class MobileSolutions {
-        +String platform
-        +String version
-        +Boolean isActive
-        ---
-        +syncData()
-        +handleNotifications()
-        +manageUpdates()
-        +trackUsage()
-    }
-
-    class EcommerceIntegration {
-        +String platform
-        +Boolean isActive
-        +List~String~ endpoints
         ---
         +syncProducts()
-        +processOrders()
+        +syncOrders()
         +updateInventory()
-        +manageWebhooks()
+        +handleWebhooks()
     }
 
-    class BusinessIntelligence {
-        +List~String~ metrics
-        +List~String~ reports
+    class MarketplaceProduct {
+        +Product product
+        +String marketplaceId
+        +String marketplaceSku
+        +Decimal marketplacePrice
         +Boolean isActive
         ---
-        +generateReport()
-        +analyzeData()
-        +exportData()
-        +scheduleReports()
+        +sync()
+        +updatePrice()
+        +updateStock()
     }
 
-    %% Human Resource Management
-    class Employee {
-        +String employeeCode
-        +String firstName
-        +String lastName
-        +String email
-        +String phone
-        +String address
-        +Date birthDate
-        +String gender
-        +String maritalStatus
-        +String nationalId
-        +String taxId
-        +String bankAccount
-        +Department department
-        +Position position
-        +Role role
-        +String employmentStatus
-        +Date joinDate
-        +Date endDate
-        +Boolean isActive
-        +List~Document~ documents
-        +List~Benefit~ benefits
-        ---
-        +updateProfile()
-        +assignPosition()
-        +assignRole()
-        +transferDepartment()
-        +terminateEmployee()
-        +calculateSalary()
-        +requestLeave()
-        +checkAttendance()
-        +enrollTraining()
-        +setGoals()
-        +viewTasks()
-    }
-
-    class Role {
-        +String code
-        +String name
-        +List~String~ permissions
-        +Boolean isActive
-        ---
-        +assignPermission()
-        +revokePermission()
-        +validateAccess()
-        +generateReport()
-    }
-
-    class Department {
-        +String code
-        +Department parent
-        +List~Position~ positions
-        +List~Employee~ employees
-        +String budgetCode
-        +Decimal annualBudget
-        +Boolean isActive
-        ---
-        +addPosition()
-        +assignManager()
-        +transferEmployee()
-        +manageBudget()
-        +generateReport()
-    }
-
-    class Position {
-        +String code
-        +Department department
-        +String jobDescription
-        +String requirements
-        +String salaryGrade
-        +Boolean isActive
-        ---
-        +assignEmployee()
-        +updateRequirements()
-        +createJobPosting()
-        +calculateSalaryRange()
-    }
-
-    class Attendance {
-        +Employee employee
-        +DateTime checkIn
-        +DateTime checkOut
+    class MarketplaceOrder {
+        +String orderId
         +String status
-        +String notes
+        +DateTime orderDate
+        +List~OrderItem~ items
         ---
-        +recordCheckIn()
-        +recordCheckOut()
-        +calculateHours()
-        +validateAttendance()
-        +generateReport()
-    }
-
-    class Shift {
-        +String name
-        +Time startTime
-        +Time endTime
-        +Integer maxEmployees
-        +Boolean isActive
-        ---
-        +assignEmployee()
-        +generateSchedule()
-        +calculateOvertime()
-        +validateCoverage()
-    }
-
-    class LeaveRequest {
-        +Employee employee
-        +LeaveType type
-        +Date startDate
-        +Date endDate
-        +String status
-        +String reason
-        +String notes
-        +Employee approver
-        +DateTime approvedAt
-        ---
-        +submitRequest()
-        +approveRequest()
-        +rejectRequest()
-        +cancelRequest()
-        +calculateBalance()
-    }
-
-    class Payroll {
-        +Employee employee
-        +Date periodStart
-        +Date periodEnd
-        +Decimal basicSalary
-        +Decimal allowances
-        +Decimal deductions
-        +Decimal overtimePay
-        +Decimal bonus
-        +Decimal tax
-        +Decimal netSalary
-        +String status
-        +Employee approver
-        +DateTime approvedAt
-        ---
-        +calculateSalary()
-        +processPayroll()
-        +generatePayslip()
-        +recordPayment()
-        +validateCalculations()
-    }
-
-    class PerformanceReview {
-        +Employee employee
-        +Employee reviewer
-        +Date reviewDate
-        +String reviewPeriod
-        +Decimal rating
-        +String comments
-        +String status
-        +Employee approver
-        +DateTime approvedAt
-        ---
-        +submitReview()
-        +approveReview()
-        +setGoals()
-        +trackProgress()
-        +generateReport()
-    }
-
-    class PerformanceGoal {
-        +Employee employee
-        +String type
-        +String description
-        +String metrics
-        +Date targetDate
-        +String status
-        +Decimal achievement
-        ---
-        +setGoal()
-        +updateProgress()
-        +evaluateAchievement()
-        +generateReport()
-    }
-
-    class TrainingProgram {
-        +String code
-        +String name
-        +String description
-        +Date startDate
-        +Date endDate
-        +String trainer
-        +String location
-        +Decimal cost
-        +Integer capacity
-        +Boolean isMandatory
-        +Boolean isActive
-        ---
-        +scheduleTraining()
-        +enrollParticipants()
-        +recordAttendance()
-        +evaluateEffectiveness()
-        +generateReport()
-    }
-
-    class JobPosting {
-        +Position position
-        +String status
-        +Date postingDate
-        +Date closingDate
-        +Integer vacancies
-        +String requirements
-        +String description
-        +Decimal budget
-        ---
-        +publishPosting()
-        +closePosting()
-        +screenCandidates()
-        +scheduleInterviews()
-        +trackBudget()
-    }
-
-    class Candidate {
-        +JobPosting jobPosting
-        +String firstName
-        +String lastName
-        +String email
-        +String phone
-        +String resumeUrl
-        +String status
-        +String notes
-        ---
-        +submitApplication()
+        +process()
         +updateStatus()
-        +scheduleInterview()
-        +generateOffer()
-        +trackProgress()
+        +syncWithLocal()
     }
 
-    class HRAnalytics {
-        +List~Metric~ metrics
-        +List~Report~ reports
+    %% Kitchen Management
+    class KitchenManagement {
+        +List~Recipe~ activeRecipes
+        +List~PrepTime~ prepTimes
         ---
-        +analyzeWorkforce()
-        +analyzePerformance()
-        +analyzeRecruitment()
-        +analyzeCosts()
-        +generateReport()
-        +forecastTrends()
+        +displayOrders()
+        +trackPrepTime()
+        +updateStatus()
     }
 
-    class EmployeeTask {
-        +Employee employee
-        +Employee assignedBy
-        +String title
-        +String description
-        +Date dueDate
-        +String priority
-        +String status
-        +DateTime completedAt
+    class CookingTimeTracker {
+        +Recipe recipe
+        +DateTime startTime
+        +DateTime endTime
+        +Employee cook
         ---
-        +assignTask()
+        +startTracking()
+        +endTracking()
+        +calculateDuration()
+    }
+
+    class KitchenDisplay {
+        +List~Order~ pendingOrders
+        +List~Recipe~ activeRecipes
+        ---
+        +showQueue()
         +updateStatus()
         +markComplete()
-        +trackProgress()
+    }
+
+    %% Warehouse Operations
+    class WarehouseOperation {
+        +Location warehouse
+        +DateTime operationDate
+        +String type
+        +String status
+        ---
+        +process()
+        +validate()
+        +complete()
+    }
+
+    class ReceivingManagement {
+        +PurchaseOrder order
+        +List~ReceiveItem~ items
+        +DateTime receivedDate
+        ---
+        +receiveItems()
+        +validateQuantity()
+        +updateInventory()
+    }
+
+    class PutAwayOptimization {
+        +List~StorageLocation~ locations
+        +List~Product~ products
+        ---
+        +suggestLocation()
+        +optimizeSpace()
+        +generatePutAwayTask()
+    }
+
+    class CrossDocking {
+        +InboundShipment inbound
+        +OutboundOrder outbound
+        +List~Product~ items
+        ---
+        +matchOrders()
+        +processCrossDock()
+        +updateInventory()
+    }
+
+    %% Enhanced Payment Management
+    class QRISPayment {
+        +String qrisCode
+        +Decimal amount
+        +DateTime expiry
+        +String status
+        ---
+        +generateQR()
+        +validatePayment()
+        +checkStatus()
+    }
+
+    class DownPaymentConfig {
+        +Product product
+        +Decimal percentage
+        +Decimal minimumAmount
+        ---
+        +calculate()
+        +validate()
+        +apply()
+    }
+
+    class PaymentSchedule {
+        +Order order
+        +List~InstallmentPlan~ installments
+        +Decimal totalAmount
+        ---
+        +generateSchedule()
+        +trackPayments()
+        +sendReminders()
+    }
+
+    class BankReconciliation {
+        +BankStatement statement
+        +List~Transaction~ transactions
+        +DateTime period
+        ---
+        +matchTransactions()
+        +flagDiscrepancies()
         +generateReport()
+    }
+
+    %% Enhanced HR Management
+    class SkillMatrix {
+        +Employee employee
+        +List~Skill~ skills
+        +List~Certification~ certifications
+        ---
+        +assessSkills()
+        +updateMatrix()
+        +generateReport()
+    }
+
+    class LaborTimeStandard {
+        +Task task
+        +Duration standardTime
+        +List~TimeStudy~ studies
+        ---
+        +calculateStandard()
+        +trackPerformance()
+        +updateStandards()
+    }
+
+    class MechanicSchedule {
+        +Employee mechanic
+        +List~Task~ tasks
+        +DateTime scheduleDate
+        ---
+        +assignTasks()
+        +optimizeSchedule()
+        +trackProgress()
+    }
+
+    class EmergencyContact {
+        +Employee employee
+        +String contactName
+        +String relationship
+        +String phone
+        +String address
+        ---
+        +validate()
+        +update()
+        +notify()
     }
 
     %% Relationships
-    Employee --> Department : "belongs to"
-    Employee --> Position : "holds"
-    Employee --> Role : "has"
-    Employee --> Attendance : "records"
-    Employee --> LeaveRequest : "submits"
-    Employee --> Payroll : "receives"
-    Employee --> PerformanceReview : "undergoes"
-    Employee --> PerformanceGoal : "sets"
-    Employee --> TrainingProgram : "participates in"
-    Employee --> EmployeeTask : "assigned"
-    
-    Role --> Employee : "assigned to"
-    
-    Department --> Position : "contains"
-    Department --> Department : "has parent"
-    Position --> JobPosting : "advertised as"
-    JobPosting --> Candidate : "receives"
-    
-    HRAnalytics --> Employee : "analyzes"
-    HRAnalytics --> Department : "analyzes"
-    HRAnalytics --> Payroll : "analyzes"
-    HRAnalytics --> PerformanceReview : "analyzes"
-    HRAnalytics --> Recruitment : "analyzes"
+    BaseModel <|-- Product
+    BaseModel <|-- MarketplaceIntegration
+    BaseModel <|-- MarketplaceProduct
+    BaseModel <|-- MarketplaceOrder
+    BaseModel <|-- KitchenManagement
+    BaseModel <|-- WarehouseOperation
+    BaseModel <|-- QRISPayment
+    BaseModel <|-- SkillMatrix
 
+    Product "1" -- "*" MarketplaceProduct
+    MarketplaceIntegration "1" -- "*" MarketplaceProduct
+    MarketplaceIntegration "1" -- "*" MarketplaceOrder
+    
+    KitchenManagement "1" -- "*" CookingTimeTracker
+    KitchenManagement "1" -- "1" KitchenDisplay
+    
+    WarehouseOperation <|-- ReceivingManagement
+    WarehouseOperation <|-- PutAwayOptimization
+    WarehouseOperation <|-- CrossDocking
+    
+    SkillMatrix "1" -- "1" Employee
+    Employee "1" -- "*" EmergencyContact
+    Employee "1" -- "*" MechanicSchedule
+    Employee "1" -- "*" LaborTimeStandard
 ```
 
 ## Catatan Implementasi
 
-1. **Internationalization**
-   - Setiap konten yang perlu diterjemahkan menggunakan `TranslatedContent`
-   - Format regional diatur melalui `RegionalSettings`
-   - `LocalizationService` menangani semua operasi terkait lokalisasi
+1. **Base Model**
+   - Semua model mewarisi dari `BaseModel` yang menyediakan fungsionalitas dasar seperti timestamps dan soft delete
+   - Menggunakan UUID sebagai primary key untuk memudahkan replikasi
 
 2. **Product Management**
-   - Produk mendukung multi bahasa dan multi mata uang
-   - Harga produk dapat diatur dalam berbagai mata uang
-   - Mendukung produk bundle dan resep
+   - Implementasi flexible attribute system untuk menangani variasi produk
+   - Support untuk multiple pricing berdasarkan mata uang dan periode
+   - Manajemen varian produk yang terstruktur
 
-3. **Currency Management**
-   - Mendukung multiple mata uang
-   - Kurs mata uang dapat diperbarui secara berkala
-   - Konversi mata uang otomatis
+3. **Inventory Management**
+   - Event-based system untuk tracking pergerakan inventory
+   - Support untuk lot dan serial number tracking
+   - Multi-location inventory management
 
-4. **Sales & Payment**
-   - Transaksi dapat dilakukan dalam berbagai mata uang
-   - Pembayaran mendukung berbagai metode
-   - Terintegrasi dengan manajemen keuangan
+4. **Sales Management**
+   - Flexible order system dengan support untuk multiple items
+   - Comprehensive payment tracking dengan installment support
+   - Table management dengan reservation system
 
-5. **Integration & Services**
-   - API platform sebagai pusat integrasi
-   - Keamanan ditangani oleh `SecurityCompliance`
-   - Mendukung integrasi mobile dan e-commerce
-   - Business intelligence untuk analisis data
+5. **Employee Management**
+   - Hierarchical department and position management
+   - Comprehensive employee information management
+   - Flexible shift management system
 
-6. **Human Resource Management**
-   - Mengelola data karyawan, departemen, dan posisi
-   - Mendukung pengelolaan kehadiran, cuti, dan gaji
-   - Terintegrasi dengan analisis HR untuk pengambilan keputusan
+6. **Audit System**
+   - Comprehensive tracking untuk semua perubahan entity
+   - JSON-based change tracking untuk flexibility

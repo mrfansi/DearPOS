@@ -1,489 +1,518 @@
 # Database Schema
 
+## Overview
+Dokumen ini menjelaskan struktur database untuk aplikasi DearPOS. Skema database dirancang menggunakan prinsip-prinsip berikut:
+- Menggunakan UUID sebagai primary key untuk memudahkan replikasi dan distribusi data
+- Mengimplementasikan soft deletes dengan kolom `deleted_at` untuk semua tabel
+- Menggunakan timestamps (`created_at`, `updated_at`) untuk audit trail
+- Mengikuti konvensi Laravel untuk penamaan dan struktur tabel
+
+## Modul-modul
+
+### 1. Product Management
+Modul ini menangani manajemen produk, termasuk:
+- Manajemen produk dasar (nama, harga, stok)
+- Varian produk (ukuran, warna, dll)
+- Manajemen stok multi-lokasi
+- Bundle produk dan resep
+- Integrasi marketplace
+- Audit trail perubahan produk
+
+#### Tabel-tabel Product Management:
+1. `PRODUCTS`: Menyimpan data utama produk
+2. `PRODUCT_CATEGORIES`: Kategori produk
+3. `PRODUCT_VARIANTS`: Mengelola jenis varian
+4. `PRODUCT_VARIANT_VALUES`: Nilai spesifik untuk setiap varian
+5. `STOCK_MOVEMENTS`: Mencatat pergerakan stok
+6. `PRODUCT_LOCATIONS`: Manajemen stok per lokasi
+7. `PRODUCT_CHANGES`: Audit trail perubahan produk
+8. `MARKETPLACE_PRODUCTS`: Integrasi dengan marketplace
+9. `PRODUCT_BUNDLES`: Manajemen produk bundle
+10. `PRODUCT_RECIPES`: Resep untuk produk olahan
+11. `RECIPE_ITEMS`: Detail item dalam resep
+12. `PRODUCT_BARCODES`: Manajemen barcode produk
+13. `STOCK_ALERTS`: Manajemen peringatan stok
+14. `EXPIRY_ALERTS`: Peringatan produk mendekati kadaluarsa
+
+### 2. Sales Transaction
+Modul ini menangani semua transaksi penjualan, termasuk:
+- Transaksi kasir
+- Pembayaran multi-metode
+- Cicilan pembayaran
+- Reservasi dan antrian
+- Diskon dan promosi
+
+#### Tabel-tabel Sales Transaction:
+1. `SALES_TRANSACTIONS`: Data utama transaksi penjualan
+2. `TRANSACTION_ITEMS`: Detail item yang dijual
+3. `PAYMENTS`: Catatan pembayaran
+4. `PAYMENT_INSTALLMENTS`: Manajemen cicilan
+5. `POS_COUNTERS`: Informasi counter POS
+6. `POS_SHIFTS`: Manajemen shift kasir
+7. `QUEUE_MANAGEMENT`: Sistem antrian
+8. `DISCOUNTS`: Manajemen diskon
+9. `COUPONS`: Manajemen kupon
+10. `REFUNDS`: Manajemen pengembalian dana
+11. `VOID_TRANSACTIONS`: Manajemen transaksi batal
+12. `RESERVATIONS`: Manajemen reservasi
+13. `PRE_ORDERS`: Manajemen pre-order
+14. `TABLES`: Manajemen meja
+15. `TABLE_RESERVATIONS`: Manajemen reservasi meja
+16. `INVOICES`: Manajemen faktur
+17. `SPLIT_PAYMENTS`: Pembagian pembayaran
+18. `MARKETPLACE_ORDERS`: Order dari marketplace
+19. `TABLE_TRANSFERS`: Perpindahan meja
+
+### 3. Payment Management
+Modul ini menangani aspek keuangan dan pembayaran, termasuk:
+- Konfigurasi metode pembayaran
+- Manajemen pajak
+- Cicilan dan DP
+- Integrasi payment gateway
+- Rekonsiliasi bank
+
+#### Tabel-tabel Payment Management:
+1. `PAYMENT_METHODS`: Metode pembayaran
+2. `PAYMENT_GATEWAYS`: Payment gateway
+3. `TAX_RATES`: Tarif pajak
+4. `TAX_EXEMPTIONS`: Pengecualian pajak
+5. `QRIS_TRANSACTIONS`: Transaksi QRIS
+6. `CUSTOMER_DEPOSITS`: Deposit pelanggan
+7. `BANK_STATEMENTS`: Rekening koran
+8. `RECONCILIATION_ITEMS`: Item rekonsiliasi
+9. `DOWN_PAYMENT_CONFIGS`: Konfigurasi DP
+10. `PAYMENT_SCHEDULES`: Jadwal pembayaran
+
+### 4. Inventory Management
+Modul ini menangani manajemen inventori, termasuk:
+- Multi-lokasi
+- Transfer stok
+- Audit inventori
+- Manajemen supplier
+- Valuasi stok
+
+#### Tabel-tabel Inventory Management:
+1. `WAREHOUSES`: Data gudang
+2. `STORAGE_LOCATIONS`: Lokasi penyimpanan
+3. `STOCK_TRANSFERS`: Transfer stok
+4. `STOCK_TRANSFER_ITEMS`: Detail transfer
+5. `SUPPLIERS`: Data supplier
+6. `PURCHASE_ORDERS`: Order pembelian
+7. `RETURNS`: Pengembalian barang
+8. `RETURN_ITEMS`: Detail pengembalian
+9. `WASTE_RECORDS`: Catatan barang rusak
+10. `INVENTORY_VALUATIONS`: Valuasi inventori
+11. `REORDER_CONFIGS`: Konfigurasi reorder
+12. `INVENTORY_AUDIT_LOGS`: Log audit inventori
+
+### 5. Human Resource Management
+Modul ini menangani SDM, termasuk:
+- Manajemen karyawan
+- Struktur organisasi
+- Shift dan kehadiran
+- Gaji dan tunjangan
+- Kinerja
+
+#### Tabel-tabel Human Resource Management:
+1. `EMPLOYEES`: Data karyawan
+2. `DEPARTMENTS`: Struktur departemen
+3. `POSITIONS`: Jabatan
+4. `SHIFTS`: Pengaturan shift
+5. `ATTENDANCE`: Kehadiran
+6. `PAYROLL`: Penggajian
+7. `JOB_POSTINGS`: Lowongan kerja
+8. `CANDIDATES`: Data pelamar
+9. `DEPARTMENT_KPIS`: KPI departemen
+10. `EMPLOYEE_DOCUMENTS`: Dokumen karyawan
+11. `TASKS`: Manajemen tugas
+12. `EMPLOYEE_BENEFITS`: Benefit karyawan
+13. `PERFORMANCE_REVIEWS`: Review kinerja
+14. `LEAVE_TYPES`: Jenis cuti
+15. `LEAVE_REQUESTS`: Pengajuan cuti
+16. `EMERGENCY_CONTACTS`: Kontak darurat
+17. `WORK_PERMITS`: Izin kerja
+18. `BREAK_TIMES`: Waktu istirahat
+19. `SHIFT_ROTATIONS`: Rotasi shift
+20. `SHIFT_COVERAGE`: Coverage shift
+21. `PERFORMANCE_GOALS`: Goal setting
+22. `SALARY_COMPONENTS`: Komponen gaji
+23. `TAX_CALCULATIONS`: Perhitungan pajak
+24. `INSURANCE_POLICIES`: Polis asuransi
+
 ```mermaid
 erDiagram
-    %% Product Management
-    PRODUCTS {
-        uuid id PK
-        string name
-        string category
-        decimal base_price
-        uuid base_currency_id FK
-        integer stock
-        string barcode
-        string image_url
-        boolean is_bundle
-        date expiry_date
-        timestamp created_at
-        timestamp updated_at
-        boolean is_deleted
-    }
-
-    PRODUCT_BUNDLES {
-        uuid id PK
-        uuid product_id FK
-        uuid bundle_item_id FK
-        integer quantity
-        timestamp created_at
-    }
-
-    PRODUCT_RECIPES {
-        uuid id PK
-        uuid product_id FK
-        string name
-        text instructions
-        timestamp created_at
-    }
-
-    RECIPE_ITEMS {
-        uuid id PK
-        uuid recipe_id FK
-        uuid ingredient_id FK
-        decimal quantity
-        string unit
-    }
-
-    %% Sales Transaction
-    SALES_TRANSACTIONS {
-        uuid id PK
-        string invoice_number
-        uuid customer_id FK
-        uuid employee_id FK
-        uuid currency_id FK
-        decimal exchange_rate
-        decimal total_amount_local
-        decimal total_amount_foreign
-        decimal total_discount_local
-        decimal total_discount_foreign
-        string status
-        integer queue_number
-        boolean is_held
-        string reservation_id
-        timestamp transaction_date
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    TRANSACTION_ITEMS {
-        uuid id PK
-        uuid transaction_id FK
-        uuid product_id FK
-        integer quantity
-        decimal unit_price
-        decimal discount
-        decimal subtotal
-        timestamp created_at
-    }
-
-    PAYMENTS {
-        uuid id PK
-        uuid transaction_id FK
-        string payment_method
-        uuid currency_id FK
-        decimal exchange_rate
-        decimal amount_local
-        decimal amount_foreign
-        string qris_data
-        decimal deposit_amount_local
-        decimal deposit_amount_foreign
-        string status
-        timestamp payment_date
-        timestamp created_at
-    }
-
-    PAYMENT_INSTALLMENTS {
-        uuid id PK
-        uuid payment_id FK
-        integer installment_number
-        decimal amount
-        date due_date
-        string status
-        timestamp paid_at
-        timestamp created_at
-    }
-
-    %% Point of Sale Operations
-    POS_COUNTERS {
-        uuid id PK
-        string counter_name
-        string counter_type
-        boolean is_active
-        uuid current_employee_id FK
-        timestamp created_at
-    }
-
-    POS_SHIFTS {
-        uuid id PK
-        uuid counter_id FK
-        uuid employee_id FK
-        decimal opening_balance
-        decimal closing_balance
-        decimal cash_in
-        decimal cash_out
-        timestamp shift_start
-        timestamp shift_end
-        timestamp created_at
-    }
-
-    QUEUE_MANAGEMENT {
-        uuid id PK
-        integer queue_number
-        uuid counter_id FK
-        string status
-        timestamp called_at
-        timestamp completed_at
-        timestamp created_at
-    }
-
-    %% Financial Management
-    CHART_OF_ACCOUNTS {
-        uuid id PK
-        string account_code
-        string account_name
-        string account_type
-        string category
-        boolean is_active
-        timestamp created_at
-    }
-
-    JOURNAL_ENTRIES {
-        uuid id PK
-        string entry_number
-        uuid currency_id FK
-        decimal exchange_rate
-        date entry_date
-        text description
-        string status
-        timestamp created_at
-    }
-
-    JOURNAL_ITEMS {
-        uuid id PK
-        uuid journal_id FK
-        uuid account_id FK
-        uuid currency_id FK
-        decimal exchange_rate
-        decimal debit_local
-        decimal debit_foreign
-        decimal credit_local
-        decimal credit_foreign
-        timestamp created_at
-    }
-
-    ASSETS {
-        uuid id PK
-        string asset_name
-        string asset_type
-        decimal purchase_value
-        date purchase_date
-        decimal depreciation_value
-        string status
-        timestamp created_at
-    }
-
-    %% Warehouse Management
-    WAREHOUSES {
-        uuid id PK
-        string name
-        string location
-        string type
-        boolean is_active
-        timestamp created_at
-    }
-
-    STORAGE_LOCATIONS {
-        uuid id PK
-        uuid warehouse_id FK
-        string location_code
-        string zone
-        string rack
-        string bin
-        boolean is_active
-        timestamp created_at
-    }
-
-    STOCK_MOVEMENTS {
-        uuid id PK
-        uuid product_id FK
-        uuid from_location_id FK
-        uuid to_location_id FK
-        integer quantity
-        string movement_type
-        string reference
-        timestamp movement_date
-        timestamp created_at
-    }
-
-    %% Automotive Service
-    VEHICLES {
-        uuid id PK
-        uuid customer_id FK
-        string plate_number
-        string vin
-        string brand
-        string model
-        integer year
-        string color
-        timestamp created_at
-    }
-
-    SERVICE_ORDERS {
-        uuid id PK
-        uuid vehicle_id FK
-        uuid customer_id FK
-        string order_number
-        string status
-        text complaints
-        text diagnosis
-        decimal estimated_cost
-        timestamp scheduled_date
-        timestamp completed_date
-        timestamp created_at
-    }
-
-    SERVICE_ITEMS {
-        uuid id PK
-        uuid service_order_id FK
-        uuid product_id FK "Optional"
-        string service_type
-        string description
-        decimal labor_cost
-        decimal parts_cost
-        decimal total_cost
-        timestamp created_at
-    }
-
-    MECHANICS {
-        uuid id PK
-        string name
-        string specialization
-        boolean is_active
-        timestamp created_at
-    }
-
-    SERVICE_ASSIGNMENTS {
-        uuid id PK
-        uuid service_order_id FK
-        uuid mechanic_id FK
-        uuid service_bay_id FK
-        timestamp start_time
-        timestamp end_time
-        string status
-        timestamp created_at
-    }
-
-    %% E-commerce Integration
-    MARKETPLACE_INTEGRATIONS {
-        uuid id PK
-        string marketplace_name
-        string api_key
-        string store_id
-        boolean is_active
-        timestamp created_at
-    }
-
-    MARKETPLACE_PRODUCTS {
-        uuid id PK
-        uuid product_id FK
-        uuid marketplace_id FK
-        string marketplace_product_id
-        decimal marketplace_price
-        string status
-        timestamp synced_at
-        timestamp created_at
-    }
-
-    MARKETPLACE_ORDERS {
-        uuid id PK
-        uuid marketplace_id FK
-        string marketplace_order_id
-        string status
-        decimal total_amount
-        timestamp order_date
-        timestamp created_at
-    }
-
-    %% Currency Management
+    %% Core Reference Tables
     CURRENCIES {
         uuid id PK
         string code
         string name
-        string symbol
-        string format_pattern
-        boolean is_base_currency
-        boolean is_active
+        decimal exchange_rate
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
-    EXCHANGE_RATES {
+    UNITS_OF_MEASURE {
         uuid id PK
-        uuid from_currency_id FK
-        uuid to_currency_id FK
-        decimal rate
-        decimal inverse_rate
-        timestamp effective_date
-        string source
-        boolean is_manual
+        string code
+        string name
+        string category
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    LOCATIONS {
+        uuid id PK
+        string name
+        string type
+        text address
+        uuid parent_location_id FK
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    %% Product Management
+    PRODUCT_CATEGORIES {
+        uuid id PK
+        string name
+        uuid parent_category_id FK
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    PRODUCTS {
+        uuid id PK
+        string name
+        string sku
+        text description
+        uuid category_id FK
+        uuid base_currency_id FK
+        uuid base_unit_id FK
+        boolean is_managed_by_recipe
+        boolean track_expiry
+        boolean track_serial
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     PRODUCT_PRICES {
         uuid id PK
         uuid product_id FK
         uuid currency_id FK
-        decimal price
-        decimal min_price
-        decimal max_price
-        timestamp effective_date
-        timestamp created_at
-    }
-
-    CURRENCY_CONVERSION_FEES {
-        uuid id PK
-        uuid from_currency_id FK
-        uuid to_currency_id FK
-        decimal fee_percentage
-        decimal fixed_fee
-        timestamp effective_date
-        timestamp created_at
-    }
-
-    %% Internationalization
-    LANGUAGES {
-        uuid id PK
-        string code
-        string name
-        string native_name
-        string direction
-        boolean is_default
-        boolean is_active
-        timestamp created_at
-    }
-
-    TRANSLATIONS {
-        uuid id PK
-        uuid language_id FK
-        string namespace
-        string key
-        text value
-        text context_hint
+        string price_type
+        decimal amount
+        timestamp effective_from
+        timestamp effective_to
         timestamp created_at
         timestamp updated_at
+        timestamp deleted_at
     }
 
-    TRANSLATION_HISTORY {
+    PRODUCT_ATTRIBUTES {
         uuid id PK
-        uuid translation_id FK
-        text old_value
-        text new_value
-        uuid changed_by_id FK
-        timestamp changed_at
-    }
-
-    REGIONAL_SETTINGS {
-        uuid id PK
-        uuid language_id FK
-        string date_format
-        string time_format
-        string number_format
-        string address_format
-        string phone_format
-        string measurement_unit
-        string calendar_type
+        string name
+        string data_type
+        boolean is_required
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
-    TRANSLATED_CONTENT {
+    PRODUCT_ATTRIBUTE_VALUES {
         uuid id PK
+        uuid product_id FK
+        uuid attribute_id FK
+        string value
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    PRODUCT_VARIANTS {
+        uuid id PK
+        uuid product_id FK
+        string sku
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    VARIANT_ATTRIBUTES {
+        uuid id PK
+        uuid variant_id FK
+        uuid attribute_id FK
+        string value
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    PRODUCT_BARCODES {
+        uuid id PK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        string barcode_type
+        string barcode_value
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    PRODUCT_IMAGES {
+        uuid id PK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        string image_url
+        integer sort_order
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    %% Inventory Management
+    INVENTORY_LOCATIONS {
+        uuid id PK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        uuid location_id FK
+        decimal minimum_stock
+        decimal reorder_point
+        decimal maximum_stock
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    INVENTORY_TRANSACTIONS {
+        uuid id PK
+        string transaction_type
         uuid reference_id
         string reference_type
-        uuid language_id FK
-        string field_name
-        text content
+        uuid location_id FK
+        timestamp transaction_date
+        text notes
+        uuid created_by FK
         timestamp created_at
         timestamp updated_at
+        timestamp deleted_at
     }
 
-    USER_LANGUAGE_PREFERENCES {
+    INVENTORY_TRANSACTION_ITEMS {
         uuid id PK
-        uuid user_id FK
-        uuid language_id FK
-        uuid regional_settings_id FK
-        string timezone
-        timestamp created_at
-    }
-
-    %% Human Resource Management
-    EMPLOYEES {
-        uuid id PK
-        string employee_code
-        string first_name
-        string last_name
-        string email
-        string phone
-        string address
-        date birth_date
-        string gender
-        string marital_status
-        string national_id
-        string tax_id
-        string bank_account
-        string bank_name
-        uuid department_id FK
-        uuid position_id FK
-        uuid role_id FK
-        string employment_status
-        date join_date
-        date end_date
-        boolean is_active
+        uuid transaction_id FK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        uuid lot_id FK "nullable"
+        decimal quantity
+        uuid unit_id FK
+        decimal unit_cost
+        uuid currency_id FK
         timestamp created_at
         timestamp updated_at
+        timestamp deleted_at
     }
 
-    ROLES {
+    INVENTORY_LOTS {
         uuid id PK
-        string code
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        string lot_number
+        date manufacturing_date
+        date expiry_date
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    INVENTORY_SERIALS {
+        uuid id PK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        uuid lot_id FK "nullable"
+        string serial_number
+        string status
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    %% Recipe Management
+    RECIPES {
+        uuid id PK
+        uuid product_id FK
         string name
-        boolean is_active
+        text instructions
+        decimal yield_quantity
+        uuid yield_unit_id FK
+        integer preparation_time
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
-    ROLE_PERMISSIONS {
+    RECIPE_INGREDIENTS {
         uuid id PK
-        uuid role_id FK
-        string permission
+        uuid recipe_id FK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        decimal quantity
+        uuid unit_id FK
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
+    %% Sales Management
+    SALES_ORDERS {
+        uuid id PK
+        string order_number
+        uuid customer_id FK
+        uuid currency_id FK
+        string status
+        decimal subtotal
+        decimal tax_amount
+        decimal discount_amount
+        decimal total_amount
+        timestamp order_date
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    SALES_ORDER_ITEMS {
+        uuid id PK
+        uuid order_id FK
+        uuid product_id FK
+        uuid variant_id FK "nullable"
+        decimal quantity
+        uuid unit_id FK
+        decimal unit_price
+        decimal tax_amount
+        decimal discount_amount
+        decimal total_amount
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    %% Payment Management
+    PAYMENT_METHODS {
+        uuid id PK
+        string name
+        string type
+        boolean is_active
+        json config
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    PAYMENTS {
+        uuid id PK
+        uuid order_id FK
+        uuid payment_method_id FK
+        decimal amount
+        string status
+        string reference_number
+        timestamp payment_date
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    PAYMENT_INSTALLMENTS {
+        uuid id PK
+        uuid payment_id FK
+        decimal amount
+        timestamp due_date
+        string status
+        timestamp paid_at
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    %% Table Management
+    FLOOR_PLANS {
+        uuid id PK
+        uuid location_id FK
+        string name
+        integer floor_number
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    TABLES {
+        uuid id PK
+        uuid floor_plan_id FK
+        string name
+        string status
+        integer capacity
+        json position
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    TABLE_RESERVATIONS {
+        uuid id PK
+        uuid table_id FK
+        uuid customer_id FK
+        timestamp reservation_time
+        integer duration_minutes
+        string status
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    %% Employee Management
     DEPARTMENTS {
         uuid id PK
-        string code
-        uuid parent_id FK
-        string budget_code
-        decimal annual_budget
-        boolean is_active
+        string name
+        uuid parent_department_id FK
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     POSITIONS {
         uuid id PK
-        string code
+        string name
         uuid department_id FK
-        string job_description
-        string requirements
-        string salary_grade
-        boolean is_active
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
-    ATTENDANCE {
+    EMPLOYEES {
+        uuid id PK
+        string employee_number
+        string first_name
+        string last_name
+        uuid position_id FK
+        date join_date
+        string status
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    EMPLOYEE_CONTACTS {
         uuid id PK
         uuid employee_id FK
-        datetime check_in
-        datetime check_out
-        string status
-        text notes
+        string contact_type
+        string contact_value
+        boolean is_primary
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     SHIFTS {
@@ -491,296 +520,68 @@ erDiagram
         string name
         time start_time
         time end_time
-        integer max_employees
-        boolean is_active
         timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     EMPLOYEE_SHIFTS {
         uuid id PK
         uuid employee_id FK
         uuid shift_id FK
-        date start_date
-        date end_date
-        timestamp created_at
-    }
-
-    LEAVE_TYPES {
-        uuid id PK
-        string code
-        string name
-        integer annual_quota
-        boolean is_paid
-        boolean requires_approval
-        boolean is_active
-        timestamp created_at
-    }
-
-    LEAVE_REQUESTS {
-        uuid id PK
-        uuid employee_id FK
-        uuid leave_type_id FK
-        date start_date
-        date end_date
-        string status
-        text reason
-        text notes
-        uuid approved_by FK
-        timestamp approved_at
+        date shift_date
+        timestamp check_in
+        timestamp check_out
         timestamp created_at
         timestamp updated_at
+        timestamp deleted_at
     }
 
-    PAYROLL {
+    %% Audit Logs
+    AUDIT_LOGS {
         uuid id PK
-        uuid employee_id FK
-        date period_start
-        date period_end
-        decimal basic_salary
-        decimal allowances
-        decimal deductions
-        decimal overtime_pay
-        decimal bonus
-        decimal tax
-        decimal net_salary
-        string status
-        uuid approved_by FK
-        timestamp approved_at
+        uuid user_id FK
+        string entity_type
+        uuid entity_id
+        string action
+        json changes
         timestamp created_at
-        timestamp updated_at
-    }
-
-    SALARY_COMPONENTS {
-        uuid id PK
-        string code
-        string name
-        string type
-        string calculation_type
-        decimal amount
-        decimal percentage
-        boolean is_taxable
-        boolean is_active
-        timestamp created_at
-    }
-
-    EMPLOYEE_SALARY {
-        uuid id PK
-        uuid employee_id FK
-        uuid component_id FK
-        decimal amount
-        date effective_date
-        timestamp created_at
-    }
-
-    PERFORMANCE_REVIEWS {
-        uuid id PK
-        uuid employee_id FK
-        uuid reviewer_id FK
-        date review_date
-        string review_period
-        decimal rating
-        text comments
-        string status
-        uuid approved_by FK
-        timestamp approved_at
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PERFORMANCE_GOALS {
-        uuid id PK
-        uuid employee_id FK
-        string type
-        string description
-        string metrics
-        date target_date
-        string status
-        decimal achievement
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    TRAINING_PROGRAMS {
-        uuid id PK
-        string code
-        string name
-        string description
-        date start_date
-        date end_date
-        string trainer
-        string location
-        decimal cost
-        integer capacity
-        boolean is_mandatory
-        boolean is_active
-        timestamp created_at
-    }
-
-    EMPLOYEE_TRAINING {
-        uuid id PK
-        uuid employee_id FK
-        uuid program_id FK
-        string status
-        decimal score
-        text feedback
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    JOB_POSTINGS {
-        uuid id PK
-        uuid position_id FK
-        string status
-        date posting_date
-        date closing_date
-        integer vacancies
-        text requirements
-        text description
-        decimal budget
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CANDIDATES {
-        uuid id PK
-        uuid job_posting_id FK
-        string first_name
-        string last_name
-        string email
-        string phone
-        string resume_url
-        string status
-        text notes
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    INTERVIEWS {
-        uuid id PK
-        uuid candidate_id FK
-        uuid interviewer_id FK
-        datetime schedule
-        string location
-        string type
-        string status
-        decimal rating
-        text notes
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    EMPLOYEE_DOCUMENTS {
-        uuid id PK
-        uuid employee_id FK
-        string document_type
-        string document_number
-        date issue_date
-        date expiry_date
-        string document_url
-        boolean requires_renewal
-        timestamp created_at
-    }
-
-    EMPLOYEE_BENEFITS {
-        uuid id PK
-        uuid employee_id FK
-        string benefit_type
-        string provider
-        string policy_number
-        date start_date
-        date end_date
-        decimal coverage_amount
-        boolean is_active
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    EMPLOYEE_TASKS {
-        uuid id PK
-        uuid employee_id FK
-        uuid assigned_by FK
-        string title
-        text description
-        date due_date
-        string priority
-        string status
-        timestamp completed_at
-        timestamp created_at
-        timestamp updated_at
     }
 
     %% Relationships
-    PRODUCTS ||--o{ PRODUCT_BUNDLES : "contains"
-    PRODUCTS ||--o{ PRODUCT_RECIPES : "has"
-    PRODUCT_RECIPES ||--o{ RECIPE_ITEMS : "contains"
+    PRODUCTS ||--o{ PRODUCT_PRICES : "has"
+    PRODUCTS ||--o{ PRODUCT_ATTRIBUTE_VALUES : "has"
+    PRODUCTS ||--o{ PRODUCT_VARIANTS : "has"
+    PRODUCTS ||--o{ PRODUCT_BARCODES : "has"
+    PRODUCTS ||--o{ PRODUCT_IMAGES : "has"
+    PRODUCTS ||--o{ INVENTORY_LOCATIONS : "stored_in"
+    PRODUCTS ||--o{ INVENTORY_TRANSACTION_ITEMS : "involved_in"
+    PRODUCTS ||--o{ INVENTORY_LOTS : "has"
+    PRODUCTS ||--o{ INVENTORY_SERIALS : "has"
+    PRODUCTS ||--o{ RECIPE_INGREDIENTS : "used_in"
+    PRODUCTS ||--o{ SALES_ORDER_ITEMS : "sold_in"
+
+    PRODUCT_VARIANTS ||--o{ VARIANT_ATTRIBUTES : "has"
+    PRODUCT_VARIANTS ||--o{ PRODUCT_BARCODES : "has"
+    PRODUCT_VARIANTS ||--o{ PRODUCT_IMAGES : "has"
+    PRODUCT_VARIANTS ||--o{ INVENTORY_LOCATIONS : "stored_in"
+    PRODUCT_VARIANTS ||--o{ INVENTORY_TRANSACTION_ITEMS : "involved_in"
+    PRODUCT_VARIANTS ||--o{ INVENTORY_LOTS : "has"
+    PRODUCT_VARIANTS ||--o{ INVENTORY_SERIALS : "has"
+    PRODUCT_VARIANTS ||--o{ RECIPE_INGREDIENTS : "used_in"
+    PRODUCT_VARIANTS ||--o{ SALES_ORDER_ITEMS : "sold_in"
+
+    INVENTORY_TRANSACTIONS ||--o{ INVENTORY_TRANSACTION_ITEMS : "contains"
+    INVENTORY_LOTS ||--o{ INVENTORY_SERIALS : "has"
     
-    SALES_TRANSACTIONS ||--o{ TRANSACTION_ITEMS : "contains"
-    SALES_TRANSACTIONS ||--o{ PAYMENTS : "has"
+    SALES_ORDERS ||--o{ SALES_ORDER_ITEMS : "contains"
+    SALES_ORDERS ||--o{ PAYMENTS : "has"
     PAYMENTS ||--o{ PAYMENT_INSTALLMENTS : "has"
-    
-    POS_COUNTERS ||--o{ POS_SHIFTS : "operates"
-    POS_COUNTERS ||--o{ QUEUE_MANAGEMENT : "manages"
-    
-    JOURNAL_ENTRIES ||--o{ JOURNAL_ITEMS : "contains"
-    
-    WAREHOUSES ||--o{ STORAGE_LOCATIONS : "contains"
-    STORAGE_LOCATIONS ||--o{ STOCK_MOVEMENTS : "tracks"
-    
-    VEHICLES ||--o{ SERVICE_ORDERS : "receives"
-    SERVICE_ORDERS ||--o{ SERVICE_ITEMS : "includes"
-    SERVICE_ORDERS ||--o{ SERVICE_ASSIGNMENTS : "assigned"
-    
-    MARKETPLACE_INTEGRATIONS ||--o{ MARKETPLACE_PRODUCTS : "lists"
-    MARKETPLACE_INTEGRATIONS ||--o{ MARKETPLACE_ORDERS : "processes"
-    
-    CURRENCIES ||--o{ EXCHANGE_RATES : "has rates to"
-    CURRENCIES ||--o{ PRODUCT_PRICES : "defines prices in"
-    CURRENCIES ||--o{ SALES_TRANSACTIONS : "used in"
-    CURRENCIES ||--o{ PAYMENTS : "accepted in"
-    CURRENCIES ||--o{ JOURNAL_ENTRIES : "recorded in"
-    CURRENCIES ||--o{ JOURNAL_ITEMS : "detailed in"
-    
-    LANGUAGES ||--o{ TRANSLATIONS : "contains"
-    LANGUAGES ||--o{ REGIONAL_SETTINGS : "has"
-    LANGUAGES ||--o{ TRANSLATED_CONTENT : "provides"
-    TRANSLATIONS ||--o{ TRANSLATION_HISTORY : "tracks"
-    USERS ||--o{ USER_LANGUAGE_PREFERENCES : "sets"
-    
-    PRODUCTS ||--o{ TRANSLATED_CONTENT : "has translations"
-    CATEGORIES ||--o{ TRANSLATED_CONTENT : "has translations"
-    ERROR_MESSAGES ||--o{ TRANSLATED_CONTENT : "has translations"
-    EMAIL_TEMPLATES ||--o{ TRANSLATED_CONTENT : "has translations"
-    
-    EMPLOYEES ||--o{ ATTENDANCE : "records"
-    EMPLOYEES ||--o{ EMPLOYEE_SHIFTS : "assigned to"
-    EMPLOYEES ||--o{ LEAVE_REQUESTS : "submits"
-    EMPLOYEES ||--o{ PAYROLL : "receives"
-    EMPLOYEES ||--o{ EMPLOYEE_SALARY : "has"
-    EMPLOYEES ||--o{ PERFORMANCE_REVIEWS : "undergoes"
-    EMPLOYEES ||--o{ PERFORMANCE_GOALS : "sets"
-    EMPLOYEES ||--o{ EMPLOYEE_TRAINING : "participates in"
-    EMPLOYEES ||--o{ EMPLOYEE_DOCUMENTS : "owns"
-    EMPLOYEES ||--o{ EMPLOYEE_BENEFITS : "receives"
-    EMPLOYEES ||--o{ EMPLOYEE_TASKS : "assigned"
-    
-    ROLES ||--o{ ROLE_PERMISSIONS : "has"
-    ROLES ||--o{ EMPLOYEES : "assigned to"
-    
-    DEPARTMENTS ||--o{ POSITIONS : "contains"
-    DEPARTMENTS ||--o{ EMPLOYEES : "employs"
-    DEPARTMENTS ||--o{ DEPARTMENTS : "has child"
-    
-    POSITIONS ||--o{ EMPLOYEES : "filled by"
-    POSITIONS ||--o{ JOB_POSTINGS : "advertised as"
-    
-    SHIFTS ||--o{ EMPLOYEE_SHIFTS : "assigned in"
-    
-    LEAVE_TYPES ||--o{ LEAVE_REQUESTS : "used in"
-    
-    SALARY_COMPONENTS ||--o{ EMPLOYEE_SALARY : "used in"
-    
-    TRAINING_PROGRAMS ||--o{ EMPLOYEE_TRAINING : "enrolls"
-    
-    JOB_POSTINGS ||--o{ CANDIDATES : "applies to"
-    
-    CANDIDATES ||--o{ INTERVIEWS : "scheduled for"
+
+    FLOOR_PLANS ||--o{ TABLES : "contains"
+    TABLES ||--o{ TABLE_RESERVATIONS : "has"
+
+    DEPARTMENTS ||--o{ POSITIONS : "has"
+    POSITIONS ||--o{ EMPLOYEES : "has"
+    EMPLOYEES ||--o{ EMPLOYEE_CONTACTS : "has"
+    EMPLOYEES ||--o{ EMPLOYEE_SHIFTS : "assigned_to"
