@@ -41,3 +41,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Generated plugin build rules, which manage building the plugins and adding
+# them to the application.
+flutter/generated_plugins.cmake
+
+.DS_Store
