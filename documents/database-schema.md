@@ -139,6 +139,50 @@ Modul ini menangani SDM, termasuk:
 23. `TAX_CALCULATIONS`: Perhitungan pajak
 24. `INSURANCE_POLICIES`: Polis asuransi
 
+### 6. Customer Management
+Modul ini menangani manajemen pelanggan, termasuk:
+- Informasi pribadi dan bisnis
+- Program loyalitas
+- Status dan catatan tambahan
+
+#### Tabel-tabel Customer Management:
+1. `CUSTOMERS`: Menyimpan informasi pelanggan
+2. `ADDRESSES`: Menyimpan alamat pelanggan
+
+### 7. Pre-Order Management
+Modul ini menangani manajemen pre-order, termasuk:
+- Identifikasi dan status pre-order
+- Detail finansial
+- Instruksi khusus
+
+#### Tabel-tabel Pre-Order Management:
+1. `PRE_ORDERS`: Menyimpan data pre-order
+2. `PRE_ORDER_ITEMS`: Menyimpan item pre-order
+
+### 8. Supplier Management
+Modul ini menangani manajemen pemasok, termasuk:
+- Informasi kontak dan bisnis
+- Status dan catatan tambahan
+
+#### Tabel-tabel Supplier Management:
+1. `SUPPLIERS`: Menyimpan informasi pemasok
+
+### 9. Payment Installment Management
+Modul ini menangani manajemen cicilan pembayaran, termasuk:
+- Detail cicilan
+- Status dan informasi tambahan
+
+#### Tabel-tabel Payment Installment Management:
+1. `PAYMENT_INSTALLMENTS`: Menyimpan data cicilan pembayaran
+
+### 10. Waste Management
+Modul ini menangani manajemen limbah, termasuk:
+- Alasan dan deskripsi limbah
+- Informasi produk dan gudang
+
+#### Tabel-tabel Waste Management:
+1. `WASTE_RECORDS`: Menyimpan catatan limbah
+
 ```mermaid
 erDiagram
     %% Core Reference Tables
