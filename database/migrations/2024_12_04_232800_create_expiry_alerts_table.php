@@ -30,17 +30,17 @@ return new class extends Migration {
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('variant_id')
                 ->references('id')
                 ->on('product_variants')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('lot_id')
                 ->references('id')
                 ->on('inventory_lots')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('created_by')
                 ->references('id')

@@ -29,7 +29,7 @@ return new class extends Migration {
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('currency_id')
                 ->references('id')

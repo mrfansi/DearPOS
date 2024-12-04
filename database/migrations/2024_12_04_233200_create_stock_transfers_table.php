@@ -12,40 +12,40 @@ return new class extends Migration {
     {
         Schema::create('stock_transfers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->uuid('from_warehouse_id');
             $table->uuid('to_warehouse_id');
-            
+
             $table->date('transfer_date');
             $table->string('status', 20);
-            
+
             $table->text('notes')->nullable();
             $table->uuid('created_by');
             $table->uuid('approved_by')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign key constraints
             $table->foreign('from_warehouse_id')
-                  ->references('id')
-                  ->on('warehouses')
-                  ->onDelete('restrict');
+                ->references('id')
+                ->on('warehouses')
+                ->onDelete('restrict');
 
             $table->foreign('to_warehouse_id')
-                  ->references('id')
-                  ->on('warehouses')
-                  ->onDelete('restrict');
+                ->references('id')
+                ->on('warehouses')
+                ->onDelete('restrict');
 
             $table->foreign('created_by')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('restrict');
+                ->references('id')
+                ->on('users')
+                ->onDelete('restrict');
 
             $table->foreign('approved_by')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('set null');
+                ->references('id')
+                ->on('users')
+                ->nullOnDelete();
         });
     }
 

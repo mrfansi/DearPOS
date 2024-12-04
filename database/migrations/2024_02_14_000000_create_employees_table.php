@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
@@ -21,21 +20,18 @@ return new class extends Migration
             $table->uuid('position_id')->nullable();
             $table->date('hire_date');
             $table->enum('employment_status', [
-                'full_time', 
-                'part_time', 
-                'contract', 
-                'probation', 
-                'internship', 
-                'resigned', 
+                'full_time',
+                'part_time',
+                'contract',
+                'probation',
+                'internship',
+                'resigned',
                 'terminated'
             ])->default('full_time');
             $table->date('resignation_date')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('department_id')->references('id')->on('departments');
-            $table->foreign('position_id')->references('id')->on('positions');
         });
     }
 

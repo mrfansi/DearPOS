@@ -29,19 +29,19 @@ return new class extends Migration {
 
             // Foreign key constraints
             $table->foreign('category_id')
-                  ->references('id')
-                  ->on('product_categories')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('product_categories')
+                ->cascadeOnDelete();
 
             $table->foreign('base_currency_id')
-                  ->references('id')
-                  ->on('currencies')
-                  ->onDelete('restrict');
+                ->references('id')
+                ->on('currencies')
+                ->onDelete('restrict');
 
             $table->foreign('base_unit_id')
-                  ->references('id')
-                  ->on('units_of_measures')
-                  ->onDelete('restrict');
+                ->references('id')
+                ->on('units_of_measures')
+                ->onDelete('restrict');
         });
     }
 

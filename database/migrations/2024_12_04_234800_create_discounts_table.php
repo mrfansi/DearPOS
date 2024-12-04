@@ -12,28 +12,28 @@ return new class extends Migration {
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             // Basic Information
             $table->string('name');
             $table->string('code')->unique();
             $table->text('description')->nullable();
-            
+
             // Discount Configuration
             $table->string('type'); // percentage, fixed_amount, buy_x_get_y
             $table->decimal('value', 15, 4);
-            
+
             // Constraints
             $table->decimal('minimum_purchase_amount', 15, 4)->default(0);
             $table->decimal('maximum_discount_amount', 15, 4)->nullable();
-            
+
             // Validity Period
             $table->date('start_date');
             $table->date('end_date');
-            
+
             // Application Scope
             $table->string('applies_to'); // all_products, specific_products, specific_categories
             $table->boolean('is_active')->default(true);
-            
+
             // Timestamps and Soft Delete
             $table->timestamps();
             $table->softDeletes();
@@ -43,36 +43,36 @@ return new class extends Migration {
         Schema::create('discount_products', function (Blueprint $table) {
             $table->uuid('discount_id');
             $table->uuid('product_id');
-            
+
             $table->primary(['discount_id', 'product_id']);
-            
+
             $table->foreign('discount_id')
-                  ->references('id')
-                  ->on('discounts')
-                  ->onDelete('cascade');
-            
+                ->references('id')
+                ->on('discounts')
+                ->cascadeOnDelete();
+
             $table->foreign('product_id')
-                  ->references('id')
-                  ->on('products')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
         });
 
         // Pivot table for categories
         Schema::create('discount_categories', function (Blueprint $table) {
             $table->uuid('discount_id');
             $table->uuid('category_id');
-            
+
             $table->primary(['discount_id', 'category_id']);
-            
+
             $table->foreign('discount_id')
-                  ->references('id')
-                  ->on('discounts')
-                  ->onDelete('cascade');
-            
+                ->references('id')
+                ->on('discounts')
+                ->cascadeOnDelete();
+
             $table->foreign('category_id')
-                  ->references('id')
-                  ->on('product_categories')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('product_categories')
+                ->cascadeOnDelete();
         });
     }
 

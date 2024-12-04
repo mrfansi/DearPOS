@@ -12,26 +12,26 @@ return new class extends Migration {
     {
         Schema::create('product_barcodes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->uuid('product_id');
             $table->uuid('variant_id')->nullable();
-            
+
             $table->string('barcode_type', 20);
             $table->string('barcode_value', 100);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign key constraints
             $table->foreign('product_id')
-                  ->references('id')
-                  ->on('products')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
 
             $table->foreign('variant_id')
-                  ->references('id')
-                  ->on('product_variants')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('product_variants')
+                ->cascadeOnDelete();
 
             // Unique constraint for barcode value
             $table->unique('barcode_value');

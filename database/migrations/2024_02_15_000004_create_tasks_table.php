@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
@@ -22,13 +21,13 @@ return new class extends Migration
             $table->date('completed_date')->nullable();
             $table->decimal('estimated_hours', 8, 2)->nullable();
             $table->decimal('actual_hours', 8, 2)->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('assigned_to_employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('created_by_employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('set null');
+            $table->foreign('assigned_to_employee_id')->references('id')->on('employees')->cascadeOnDelete();
+            $table->foreign('created_by_employee_id')->references('id')->on('employees')->cascadeOnDelete();
+            $table->foreign('department_id')->references('id')->on('departments')->nullOnDelete();
         });
     }
 

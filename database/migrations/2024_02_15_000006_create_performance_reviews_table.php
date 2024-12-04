@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('performance_reviews', function (Blueprint $table) {
@@ -21,12 +20,12 @@ return new class extends Migration
             $table->text('goals_achieved')->nullable();
             $table->text('recommended_actions')->nullable();
             $table->date('next_review_date')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('reviewer_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->cascadeOnDelete();
+            $table->foreign('reviewer_id')->references('id')->on('employees')->cascadeOnDelete();
         });
     }
 

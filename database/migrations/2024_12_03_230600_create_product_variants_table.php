@@ -12,20 +12,20 @@ return new class extends Migration {
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->uuid('product_id');
             $table->string('sku', 50);
-            
+
             $table->boolean('is_active')->default(true);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign key constraints
             $table->foreign('product_id')
-                  ->references('id')
-                  ->on('products')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
 
             // Unique constraint for SKU
             $table->unique('sku');

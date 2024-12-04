@@ -12,33 +12,33 @@ return new class extends Migration {
     {
         Schema::create('payment_installments', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             // Payment Reference
             $table->uuid('payment_id');
-            
+
             // Installment Details
             $table->integer('installment_number');
             $table->decimal('amount', 15, 4);
-            
+
             // Timing
             $table->date('due_date');
             $table->date('paid_date')->nullable();
-            
+
             // Status
             $table->string('status', 20); // pending, paid, overdue
-            
+
             // Additional Information
             $table->text('notes')->nullable();
-            
+
             // Timestamps and Soft Delete
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign Key Constraints
             $table->foreign('payment_id')
-                  ->references('id')
-                  ->on('payments')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('payments')
+                ->cascadeOnDelete();
         });
     }
 

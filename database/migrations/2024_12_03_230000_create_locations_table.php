@@ -21,9 +21,9 @@ return new class extends Migration {
 
             // Foreign key constraint
             $table->foreign('parent_location_id')
-                  ->references('id')
-                  ->on('locations')
-                  ->onDelete('set null');
+                ->references('id')
+                ->on('locations')
+                ->nullOnDelete();
         });
     }
 

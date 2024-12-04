@@ -12,18 +12,18 @@ return new class extends Migration {
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->string('name', 100);
             $table->string('code', 50)->unique();
             $table->text('address')->nullable();
             $table->string('phone', 20)->nullable();
             $table->string('email', 100)->nullable();
-            
+
             $table->uuid('company_id');
             $table->uuid('location_id')->nullable();
-            
+
             $table->boolean('is_active')->default(true);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
@@ -36,7 +36,7 @@ return new class extends Migration {
             $table->foreign('location_id')
                 ->references('id')
                 ->on('locations')
-                ->onDelete('set null');
+                ->nullOnDelete();
         });
     }
 

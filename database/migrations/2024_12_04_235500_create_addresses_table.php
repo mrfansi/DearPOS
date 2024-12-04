@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->string('name', 100)->nullable();
             $table->string('phone', 20)->nullable();
             $table->text('street_address');
@@ -20,11 +20,11 @@ return new class extends Migration {
             $table->string('state', 100)->nullable();
             $table->string('postal_code', 20)->nullable();
             $table->string('country', 100);
-            
+
             $table->uuid('customer_id')->nullable();
             $table->boolean('is_primary')->default(false);
             $table->string('address_type', 50)->nullable(); // e.g., 'billing', 'shipping', 'home', 'work'
-            
+
             $table->timestamps();
             $table->softDeletes();
 
@@ -32,7 +32,7 @@ return new class extends Migration {
             $table->foreign('customer_id')
                 ->references('id')
                 ->on('customers')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
         });
     }
 

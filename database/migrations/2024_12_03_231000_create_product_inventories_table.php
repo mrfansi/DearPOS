@@ -12,33 +12,33 @@ return new class extends Migration {
     {
         Schema::create('product_inventories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->uuid('product_id');
             $table->uuid('variant_id')->nullable();
             $table->uuid('location_id');
-            
+
             $table->decimal('minimum_stock', 15, 4)->default(0);
             $table->decimal('reorder_point', 15, 4)->default(0);
             $table->decimal('maximum_stock', 15, 4)->default(0);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign key constraints
             $table->foreign('product_id')
-                  ->references('id')
-                  ->on('products')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
 
             $table->foreign('variant_id')
-                  ->references('id')
-                  ->on('product_variants')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('product_variants')
+                ->cascadeOnDelete();
 
             $table->foreign('location_id')
-                  ->references('id')
-                  ->on('locations')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('locations')
+                ->cascadeOnDelete();
 
             // Unique constraint to prevent duplicate inventory entries
             $table->unique(['product_id', 'variant_id', 'location_id']);

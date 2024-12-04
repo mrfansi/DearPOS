@@ -12,29 +12,29 @@ return new class extends Migration {
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->string('name', 100);
             $table->string('code', 20)->unique();
-            
+
             $table->text('address')->nullable();
             $table->string('contact_person', 100)->nullable();
             $table->string('contact_email', 100)->nullable();
             $table->string('contact_phone', 20)->nullable();
-            
+
             $table->uuid('currency_id')->nullable();
             $table->string('tax_number', 50)->nullable();
-            
+
             $table->boolean('is_active')->default(true);
             $table->text('notes')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign key constraints
             $table->foreign('currency_id')
-                  ->references('id')
-                  ->on('currencies')
-                  ->onDelete('set null');
+                ->references('id')
+                ->on('currencies')
+                ->nullOnDelete();
         });
     }
 

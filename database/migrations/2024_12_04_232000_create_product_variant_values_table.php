@@ -12,24 +12,24 @@ return new class extends Migration {
     {
         Schema::create('product_variant_values', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->uuid('variant_id');
             $table->uuid('attribute_id');
             $table->string('value', 100);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign key constraints
             $table->foreign('variant_id')
-                  ->references('id')
-                  ->on('product_variants')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('product_variants')
+                ->cascadeOnDelete();
 
             $table->foreign('attribute_id')
-                  ->references('id')
-                  ->on('variant_attributes')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('variant_attributes')
+                ->cascadeOnDelete();
 
             // Unique constraint to prevent duplicate variant-attribute combinations
             $table->unique(['variant_id', 'attribute_id']);

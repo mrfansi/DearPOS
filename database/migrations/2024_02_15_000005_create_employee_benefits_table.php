@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('employee_benefits', function (Blueprint $table) {
@@ -20,11 +19,11 @@ return new class extends Migration
             $table->decimal('employee_contribution', 15, 2)->nullable();
             $table->decimal('employer_contribution', 15, 2)->nullable();
             $table->boolean('is_active')->default(true);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->cascadeOnDelete();
         });
     }
 

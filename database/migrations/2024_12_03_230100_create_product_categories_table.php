@@ -19,9 +19,9 @@ return new class extends Migration {
 
             // Foreign key constraint
             $table->foreign('parent_category_id')
-                  ->references('id')
-                  ->on('product_categories')
-                  ->onDelete('set null');
+                ->references('id')
+                ->on('product_categories')
+                ->nullOnDelete();
         });
     }
 

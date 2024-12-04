@@ -34,12 +34,12 @@ return new class extends Migration {
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('variant_id')
                 ->references('id')
                 ->on('product_variants')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('location_id')
                 ->references('id')
