@@ -143,409 +143,409 @@ Modul ini menangani SDM, termasuk:
 erDiagram
     %% Core Reference Tables
     CURRENCIES {
-        uuid id PK
-        string code
-        string name
-        decimal exchange_rate
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(3) code "not null"
+        string(50) name "not null"
+        decimal(15,4) exchange_rate "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     UNITS_OF_MEASURE {
-        uuid id PK
-        string code
-        string name
-        string category
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(10) code "not null"
+        string(50) name "not null"
+        string(20) category "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     LOCATIONS {
-        uuid id PK
-        string name
-        string type
-        text address
-        uuid parent_location_id FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(100) name "not null"
+        string(20) type "not null"
+        text(500) address "nullable"
+        uuid(36) parent_location_id FK "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Product Management
     PRODUCT_CATEGORIES {
-        uuid id PK
-        string name
-        uuid parent_category_id FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(100) name "not null"
+        uuid(36) parent_category_id FK "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCTS {
-        uuid id PK
-        string name
-        string sku
-        text description
-        uuid category_id FK
-        uuid base_currency_id FK
-        uuid base_unit_id FK
-        boolean is_managed_by_recipe
-        boolean track_expiry
-        boolean track_serial
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(100) name "not null"
+        string(50) sku "not null"
+        text(1000) description "nullable"
+        uuid(36) category_id FK "not null"
+        uuid(36) base_currency_id FK "not null"
+        uuid(36) base_unit_id FK "not null"
+        boolean is_managed_by_recipe "not null default false"
+        boolean track_expiry "not null default false"
+        boolean track_serial "not null default false"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCT_PRICES {
-        uuid id PK
-        uuid product_id FK
-        uuid currency_id FK
-        string price_type
-        decimal amount
-        timestamp effective_from
-        timestamp effective_to
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) currency_id FK "not null"
+        string(20) price_type "not null"
+        decimal(15,4) amount "not null"
+        timestamp effective_from "not null"
+        timestamp effective_to "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCT_ATTRIBUTES {
-        uuid id PK
-        string name
-        string data_type
-        boolean is_required
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(50) name "not null"
+        string(20) data_type "not null"
+        boolean is_required "not null default false"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCT_ATTRIBUTE_VALUES {
-        uuid id PK
-        uuid product_id FK
-        uuid attribute_id FK
-        string value
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) attribute_id FK "not null"
+        string(255) value "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCT_VARIANTS {
-        uuid id PK
-        uuid product_id FK
-        string sku
-        boolean is_active
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        string(50) sku "not null"
+        boolean is_active "not null default true"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     VARIANT_ATTRIBUTES {
-        uuid id PK
-        uuid variant_id FK
-        uuid attribute_id FK
-        string value
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) variant_id FK "not null"
+        uuid(36) attribute_id FK "not null"
+        string(255) value "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCT_BARCODES {
-        uuid id PK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        string barcode_type
-        string barcode_value
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        string(20) barcode_type "not null"
+        string(100) barcode_value "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PRODUCT_IMAGES {
-        uuid id PK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        string image_url
-        integer sort_order
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        string(255) image_url "not null"
+        integer sort_order "not null default 0"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Inventory Management
     INVENTORY_LOCATIONS {
-        uuid id PK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        uuid location_id FK
-        decimal minimum_stock
-        decimal reorder_point
-        decimal maximum_stock
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        uuid(36) location_id FK "not null"
+        decimal(15,4) minimum_stock "not null default 0"
+        decimal(15,4) reorder_point "not null default 0"
+        decimal(15,4) maximum_stock "not null default 0"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     INVENTORY_TRANSACTIONS {
-        uuid id PK
-        string transaction_type
-        uuid reference_id
-        string reference_type
-        uuid location_id FK
-        timestamp transaction_date
-        text notes
-        uuid created_by FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(20) transaction_type "not null"
+        uuid(36) reference_id "not null"
+        string(50) reference_type "not null"
+        uuid(36) location_id FK "not null"
+        timestamp transaction_date "not null"
+        text(500) notes "nullable"
+        uuid(36) created_by FK "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     INVENTORY_TRANSACTION_ITEMS {
-        uuid id PK
-        uuid transaction_id FK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        uuid lot_id FK "nullable"
-        decimal quantity
-        uuid unit_id FK
-        decimal unit_cost
-        uuid currency_id FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) transaction_id FK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        uuid(36) lot_id FK "nullable"
+        decimal(15,4) quantity "not null"
+        uuid(36) unit_id FK "not null"
+        decimal(15,4) unit_cost "not null"
+        uuid(36) currency_id FK "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     INVENTORY_LOTS {
-        uuid id PK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        string lot_number
-        date manufacturing_date
-        date expiry_date
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        string(50) lot_number "not null"
+        date manufacturing_date "not null"
+        date expiry_date "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     INVENTORY_SERIALS {
-        uuid id PK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        uuid lot_id FK "nullable"
-        string serial_number
-        string status
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        uuid(36) lot_id FK "nullable"
+        string(100) serial_number "not null"
+        string(20) status "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Recipe Management
     RECIPES {
-        uuid id PK
-        uuid product_id FK
-        string name
-        text instructions
-        decimal yield_quantity
-        uuid yield_unit_id FK
-        integer preparation_time
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) product_id FK "not null"
+        string(100) name "not null"
+        text(1000) instructions "nullable"
+        decimal(15,4) yield_quantity "not null"
+        uuid(36) yield_unit_id FK "not null"
+        integer preparation_time "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     RECIPE_INGREDIENTS {
-        uuid id PK
-        uuid recipe_id FK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        decimal quantity
-        uuid unit_id FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) recipe_id FK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        decimal(15,4) quantity "not null"
+        uuid(36) unit_id FK "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Sales Management
     SALES_ORDERS {
-        uuid id PK
-        string order_number
-        uuid customer_id FK
-        uuid currency_id FK
-        string status
-        decimal subtotal
-        decimal tax_amount
-        decimal discount_amount
-        decimal total_amount
-        timestamp order_date
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(50) order_number "not null"
+        uuid(36) customer_id FK "not null"
+        uuid(36) currency_id FK "not null"
+        string(20) status "not null"
+        decimal(15,4) subtotal "not null"
+        decimal(15,4) tax_amount "not null"
+        decimal(15,4) discount_amount "not null"
+        decimal(15,4) total_amount "not null"
+        timestamp order_date "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     SALES_ORDER_ITEMS {
-        uuid id PK
-        uuid order_id FK
-        uuid product_id FK
-        uuid variant_id FK "nullable"
-        decimal quantity
-        uuid unit_id FK
-        decimal unit_price
-        decimal tax_amount
-        decimal discount_amount
-        decimal total_amount
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) order_id FK "not null"
+        uuid(36) product_id FK "not null"
+        uuid(36) variant_id FK "nullable"
+        decimal(15,4) quantity "not null"
+        uuid(36) unit_id FK "not null"
+        decimal(15,4) unit_price "not null"
+        decimal(15,4) tax_amount "not null"
+        decimal(15,4) discount_amount "not null"
+        decimal(15,4) total_amount "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Payment Management
     PAYMENT_METHODS {
-        uuid id PK
-        string name
-        string type
-        boolean is_active
-        json config
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(50) name "not null"
+        string(20) type "not null"
+        boolean is_active "not null default true"
+        json config "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PAYMENTS {
-        uuid id PK
-        uuid order_id FK
-        uuid payment_method_id FK
-        decimal amount
-        string status
-        string reference_number
-        timestamp payment_date
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) order_id FK "not null"
+        uuid(36) payment_method_id FK "not null"
+        decimal(15,4) amount "not null"
+        string(20) status "not null"
+        string(50) reference_number "nullable"
+        timestamp payment_date "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     PAYMENT_INSTALLMENTS {
-        uuid id PK
-        uuid payment_id FK
-        decimal amount
-        timestamp due_date
-        string status
-        timestamp paid_at
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) payment_id FK "not null"
+        decimal(15,4) amount "not null"
+        timestamp due_date "not null"
+        string(20) status "not null"
+        timestamp paid_at "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Table Management
     FLOOR_PLANS {
-        uuid id PK
-        uuid location_id FK
-        string name
-        integer floor_number
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) location_id FK "not null"
+        string(100) name "not null"
+        integer floor_number "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     TABLES {
-        uuid id PK
-        uuid floor_plan_id FK
-        string name
-        string status
-        integer capacity
-        json position
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) floor_plan_id FK "not null"
+        string(50) name "not null"
+        string(20) status "not null"
+        integer capacity "not null"
+        json position "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     TABLE_RESERVATIONS {
-        uuid id PK
-        uuid table_id FK
-        uuid customer_id FK
-        timestamp reservation_time
-        integer duration_minutes
-        string status
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) table_id FK "not null"
+        uuid(36) customer_id FK "not null"
+        timestamp reservation_time "not null"
+        integer duration_minutes "not null"
+        string(20) status "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Employee Management
     DEPARTMENTS {
-        uuid id PK
-        string name
-        uuid parent_department_id FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(100) name "not null"
+        uuid(36) parent_department_id FK "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     POSITIONS {
-        uuid id PK
-        string name
-        uuid department_id FK
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(100) name "not null"
+        uuid(36) department_id FK "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     EMPLOYEES {
-        uuid id PK
-        string employee_number
-        string first_name
-        string last_name
-        uuid position_id FK
-        date join_date
-        string status
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(20) employee_number "not null"
+        string(50) first_name "not null"
+        string(50) last_name "not null"
+        uuid(36) position_id FK "not null"
+        date join_date "not null"
+        string(20) status "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     EMPLOYEE_CONTACTS {
-        uuid id PK
-        uuid employee_id FK
-        string contact_type
-        string contact_value
-        boolean is_primary
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) employee_id FK "not null"
+        string(20) contact_type "not null"
+        string(255) contact_value "not null"
+        boolean is_primary "not null default false"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     SHIFTS {
-        uuid id PK
-        string name
-        time start_time
-        time end_time
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        string(50) name "not null"
+        time start_time "not null"
+        time end_time "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     EMPLOYEE_SHIFTS {
-        uuid id PK
-        uuid employee_id FK
-        uuid shift_id FK
-        date shift_date
-        timestamp check_in
-        timestamp check_out
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        uuid(36) id PK "not null"
+        uuid(36) employee_id FK "not null"
+        uuid(36) shift_id FK "not null"
+        date shift_date "not null"
+        timestamp check_in "nullable"
+        timestamp check_out "nullable"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        timestamp deleted_at "nullable"
     }
 
     %% Audit Logs
     AUDIT_LOGS {
-        uuid id PK
-        uuid user_id FK
-        string entity_type
-        uuid entity_id
-        string action
-        json changes
-        timestamp created_at
+        uuid(36) id PK "not null"
+        uuid(36) user_id FK "not null"
+        string(50) entity_type "not null"
+        uuid(36) entity_id "not null"
+        string(20) action "not null"
+        json changes "not null"
+        timestamp created_at "not null"
     }
 
     %% Relationships
