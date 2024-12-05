@@ -3,39 +3,42 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\Currency;
+use App\Models\UnitOfMeasure;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Product::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'name' => $this->faker->word,
-            'sku' => strtoupper($this->faker->unique()->lexify('?????')),
-            'description' => $this->faker->sentence,
-            'category_id' => $this->faker->optional()->uuid,
-            'base_currency_id' => $this->faker->optional()->uuid,
-            'base_unit_id' => $this->faker->optional()->uuid,
-            'is_managed_by_recipe' => $this->faker->boolean,
-            'track_expiry' => $this->faker->boolean,
-            'track_serial' => $this->faker->boolean,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'name' => fake()->unique()->productName(),
+            'sku' => strtoupper(fake()->unique()->bothify('PRD-####-????')),
+            'description' => fake()->optional()->paragraph(),
+            'category_id' => ProductCategory::factory(),
+            'base_currency_id' => Currency::factory(),
+            'base_unit_id' => UnitOfMeasure::factory(),
+            'is_managed_by_recipe' => fake()->boolean(20),
+            'track_expiry' => fake()->boolean(30),
+            'track_serial' => fake()->boolean(25),
         ];
+    }
+
+    public function managed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_managed_by_recipe' => true,
+        ]);
+    }
+
+    public function trackable(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'track_expiry' => true,
+            'track_serial' => true,
+        ]);
     }
 }

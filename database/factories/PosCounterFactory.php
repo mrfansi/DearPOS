@@ -2,39 +2,43 @@
 
 namespace Database\Factories;
 
+use App\Models\Location;
 use App\Models\PosCounter;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class PosCounterFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = PosCounter::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'name' => $this->faker->word,
-            'code' => strtoupper($this->faker->unique()->lexify('POS??')),
-            'location_id' => $this->faker->optional()->uuid,
-            'is_active' => $this->faker->boolean,
-            'description' => $this->faker->sentence,
-            'terminal_number' => $this->faker->numberBetween(1, 10),
-            'printer_name' => $this->faker->word,
-            'cash_drawer_name' => $this->faker->word,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'name' => fake()->words(2, true),
+            'code' => strtoupper(fake()->unique()->bothify('POS-####-??')),
+            'location_id' => Location::factory(),
+            'is_active' => true,
+            'description' => fake()->optional()->sentence(),
+            'terminal_number' => fake()->optional()->bothify('TERM-####'),
+            'printer_name' => fake()->optional()->bothify('PRT-####'),
+            'cash_drawer_name' => fake()->optional()->bothify('CDR-####'),
+            'customer_display' => fake()->optional()->bothify('DSP-####'),
         ];
+    }
+
+    public function inactive(): static
+    {
+        return $this->state([
+            'is_active' => false,
+        ]);
+    }
+
+    public function withFullConfig(): static
+    {
+        return $this->state([
+            'terminal_number' => fake()->bothify('TERM-####'),
+            'printer_name' => fake()->bothify('PRT-####'),
+            'cash_drawer_name' => fake()->bothify('CDR-####'),
+            'customer_display' => fake()->bothify('DSP-####'),
+        ]);
     }
 }

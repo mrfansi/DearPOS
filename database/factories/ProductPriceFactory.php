@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProductPriceFactory extends Factory
 {
@@ -13,18 +14,40 @@ class ProductPriceFactory extends Factory
 
     public function definition(): array
     {
+        $priceTypes = ['retail', 'wholesale', 'special'];
+        
         return [
-            'price_type' => $this->faker->word(),
-            'base_price' => $this->faker->randomFloat(),
-            'markup_percentage' => $this->faker->randomFloat(),
-            'discount_percentage' => $this->faker->randomFloat(),
-            'start_date' => Carbon::now(),
-            'end_date' => Carbon::now(),
-            'is_active' => $this->faker->boolean(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-
             'product_id' => Product::factory(),
+            'product_variant_id' => fake()->boolean(30) ? ProductVariant::factory() : null,
+            'currency_id' => Currency::factory(),
+            'price_type' => fake()->randomElement($priceTypes),
+            'price' => fake()->randomFloat(4, 0.1, 10000),
+            'min_quantity' => fake()->randomFloat(4, 1, 100),
+            'start_date' => fake()->optional()->date(),
+            'end_date' => fake()->optional()->date(),
         ];
+    }
+
+    public function retail(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'price_type' => 'retail',
+        ]);
+    }
+
+    public function wholesale(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'price_type' => 'wholesale',
+        ]);
+    }
+
+    public function special(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'price_type' => 'special',
+            'start_date' => fake()->dateTimeBetween('now', '+1 month'),
+            'end_date' => fake()->dateTimeBetween('+1 month', '+2 months'),
+        ]);
     }
 }

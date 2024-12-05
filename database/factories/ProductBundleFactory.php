@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\ProductBundle;
+use App\Models\ProductVariant;
+use App\Models\UnitOfMeasure;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProductBundleFactory extends Factory
 {
@@ -13,14 +15,18 @@ class ProductBundleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'description' => $this->faker->text(),
-            'discount_percentage' => $this->faker->randomFloat(),
-            'start_date' => Carbon::now(),
-            'end_date' => Carbon::now(),
-            'is_active' => $this->faker->boolean(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'bundle_product_id' => Product::factory(),
+            'component_product_id' => Product::factory(),
+            'component_variant_id' => fake()->boolean(30) ? ProductVariant::factory() : null,
+            'quantity' => fake()->randomFloat(4, 1, 100),
+            'unit_id' => UnitOfMeasure::factory(),
         ];
+    }
+
+    public function withQuantity(float $quantity): static
+    {
+        return $this->state([
+            'quantity' => $quantity,
+        ]);
     }
 }

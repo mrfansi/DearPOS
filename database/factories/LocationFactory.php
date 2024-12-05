@@ -4,33 +4,41 @@ namespace Database\Factories;
 
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class LocationFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Location::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
+        $types = ['store', 'warehouse', 'office', 'branch'];
+
         return [
-            'id' => $this->faker->uuid,
-            'name' => $this->faker->word,
-            'type' => $this->faker->randomElement(['warehouse', 'store', 'office']),
-            'address' => $this->faker->address,
-            'parent_location_id' => $this->faker->optional()->uuid,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'name' => fake()->company(),
+            'type' => fake()->randomElement($types),
+            'address' => fake()->optional()->address(),
+            'parent_location_id' => null,
         ];
+    }
+
+    public function store()
+    {
+        return $this->state([
+            'type' => 'store',
+        ]);
+    }
+
+    public function warehouse(): static
+    {
+        return $this->state([
+            'type' => 'warehouse',
+        ]);
+    }
+
+    public function withParent(string $parentId): static
+    {
+        return $this->state([
+            'parent_location_id' => $parentId,
+        ]);
     }
 }

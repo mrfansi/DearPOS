@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProductImageFactory extends Factory
 {
@@ -13,17 +13,38 @@ class ProductImageFactory extends Factory
 
     public function definition(): array
     {
+        $imageTypes = ['primary', 'thumbnail', 'gallery'];
+        
         return [
-            'file_name' => $this->faker->name(),
-            'file_path' => $this->faker->word(),
-            'mime_type' => $this->faker->word(),
-            'size' => $this->faker->randomNumber(),
-            'is_primary' => $this->faker->boolean(),
-            'display_order' => $this->faker->randomNumber(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-
             'product_id' => Product::factory(),
+            'product_variant_id' => fake()->boolean(30) ? ProductVariant::factory() : null,
+            'image_url' => fake()->imageUrl(640, 480, 'products'),
+            'image_type' => fake()->randomElement($imageTypes),
+            'sort_order' => fake()->numberBetween(1, 100),
         ];
+    }
+
+    public function primary(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'image_type' => 'primary',
+            'sort_order' => 1,
+        ]);
+    }
+
+    public function thumbnail(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'image_type' => 'thumbnail',
+            'sort_order' => 2,
+        ]);
+    }
+
+    public function gallery(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'image_type' => 'gallery',
+            'sort_order' => fake()->numberBetween(3, 100),
+        ]);
     }
 }

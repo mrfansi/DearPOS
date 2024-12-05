@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductImage extends Model
 {
@@ -13,39 +14,26 @@ class ProductImage extends Model
 
     protected $fillable = [
         'product_id',
-        'file_name',
-        'file_path',
-        'mime_type',
-        'size',
-        'is_primary',
-        'display_order'
+        'product_variant_id',
+        'image_url',
+        'image_type',
+        'sort_order',
     ];
 
     protected $casts = [
-        'size' => 'integer',
-        'is_primary' => 'boolean',
-        'display_order' => 'integer'
+        'sort_order' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function getUrl(): string
+    public function variant(): BelongsTo
     {
-        return asset($this->file_path);
-    }
-
-    public function resize(int $width, int $height): bool
-    {
-        // TODO: Implement image resize logic
-        return true;
-    }
-
-    public function optimize(): bool
-    {
-        // TODO: Implement image optimization logic
-        return true;
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
 }

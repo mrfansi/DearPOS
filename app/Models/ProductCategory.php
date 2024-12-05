@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductCategory extends Model
 {
@@ -14,29 +16,27 @@ class ProductCategory extends Model
     protected $fillable = [
         'name',
         'description',
-        'parent_category_id',
-        'level',
-        'path',
-        'is_active'
+        'parent_id',
     ];
 
     protected $casts = [
-        'level' => 'integer',
-        'is_active' => 'boolean'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function parent()
+    public function parent(): BelongsTo
     {
-        return $this->belongsTo(ProductCategory::class, 'parent_category_id');
+        return $this->belongsTo(ProductCategory::class, 'parent_id');
     }
 
-    public function children()
+    public function children(): HasMany
     {
-        return $this->hasMany(ProductCategory::class, 'parent_category_id');
+        return $this->hasMany(ProductCategory::class, 'parent_id');
     }
 
-    public function products()
+    public function products(): HasMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->hasMany(Product::class, 'category_id');
     }
 }

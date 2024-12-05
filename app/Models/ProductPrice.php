@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductPrice extends Model
 {
@@ -13,60 +14,37 @@ class ProductPrice extends Model
 
     protected $fillable = [
         'product_id',
+        'product_variant_id',
+        'currency_id',
         'price_type',
-        'base_price',
-        'markup_percentage',
-        'discount_percentage',
+        'price',
+        'min_quantity',
         'start_date',
         'end_date',
-        'is_active'
     ];
 
     protected $casts = [
-        'base_price' => 'decimal:2',
-        'markup_percentage' => 'decimal:2',
-        'discount_percentage' => 'decimal:2',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
-        'is_active' => 'boolean'
+        'price' => 'decimal:4',
+        'min_quantity' => 'decimal:4',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function calculateFinalPrice(): float
+    public function variant(): BelongsTo
     {
-        $price = $this->base_price;
-
-        if ($this->markup_percentage > 0) {
-            $price += ($price * $this->markup_percentage / 100);
-        }
-
-        if ($this->discount_percentage > 0) {
-            $price -= ($price * $this->discount_percentage / 100);
-        }
-
-        return round($price, 2);
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
 
-    public function isValid(): bool
+    public function currency(): BelongsTo
     {
-        $now = now();
-
-        if (!$this->is_active) {
-            return false;
-        }
-
-        if ($this->start_date && $now < $this->start_date) {
-            return false;
-        }
-
-        if ($this->end_date && $now > $this->end_date) {
-            return false;
-        }
-
-        return true;
+        return $this->belongsTo(Currency::class);
     }
 }

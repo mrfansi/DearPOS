@@ -2,43 +2,79 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
+use App\Models\PosCounter;
 use App\Models\Reservation;
+use App\Models\SalesTransaction;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class ReservationFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Reservation::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
+        $statuses = ['confirmed', 'in_progress', 'completed', 'cancelled'];
+        $totalGuests = fake()->numberBetween(1, 10);
+        $depositAmount = fake()->optional()->randomFloat(4, 50, 500);
+
         return [
-            'id' => $this->faker->uuid,
-            'reservation_number' => $this->faker->unique()->numerify('RES#####'),
-            'customer_id' => $this->faker->optional()->uuid,
-            'pos_counter_id' => $this->faker->optional()->uuid,
-            'reservation_date' => $this->faker->date(),
-            'reservation_time' => $this->faker->dateTime(),
-            'expected_duration' => $this->faker->numberBetween(30, 180),
-            'status' => $this->faker->randomElement(['confirmed', 'in_progress', 'completed', 'cancelled']),
-            'total_guests' => $this->faker->numberBetween(1, 20),
-            'special_requests' => $this->faker->sentence,
-            'deposit_amount' => $this->faker->randomFloat(4, 0, 500),
-            'notes' => $this->faker->sentence,
-            'created_by' => $this->faker->uuid,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'reservation_number' => 'RES-' . fake()->unique()->numerify('######'),
+            'customer_id' => fake()->optional()->passThrough(fn() => Customer::factory()),
+            'pos_counter_id' => PosCounter::factory(),
+            'sales_transaction_id' => fake()->optional()->passThrough(fn() => SalesTransaction::factory()),
+            'reservation_date' => fake()->dateTimeBetween('now', '+1 month'),
+            'reservation_time' => fake()->dateTimeBetween('now', '+1 month'),
+            'expected_duration' => fake()->optional()->numberBetween(30, 240),
+            'status' => fake()->randomElement($statuses),
+            'total_guests' => $totalGuests,
+            'special_requests' => fake()->optional()->sentence(),
+            'deposit_amount' => $depositAmount,
+            'notes' => fake()->optional()->sentence(),
+            'created_by' => User::factory(),
         ];
+    }
+
+    public function confirmed(): static
+    {
+        return $this->state([
+            'status' => 'confirmed',
+        ]);
+    }
+
+    public function inProgress(): static
+    {
+        return $this->state([
+            'status' => 'in_progress',
+        ]);
+    }
+
+    public function completed(): static
+    {
+        return $this->state([
+            'status' => 'completed',
+        ]);
+    }
+
+    public function cancelled(): static
+    {
+        return $this->state([
+            'status' => 'cancelled',
+        ]);
+    }
+
+    public function withCustomer(): static
+    {
+        return $this->state([
+            'customer_id' => Customer::factory(),
+        ]);
+    }
+
+    public function withSalesTransaction(): static
+    {
+        return $this->state([
+            'sales_transaction_id' => SalesTransaction::factory(),
+        ]);
     }
 }

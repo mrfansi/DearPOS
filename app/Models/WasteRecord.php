@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WasteRecord extends Model
@@ -13,30 +14,45 @@ class WasteRecord extends Model
 
     protected $fillable = [
         'product_id',
-        'warehouse_id',
         'quantity',
-        'reason'
+        'unit_id',
+        'reason',
+        'notes',
+        'recorded_by',
+        'recorded_at',
     ];
 
     protected $casts = [
-        'quantity' => 'integer'
+        'quantity' => 'decimal:4',
+        'recorded_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function warehouse()
+    public function unit(): BelongsTo
     {
-        return $this->belongsTo(Warehouse::class);
+        return $this->belongsTo(UnitOfMeasure::class, 'unit_id');
     }
 
-    public function recordWaste(int $product, int $warehouse, int $quantity): bool
+    public function recorder(): BelongsTo
     {
-        $this->product_id = $product;
-        $this->warehouse_id = $warehouse;
-        $this->quantity = $quantity;
-        return $this->save();
+        return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function scopeByReason($query, string $reason)
+    {
+        return $query->where('reason', $reason);
+    }
+
+    public function calculateWasteValue(): float
+    {
+        // Assumes the product has a current cost or average cost
+        return $this->quantity * $this->product->current_cost ?? 0;
     }
 }

@@ -3,38 +3,38 @@
 namespace Database\Factories;
 
 use App\Models\Company;
+use App\Models\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class CompanyFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Company::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'name' => $this->faker->company,
-            'code' => strtoupper($this->faker->unique()->lexify('COM??')),
-            'address' => $this->faker->address,
-            'phone' => $this->faker->phoneNumber,
-            'email' => $this->faker->unique()->companyEmail,
-            'tax_id' => $this->faker->numerify('TAX#####'),
-            'primary_currency_id' => $this->faker->optional()->uuid,
-            'is_active' => $this->faker->boolean,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'name' => fake()->company(),
+            'code' => strtoupper(fake()->unique()->bothify('COM-####-??')),
+            'address' => fake()->optional()->address(),
+            'phone' => fake()->optional()->phoneNumber(),
+            'email' => fake()->optional()->companyEmail(),
+            'tax_id' => fake()->optional()->numerify('TAX-###-###-###'),
+            'primary_currency_id' => Currency::factory(),
+            'is_active' => true,
         ];
+    }
+
+    public function inactive(): static
+    {
+        return $this->state([
+            'is_active' => false,
+        ]);
+    }
+
+    public function withTaxId(): static
+    {
+        return $this->state([
+            'tax_id' => fake()->numerify('TAX-###-###-###'),
+        ]);
     }
 }

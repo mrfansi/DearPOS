@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -15,97 +17,80 @@ class Product extends Model
         'name',
         'sku',
         'description',
-        'brand',
-        'unit',
-        'weight',
-        'length',
-        'width',
-        'height',
-        'is_active',
-        'is_service',
-        'track_inventory',
-        'min_stock_level',
-        'reorder_point',
-        'lead_time_days'
+        'category_id',
+        'base_currency_id',
+        'base_unit_id',
+        'is_managed_by_recipe',
+        'track_expiry',
+        'track_serial',
     ];
 
     protected $casts = [
-        'weight' => 'float',
-        'length' => 'float',
-        'width' => 'float',
-        'height' => 'float',
-        'is_active' => 'boolean',
-        'is_service' => 'boolean',
-        'track_inventory' => 'boolean',
-        'min_stock_level' => 'integer',
-        'reorder_point' => 'integer',
-        'lead_time_days' => 'integer'
+        'is_managed_by_recipe' => 'boolean',
+        'track_expiry' => 'boolean',
+        'track_serial' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function categories()
+    public function category(): BelongsTo
     {
-        return $this->belongsToMany(ProductCategory::class);
+        return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
-    public function variants()
+    public function baseCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'base_currency_id');
+    }
+
+    public function baseUnit(): BelongsTo
+    {
+        return $this->belongsTo(UnitOfMeasure::class, 'base_unit_id');
+    }
+
+    public function variants(): HasMany
     {
         return $this->hasMany(ProductVariant::class);
     }
 
-    public function attributes()
+    public function attributeValues(): HasMany
     {
         return $this->hasMany(ProductAttributeValue::class);
     }
 
-    public function prices()
+    public function prices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
     }
 
-    public function barcodes()
+    public function barcodes(): HasMany
     {
         return $this->hasMany(ProductBarcode::class);
     }
 
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);
     }
 
-    public function bundles()
+    public function inventories(): HasMany
     {
-        return $this->belongsToMany(ProductBundle::class, 'bundle_items')
-            ->withPivot(['quantity', 'price_adjustment'])
-            ->withTimestamps();
+        return $this->hasMany(ProductInventory::class);
     }
 
-    public function recipes()
+    public function locations(): HasMany
+    {
+        return $this->hasMany(ProductLocation::class);
+    }
+
+    public function changes(): HasMany
+    {
+        return $this->hasMany(ProductChange::class);
+    }
+
+    public function recipes(): HasMany
     {
         return $this->hasMany(ProductRecipe::class);
-    }
-
-    public function movements()
-    {
-        return $this->hasMany(ProductMovement::class);
-    }
-
-    public function suppliers()
-    {
-        return $this->hasMany(ProductSupplier::class);
-    }
-
-    public function isLowStock(): bool
-    {
-        return $this->checkStock() <= $this->min_stock_level;
-    }
-
-    public function checkStock(): int
-    {
-        return $this->variants->sum('stock_level');
-    }
-
-    public function needsReorder(): bool
-    {
-        return $this->checkStock() <= $this->reorder_point;
     }
 }

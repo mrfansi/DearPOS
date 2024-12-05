@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Warehouse extends Model
 {
@@ -13,36 +15,25 @@ class Warehouse extends Model
 
     protected $fillable = [
         'name',
-        'location',
-        'is_active'
+        'location_id',
+        'description',
+        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function inventory()
+    public function location(): BelongsTo
     {
-        return $this->hasMany(Inventory::class);
+        return $this->belongsTo(Location::class);
     }
 
-    public function stockTransfersFrom()
+    public function productInventories(): HasMany
     {
-        return $this->hasMany(StockTransfer::class, 'from_warehouse_id');
-    }
-
-    public function stockTransfersTo()
-    {
-        return $this->hasMany(StockTransfer::class, 'to_warehouse_id');
-    }
-
-    public function wasteRecords()
-    {
-        return $this->hasMany(WasteRecord::class);
-    }
-
-    public function stockAlerts()
-    {
-        return $this->hasMany(StockAlert::class);
+        return $this->hasMany(ProductInventory::class);
     }
 }

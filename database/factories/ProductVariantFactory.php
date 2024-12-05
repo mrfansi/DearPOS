@@ -2,34 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class ProductVariantFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = ProductVariant::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'product_id' => $this->faker->optional()->uuid,
-            'sku' => strtoupper($this->faker->unique()->lexify('VAR?????')),
-            'is_active' => $this->faker->boolean,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'product_id' => Product::factory(),
+            'sku' => strtoupper(fake()->unique()->bothify('VAR-####-????')),
+            'barcode' => fake()->optional()->ean13(),
         ];
     }
 }

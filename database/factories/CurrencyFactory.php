@@ -4,32 +4,25 @@ namespace Database\Factories;
 
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Currency>
+ */
 class CurrencyFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Currency::class;
 
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'code' => $this->faker->unique()->currencyCode,
-            'name' => $this->faker->unique()->country,
-            'exchange_rate' => $this->faker->randomFloat(4, 0.5, 20),
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'code' => strtoupper(fake()->unique()->lexify('???')),
+            'name' => fake()->unique()->currency(),
+            'exchange_rate' => fake()->randomFloat(4, 0.0001, 100),
         ];
     }
 }

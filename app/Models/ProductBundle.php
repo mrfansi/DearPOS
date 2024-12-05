@@ -5,71 +5,45 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductBundle extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'description',
-        'discount_percentage',
-        'start_date',
-        'end_date',
-        'is_active'
+        'bundle_product_id',
+        'component_product_id',
+        'component_variant_id',
+        'quantity',
+        'unit_id',
     ];
 
     protected $casts = [
-        'discount_percentage' => 'decimal:2',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
-        'is_active' => 'boolean'
+        'quantity' => 'decimal:4',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
-    public function items(): HasMany
+    public function bundleProduct(): BelongsTo
     {
-        return $this->hasMany(BundleItem::class, 'bundle_id');
+        return $this->belongsTo(Product::class, 'bundle_product_id');
     }
 
-    public function products()
+    public function componentProduct(): BelongsTo
     {
-        return $this->belongsToMany(Product::class, 'bundle_items')
-            ->withPivot(['quantity', 'price_adjustment'])
-            ->withTimestamps();
+        return $this->belongsTo(Product::class, 'component_product_id');
     }
 
-    public function calculatePrice(): float
+    public function componentVariant(): BelongsTo
     {
-        $total = $this->items->sum(function ($item) {
-            $price = $item->product->prices()->where('is_active', true)->first()?->base_price ?? 0;
-            return ($price + $item->price_adjustment) * $item->quantity;
-        });
-
-        if ($this->discount_percentage > 0) {
-            $total -= ($total * $this->discount_percentage / 100);
-        }
-
-        return round($total, 2);
+        return $this->belongsTo(ProductVariant::class, 'component_variant_id');
     }
 
-    public function isValid(): bool
+    public function unit(): BelongsTo
     {
-        $now = now();
-
-        if (!$this->is_active) {
-            return false;
-        }
-
-        if ($this->start_date && $now < $this->start_date) {
-            return false;
-        }
-
-        if ($this->end_date && $now > $this->end_date) {
-            return false;
-        }
-
-        return true;
+        return $this->belongsTo(UnitOfMeasure::class, 'unit_id');
     }
 }

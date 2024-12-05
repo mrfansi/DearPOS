@@ -4,43 +4,56 @@ namespace Database\Factories;
 
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class CustomerFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Customer::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->unique()->safeEmail,
-            'phone' => $this->faker->phoneNumber,
-            'address' => $this->faker->address,
-            'city' => $this->faker->city,
-            'state' => $this->faker->state,
-            'country' => $this->faker->country,
-            'postal_code' => $this->faker->postcode,
-            'tax_number' => $this->faker->numerify('TAX#####'),
-            'customer_type' => $this->faker->randomElement(['individual', 'business']),
-            'loyalty_points' => $this->faker->numberBetween(0, 1000),
-            'is_active' => $this->faker->boolean,
-            'notes' => $this->faker->sentence,
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => null,
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+            'address' => fake()->streetAddress(),
+            'city' => fake()->city(),
+            'state' => fake()->state(),
+            'country' => fake()->country(),
+            'postal_code' => fake()->postcode(),
+            'is_active' => fake()->boolean(80),
         ];
+    }
+
+    public function active(): static
+    {
+        return $this->state([
+            'is_active' => true,
+        ]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state([
+            'is_active' => false,
+        ]);
+    }
+
+    public function withTaxExemption(): static
+    {
+        return $this->afterCreating(function (Customer $customer) {
+            $customer->taxExemptions()->save(
+                TaxExemptionFactory::new()->make()
+            );
+        });
+    }
+
+    public function withActiveDeposit(): static
+    {
+        return $this->afterCreating(function (Customer $customer) {
+            $customer->customerDeposits()->save(
+                CustomerDepositFactory::new()->active()->make()
+            );
+        });
     }
 }
