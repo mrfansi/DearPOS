@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\CurrencySeeder;
+use Database\Seeders\LocationSeeder;
+use Database\Seeders\UnitOfMeasureSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +15,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Create default admin user
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Administrator',
+            'email' => 'admin@dearpos.com',
+        ]);
+
+        // Seed core tables
+        $this->call([
+            CurrencySeeder::class,
+            UnitOfMeasureSeeder::class,
+            LocationSeeder::class,
         ]);
     }
 }
