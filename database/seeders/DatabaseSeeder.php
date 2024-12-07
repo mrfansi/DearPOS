@@ -8,6 +8,9 @@ use Database\Seeders\CustomerCreditHistorySeeder;
 use Database\Seeders\CustomerGroupSeeder;
 use Database\Seeders\CustomerSeeder;
 use Database\Seeders\LocationSeeder;
+use Database\Seeders\PaymentInstallmentSeeder;
+use Database\Seeders\PaymentMethodSeeder;
+use Database\Seeders\PaymentSeeder;
 use Database\Seeders\PosCounterSeeder;
 use Database\Seeders\ProductBrandSeeder;
 use Database\Seeders\ProductCategorySeeder;
@@ -56,6 +59,9 @@ class DatabaseSeeder extends Seeder
             SupplierAddressSeeder::class,
             SupplierContactSeeder::class,
             SupplierReturnSeeder::class,
+            PaymentMethodSeeder::class,
+            PaymentSeeder::class,
+            PaymentInstallmentSeeder::class,
         ]);
     }
 }

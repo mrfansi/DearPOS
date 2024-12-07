@@ -19,8 +19,7 @@ class CurrencyFactory extends Factory
      */
     public function definition(): array
     {
-        static $usedCurrencies = [];
-
+        // Predefined list of currencies
         $currencies = [
             ['code' => 'USD', 'name' => 'US Dollar', 'exchange_rate' => 1],
             ['code' => 'EUR', 'name' => 'Euro', 'exchange_rate' => 0.93],
@@ -29,23 +28,20 @@ class CurrencyFactory extends Factory
             ['code' => 'IDR', 'name' => 'Indonesian Rupiah', 'exchange_rate' => 15500],
         ];
 
-        // Filter out already used currencies
-        $availableCurrencies = array_filter($currencies, function($currency) use (&$usedCurrencies) {
-            return !in_array($currency['code'], $usedCurrencies);
-        });
-
-        // If all currencies have been used, reset the used list
-        if (empty($availableCurrencies)) {
-            $usedCurrencies = [];
-            $availableCurrencies = $currencies;
+        // If no currencies exist, return the first currency
+        if (Currency::count() === 0) {
+            return $currencies[0];
         }
 
-        // Select a random currency
-        $currency = fake()->randomElement($availableCurrencies);
-        
-        // Mark this currency as used
-        $usedCurrencies[] = $currency['code'];
+        // Find a currency that doesn't exist in the database
+        foreach ($currencies as $currency) {
+            $existingCurrency = Currency::where('code', $currency['code'])->first();
+            if (!$existingCurrency) {
+                return $currency;
+            }
+        }
 
-        return $currency;
+        // If all currencies exist, throw an exception
+        throw new \Exception('All predefined currencies already exist in the database.');
     }
 }

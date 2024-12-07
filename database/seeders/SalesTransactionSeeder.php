@@ -17,8 +17,8 @@ class SalesTransactionSeeder extends Seeder
         // Get all active POS counters
         $posCounters = PosCounter::where('is_active', true)->get();
 
-        // Get the default currency (USD)
-        $defaultCurrency = Currency::where('code', 'USD')->first();
+        // Get the default currency (USD or first available currency)
+        $defaultCurrency = Currency::where('code', 'USD')->first() ?? Currency::first();
 
         // Create completed sales transactions
         SalesTransaction::factory()
@@ -50,4 +50,3 @@ class SalesTransactionSeeder extends Seeder
             ])->create();
     }
 }
-;
