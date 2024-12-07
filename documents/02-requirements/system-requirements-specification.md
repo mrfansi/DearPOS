@@ -3,498 +3,711 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-Dokumen ini menjelaskan spesifikasi kebutuhan sistem untuk aplikasi DearPOS, sebuah sistem point of sale modern berbasis Flutter dan Firebase. Dokumen ini ditujukan untuk tim pengembang, stakeholder, dan quality assurance team.
+Dokumen ini menjelaskan spesifikasi kebutuhan sistem untuk aplikasi DearPOS, sebuah sistem point of sale modern berbasis Laravel. Dokumen ini ditujukan untuk tim pengembang, stakeholder, dan quality assurance team, dengan tujuan memberikan panduan komprehensif untuk implementasi sistem.
 
 ### 1.2 Project Overview
-- **Project Name**: DearPOS - Modern Point of Sale System
-- **Frontend Framework**: Flutter 3.16
-- **Backend Service**: Firebase
-- **Database**: Cloud Firestore
-- **Authentication**: Firebase Authentication
-- **Storage**: Firebase Cloud Storage
-- **Platforms**: Android, iOS, Web, Windows, macOS
-- **Minimum Versions**:
-  - Android: 6.0 (API level 23)
-  - iOS: 12.0
-  - Web: Modern browsers (Chrome, Firefox, Safari, Edge)
-  - Windows: 10
-  - macOS: 10.15 (Catalina)
+- **Project Name**: DearPOS
+- **Backend Framework**: Laravel 11
+- **Programming Language**: PHP 8.2
+- **Database**: 
+  - Primary Database: MariaDB
+  - Session Storage: Database
+  - Cache Storage: Database
+- **Deployment Environment**:
+  - Development: Local
+  - Server: HTTP Localhost
+- **Internationalization**:
+  - Default Locale: English
+  - Fallback Locale: English
+- **Platforms**: 
+  - Web Application
+  - Server-side Rendering
+- **System Configuration**:
+  - Debug Mode: Enabled
+  - Maintenance Mode: File-based
+  - Log Channel: Stack Logging
 
-### 1.3 Scope
+### 1.3 Technology Stack
+- **Backend**:
+  - Framework: Laravel 11
+  - Language: PHP 8.2
+  - ORM: Eloquent
+  - Dependency Management: Composer
+- **Database**:
+  - Type: Relational (MariaDB)
+  - Connection: TCP/IP
+  - Port: 3306
+- **Caching & Session**:
+  - Session Driver: Database
+  - Cache Store: Database
+  - Session Lifetime: 120 minutes
+- **Logging**:
+  - Log Level: Debug
+  - Log Channels: Stack, Single
+- **Development Tools**:
+  - Testing: Pest PHP
+  - Code Style: Laravel Pint
+  - Development Server: Laravel Sail
+
+### 1.4 System Architecture
+DearPOS dirancang dengan arsitektur modular yang mencakup:
+1. **Dashboard & Monitoring**
+   - Pusat kontrol untuk metrik sistem
+   - Tampilan overview bisnis real-time
+2. **Manajemen Pengguna**
+   - Kontrol akses berbasis peran
+   - Manajemen izin terperinci
+3. **Manajemen Produk**
+   - Katalog produk komprehensif
+   - Dukungan varian dan atribut produk
+4. **Manajemen Inventori**
+   - Pelacakan stok multi-lokasi
+   - Sistem peringatan stok
+5. **Manajemen Penjualan**
+   - Transaksi point of sale
+   - Dukungan berbagai metode pembayaran
+6. **Manajemen Keuangan**
+   - Pelacakan pembayaran
+   - Integrasi akuntansi
+7. **Manajemen Sumber Daya Manusia**
+   - Manajemen karyawan
+   - Pelacakan kinerja dan kehadiran
+8. **Pelaporan & Analitik**
+   - Laporan dinamis
+   - Visualisasi data bisnis
+
+### 1.5 Key Design Principles
+- **Modularitas**: Sistem dibangun dengan pendekatan modular untuk fleksibilitas dan skalabilitas
+- **Keamanan**: Implementasi kontrol akses berbasis peran
+- **Skalabilitas**: Mendukung pertumbuhan bisnis dari skala kecil hingga menengah
+- **Integrasi**: Kompatibilitas dengan sistem eksternal
+- **Performa**: Optimasi untuk transaksi cepat dan responsif
+
+### 1.6 Deployment Considerations
+- **Cloud-Native**: Menggunakan infrastruktur Firebase
+- **Multi-Tenant**: Mendukung beberapa outlet/bisnis
+- **Offline Support**: Fungsionalitas dasar tersedia tanpa koneksi internet
+- **Sinkronisasi**: Otomatis mensinkronkan data saat koneksi pulih
+
+### 1.7 Scope
 DearPOS adalah aplikasi point of sale multi-platform yang mencakup:
-1. Core POS Features
-2. Inventory Management
-3. Customer Management
-4. Employee Management
-5. Financial Management
-6. Reporting & Analytics
-7. Integration Services
+1. Manajemen Produk
+   - Tambah, edit, hapus produk
+   - Manajemen varian produk
+   - Pelacakan stok
+   - Generasi barcode
+   - Manajemen bundle produk
+2. Manajemen Penjualan
+   - Transaksi point of sale
+   - Keranjang dan modifikasi pesanan
+   - Diskon dan kupon
+   - Pembayaran multi-metode
+   - Reservasi dan pra-order
+3. Manajemen Inventori
+   - Pelacakan stok multi-lokasi
+   - Transfer stok
+   - Audit inventori
+   - Manajemen supplier
+   - Pemesanan otomatis
+4. Manajemen Keuangan
+   - Konfigurasi pembayaran
+   - Manajemen pajak
+   - Cicilan pembayaran
+   - Rekonsiliasi
+5. Manajemen Pelanggan
+   - Profil pelanggan
+   - Program loyalitas
+   - Komunikasi pelanggan
+6. Manajemen Sumber Daya Manusia
+   - Profil karyawan
+   - Manajemen shift
+   - Pelacakan kinerja
+   - Manajemen cuti
+7. Pelaporan & Analitik
+   - Laporan penjualan
+   - Laporan inventori
+   - Laporan keuangan
+   - Laporan kinerja karyawan
 
 ## 2. Functional Requirements
 
 ### 2.1 Authentication & Authorization
 1. **User Authentication**
-   - Multi-factor authentication (Email + SMS/Authenticator)
-   - Social login integration (Google, Apple)
-   - Password policies dan reset flow
-   - Session management dan auto-logout
-   - Login attempt tracking
+   - Multi-factor authentication
+   - Social login (Google, Apple)
+   - Password reset
+   - Manajemen sesi
+   - Pelacakan upaya login
+   - Enkripsi kredensial
 
 2. **Role-Based Access Control**
-   - Predefined roles: Owner, Manager, Cashier, Inventory, Finance
-   - Custom role creation
-   - Granular permission settings
-   - Role hierarchy support
-   - Audit logging untuk aksi sensitif
+   - Peran default: Owner, Manager, Cashier, Inventory, Finance
+   - Pembuatan peran kustom
+   - Pengaturan izin terperinci
+   - Hierarki peran
+   - Audit log untuk aksi sensitif
 
 ### 2.2 Product Management
-1. **Product Information**
-   - Basic info: name, SKU, description, category
-   - Pricing: multiple price levels, tax settings
-   - Inventory: stock levels, reorder points
-   - Images: multiple images, thumbnail generation
-   - Variants: size, color, material
-   - Custom attributes
-   - Digital product support
+1. **Manajemen Produk**
+   - Tambah produk baru
+     - Nama produk
+     - Kategori
+     - Harga
+     - Stok
+     - Barcode (opsional)
+     - Gambar (opsional)
+   - Impor massal via CSV/Excel
+   - Log perubahan untuk audit
+   - Soft delete untuk menjaga riwayat transaksi
 
-2. **Category Management**
-   - Hierarchical categories
-   - Category attributes
-   - Category-specific settings
-   - Bulk category updates
+2. **Varian Produk**
+   - Tambah varian (ukuran, warna)
+   - Pelacakan stok per varian
+   - Harga varian
+   - Atribut kustom
 
-3. **Inventory Control**
-   - Real-time stock tracking
-   - Multi-location inventory
-   - Stock transfers
-   - Stock takes/adjustments
-   - Batch/lot tracking
-   - Expiry date management
-   - Low stock alerts
-   - Automatic reordering
+3. **Manajemen Kategori**
+   - Kategori hierarkis
+   - Atribut kategori
+   - Pengaturan kategori spesifik
+   - Pembaruan massal
 
-4. **Product Import/Export**
-   - Bulk import via CSV/Excel
-   - Template generation
-   - Validation rules
-   - Error handling
-   - Export in multiple formats
+4. **Generasi Barcode**
+   - Format: EAN-13, Code128
+   - Kustomisasi label
+   - Cetak barcode
 
-5. **Product Bundling**
-   - Bundle creation
-   - Dynamic pricing
-   - Stock management
-   - Component tracking
+5. **Manajemen Bundle**
+   - Buat paket produk
+   - Penetapan harga dinamis
+   - Manajemen stok bundle
 
 ### 2.3 Sales Management
-1. **Point of Sale**
-   - Quick product search
-   - Barcode scanning
-   - Custom price/discount
-   - Hold/recall transactions
-   - Split payments
-   - Multiple payment methods
-   - Customer assignment
-   - Loyalty points
-   - Gift cards
-   - Offline mode
+1. **Transaksi Point of Sale**
+   - Pencarian produk cepat
+   - Pemindaian barcode
+   - Harga/diskon kustom
+   - Tahan/panggil transaksi
+   - Pembayaran terpisah
+   - Metode pembayaran berganda
+   - Penugasan pelanggan
 
-2. **Order Management**
-   - Order types (dine-in, takeaway, delivery)
-   - Table management
-   - Kitchen display system
-   - Order modification
-   - Order cancellation
-   - Refunds and returns
-   - Partial fulfillment
+2. **Manajemen Pesanan**
+   - Tipe pesanan (dine-in, takeaway, delivery)
+   - Manajemen meja
+   - Tampilan dapur
+   - Modifikasi pesanan
+   - Pembatalan pesanan
+   - Refund dan retur
+   - Pemenuhan parsial
 
-3. **Payment Processing**
-   - Cash management
-   - Card payments (credit/debit)
-   - Digital wallets
-   - QR payments
-   - Split payments
-   - Partial payments
-   - Payment verification
-   - Receipt generation
+3. **Pembayaran**
+   - Manajemen kas
+   - Pembayaran kartu
+   - Dompet digital
+   - Pembayaran QR
+   - Pembayaran terpisah
+   - Pembayaran parsial
+   - Verifikasi pembayaran
+   - Generasi struk
 
-4. **Discounts & Promotions**
-   - Discount types (percentage, fixed)
-   - Promotion scheduling
-   - Coupon management
-   - Bundle deals
-   - Happy hour pricing
-   - Member discounts
-   - Automatic promotions
+4. **Diskon & Promosi**
+   - Jenis diskon (persentase, tetap)
+   - Penjadwalan promosi
+   - Manajemen kupon
+   - Paket bundle
+   - Harga jam bahagia
+   - Diskon member
 
-### 2.4 Customer Management
-1. **Customer Profiles**
-   - Basic info
-   - Purchase history
-   - Payment history
-   - Loyalty points
-   - Credit limit
-   - Custom fields
-   - Notes/tags
+### 2.4 Inventory Management
+1. **Pelacakan Stok**
+   - Stok real-time
+   - Multi-lokasi
+   - Transfer stok
+   - Stok take/penyesuaian
+   - Pelacakan batch/lot
+   - Manajemen tanggal kedaluwarsa
+   - Peringatan stok rendah
+   - Pemesanan otomatis
 
-2. **Loyalty Program**
-   - Point accumulation
-   - Point redemption
-   - Tier management
-   - Rewards catalog
-   - Expiry rules
-   - Member benefits
+2. **Manajemen Supplier**
+   - Detail supplier
+   - Pesanan pembelian
+   - Penerimaan barang
+   - Retur supplier
+   - Integrasi marketplace
 
-3. **Customer Communication**
-   - Email notifications
-   - SMS notifications
-   - Push notifications
-   - Marketing campaigns
-   - Feedback collection
-   - Survey management
+3. **Gudang**
+   - Manajemen lokasi gudang
+   - Optimasi penyimpanan
+   - Pelacakan perpindahan
 
-### 2.5 Employee Management
-1. **Employee Profiles**
-   - Personal information
-   - Work schedule
-   - Performance metrics
-   - Access rights
-   - Training records
-   - Documents
+### 2.5 Payment Management
+1. **Konfigurasi Pembayaran**
+   - Aktifkan/nonaktifkan metode
+   - Integrasi gateway eksternal
+   - Dukungan multi-mata uang
 
-2. **Time & Attendance**
-   - Clock in/out
-   - Break management
-   - Overtime tracking
-   - Leave management
-   - Shift scheduling
-   - Attendance reports
+2. **Manajemen Pajak**
+   - Tarif pajak konfigurabel
+   - Pengecualian pajak
+   - Perhitungan otomatis
 
-3. **Performance Management**
-   - Sales targets
-   - Commission calculation
-   - Performance reviews
-   - Training tracking
-   - Disciplinary records
+3. **Cicilan**
+   - Cicilan untuk pembelian bernilai tinggi
+   - Pelacakan tanggal jatuh tempo
+   - Notifikasi terlambat
 
-### 2.6 Financial Management
-1. **Accounting Integration**
-   - Chart of accounts
-   - Journal entries
-   - Bank reconciliation
-   - Tax management
-   - Multi-currency support
-   - Financial reports
+4. **Rekonsiliasi**
+   - Pencocokan pembayaran
+   - Laporan rekonsiliasi
 
-2. **Expense Management**
-   - Expense tracking
-   - Receipt capture
-   - Approval workflow
-   - Budget management
-   - Reimbursement
+### 2.6 Customer Management
+1. **Profil Pelanggan**
+   - Informasi dasar
+   - Riwayat pembelian
+   - Riwayat pembayaran
+   - Poin loyalitas
+   - Batas kredit
 
-3. **Financial Reporting**
-   - P&L statements
-   - Balance sheets
-   - Cash flow reports
-   - Tax reports
-   - Custom reports
+2. **Program Loyalitas**
+   - Akumulasi poin
+   - Penukaran poin
+   - Manajemen tier
+   - Katalog hadiah
 
-### 2.7 Reporting & Analytics
-1. **Sales Reports**
-   - Daily/weekly/monthly sales
-   - Product performance
-   - Category performance
-   - Employee performance
-   - Payment method analysis
-   - Discount impact
+3. **Komunikasi**
+   - Notifikasi email
+   - Notifikasi SMS
+   - Kampanye pemasaran
+   - Pengumpulan umpan balik
 
-2. **Inventory Reports**
-   - Stock levels
-   - Movement history
-   - Valuation reports
-   - Reorder suggestions
-   - Dead stock analysis
-   - Shrinkage reports
+### 2.7 HR Management
+1. **Manajemen Karyawan**
+   - Informasi pribadi
+   - Jadwal kerja
+   - Metrik kinerja
+   - Hak akses
+   - Catatan pelatihan
 
-3. **Customer Reports**
-   - Customer segments
-   - Purchase patterns
-   - Loyalty program
-   - Customer lifetime value
-   - Churn analysis
+2. **Absensi**
+   - Rekam waktu
+   - Manajemen istirahat
+   - Pelacakan lembur
+   - Manajemen cuti
 
-4. **Custom Reports**
-   - Report builder
-   - Export options
-   - Scheduled reports
-   - Dashboard customization
+3. **Kinerja**
+   - Target penjualan
+   - Perhitungan komisi
+   - Tinjauan kinerja
+   - Pelacakan pelatihan
 
-### 2.8 Integration Services
-1. **E-commerce Integration**
-   - Product sync
-   - Order sync
-   - Inventory sync
-   - Customer sync
-   - Pricing sync
+### 2.8 Reporting & Analytics
+1. **Laporan Penjualan**
+   - Laporan harian/bulanan/tahunan
+   - Analisis produk terlaris
+   - Perbandingan periode
 
-2. **Payment Gateway**
-   - Multiple gateway support
-   - Payment reconciliation
-   - Refund handling
-   - Payment security
-   - Transaction logs
+2. **Laporan Inventori**
+   - Stok saat ini
+   - Pergerakan stok
+   - Produk yang hampir habis
 
-3. **Accounting Software**
-   - Transaction sync
-   - Account mapping
-   - Tax integration
-   - Report generation
+3. **Laporan Keuangan**
+   - Laporan laba/rugi
+   - Neraca
+   - Arus kas
+   - Laporan pajak
 
-4. **Delivery Services**
-   - Order tracking
-   - Delivery status
-   - Driver assignment
-   - Route optimization
-   - Delivery reports
+4. **Laporan Karyawan**
+   - Kinerja individu
+   - Produktivitas
+   - Komisi
 
 ## 3. Non-Functional Requirements
 
 ### 3.1 Performance
-1. **Response Time**
-   - Page load: < 2 seconds
-   - Transaction processing: < 1 second
-   - Report generation: < 5 seconds
-   - Search results: < 1 second
-
-2. **Scalability**
-   - Support 1000+ concurrent users
-   - Handle 100,000+ products
-   - Process 10,000+ daily transactions
-   - Store 5+ years of data
-
-3. **Availability**
-   - 99.9% uptime
-   - Planned maintenance windows
-   - Automatic failover
-   - Disaster recovery
+- Waktu respon < 2 detik untuk transaksi
+- Dukungan 100 transaksi simultan
+- Skalabilitas untuk 50+ pengguna
+- Kompresi data untuk efisiensi
 
 ### 3.2 Security
-1. **Data Security**
-   - End-to-end encryption
-   - Secure data transmission
-   - Regular security audits
-   - Vulnerability testing
+- Enkripsi end-to-end
+- Kepatuhan GDPR
+- Audit log komprehensif
+- Pemulihan akun
+- Pencegahan serangan brute force
 
-2. **Access Control**
-   - Role-based access
-   - Two-factor authentication
-   - Session management
-   - IP whitelisting
+### 3.3 Reliability
+- Uptime 99.9%
+- Backup otomatis
+- Pemulihan bencana
+- Sinkronisasi data real-time
 
-3. **Compliance**
-   - GDPR compliance
-   - PCI DSS compliance
-   - Local regulations
-   - Data retention policies
+### 3.4 Usability
+- Antarmuka intuitif
+- Dukungan multi-bahasa
+- Tema kustomisasi
+- Bantuan kontekstual
+- Petunjuk pengguna
 
-### 3.3 Usability
-1. **User Interface**
-   - Intuitive navigation
-   - Responsive design
-   - Consistent layout
-   - Accessibility compliance
+### 3.5 Compatibility
+- Responsif di semua platform
+- Kompatibel dengan browser modern
+- Integrasi sistem eksternal
+- Dukungan offline
 
-2. **User Experience**
-   - Minimal training required
-   - Context-sensitive help
-   - Error prevention
-   - Quick recovery
+### 3.6 Maintainability
+- Arsitektur modular
+- Dokumentasi kode
+- Pembaruan otomatis
+- Logging komprehensif
 
-### 3.4 Reliability
-1. **Data Backup**
-   - Automated backups
-   - Point-in-time recovery
-   - Backup verification
-   - Restore testing
+## 4. System Constraints
 
-2. **Error Handling**
-   - Graceful degradation
-   - Error logging
-   - User notifications
-   - Recovery procedures
+### 4.1 Technical Constraints
+- Flutter 3.16+
+- Firebase
+- Cloud Firestore
+- Minimum Android 6.0
+- Minimum iOS 12.0
 
-### 3.5 Maintainability
-1. **Code Quality**
-   - Coding standards
-   - Documentation
-   - Version control
-   - Code reviews
+### 4.2 Operational Constraints
+- Koneksi internet stabil
+- Perangkat dengan spesifikasi minimal
+- Dukungan pemeliharaan 2 tahun
 
-2. **Testing**
-   - Unit testing
-   - Integration testing
-   - Performance testing
-   - Security testing
+### 4.3 Regulatory Constraints
+- Kepatuhan pajak lokal
+- Perlindungan data pelanggan
+- Standar keamanan transaksi
 
-## 4. System Interfaces
+## 5. Assumptions and Dependencies
 
-### 4.1 User Interfaces
-1. **Web Interface**
-   - Responsive design
-   - Cross-browser support
-   - Mobile optimization
-   - Offline capabilities
+### 5.1 Asumsi
+- Pengguna memiliki perangkat modern
+- Koneksi internet tersedia
+- Pelatihan pengguna dilakukan
 
-2. **Mobile Apps**
-   - Native performance
-   - Device features
-   - Offline mode
-   - Push notifications
+### 5.2 Dependensi
+- Firebase Authentication
+- Cloud Firestore
+- Payment gateway
+- Integrasi marketplace
 
-### 4.2 Hardware Interfaces
-1. **POS Hardware**
-   - Receipt printers
-   - Barcode scanners
-   - Cash drawers
-   - Card readers
-   - Customer displays
+## 6. Data Requirements
 
-2. **Network Requirements**
-   - Internet connectivity
-   - Local network
-   - Backup connections
-   - Bandwidth requirements
+### 6.1 Data Modeling Standards
+1. **Primary Keys**
+   - Tipe: UUID
+   - Berlaku untuk semua tabel
+   - Unik di seluruh sistem
 
-### 4.3 Software Interfaces
-1. **APIs**
-   - RESTful APIs
-   - WebSocket support
-   - API documentation
-   - Rate limiting
+2. **Tipe Data**
+   - String: Panjang 3-255 karakter
+   - Desimal: Presisi (15,4) untuk nilai moneter/kuantitas
+   - Tanggal: Menggunakan tipe temporal yang tepat
 
-2. **Third-party Services**
-   - Payment gateways
-   - SMS services
-   - Email services
-   - Cloud services
+3. **Bidang Umum**
+   - `id`: Kunci Utama UUID
+   - `code`: Pengenal unik string
+   - `created_at`: Stempel waktu pembuatan
+   - `updated_at`: Stempel waktu terakhir diperbarui
+   - `deleted_at`: Stempel waktu penghapusan lembut (opsional)
 
-## 5. Data Requirements
+### 6.2 Konvensi Penamaan
+1. **Tabel**
+   - Bentuk jamak
+   - Menggunakan snake_case
+   - Contoh: `products`, `customer_addresses`
 
-### 5.1 Data Management
-1. **Data Storage**
-   - Cloud-based storage
-   - Local caching
-   - Data synchronization
-   - Version control
+2. **Kunci Asing**
+   - Bentuk tunggal dengan akhiran `_id`
+   - Contoh: `product_id`, `customer_id`
 
-2. **Data Migration**
-   - Import tools
-   - Export capabilities
-   - Data mapping
-   - Validation rules
+3. **Bidang Boolean**
+   - Awalan `is_`
+   - Contoh: `is_active`, `is_verified`
 
-### 5.2 Data Retention
-1. **Retention Policies**
-   - Transaction data
-   - Customer data
-   - Employee data
-   - System logs
+4. **Bidang Status**
+   - Menggunakan tipe Enum
+   - Mendefinisikan status yang mungkin
 
-2. **Data Archival**
-   - Archival process
-   - Retrieval process
-   - Storage optimization
-   - Compliance requirements
+### 6.3 Hubungan Data
+1. **Kunci Asing**
+   - Menerapkan batasan referensial yang tepat
+   - Mendukung operasi CASCADE/RESTRICT
 
-## 6. Quality Attributes
+2. **Penghapusan Lembut**
+   - Menggunakan kolom `deleted_at`
+   - Mempertahankan riwayat data
 
-### 6.1 Performance Efficiency
-- Response time targets
-- Resource utilization
-- Capacity requirements
-- Scalability metrics
+3. **Tabel Hubung**
+   - Untuk hubungan many-to-many
+   - Menyimpan metadata hubungan
 
-### 6.2 Compatibility
-- Platform compatibility
-- Browser compatibility
-- Device compatibility
-- Integration compatibility
+### 6.4 Indeks
+1. **Kunci Utama**
+   - Otomatis pada `id`
 
-### 6.3 Usability
-- Learnability metrics
-- Efficiency metrics
-- Error prevention
-- User satisfaction
+2. **Kunci Asing**
+   - Indeks pada kolom referensi
+   - Optimasi kueri
 
-### 6.4 Reliability
-- Availability targets
-- Fault tolerance
-- Recoverability
-- Backup frequency
+3. **Batasan Unik**
+   - Pada kolom yang memerlukan keunikan
+   - Mencegah duplikasi data
 
-### 6.5 Security
-- Authentication methods
-- Authorization levels
-- Data protection
-- Audit requirements
+### 6.5 Modul Data
+1. **Sistem Inti**
+   - Pengguna
+   - Sesi
+   - Pekerjaan terjadwal
 
-### 6.6 Maintainability
-- Modularity
-- Reusability
-- Analyzability
-- Testability
+2. **Manajemen Pelanggan**
+   - Profil pelanggan
+   - Alamat
+   - Kontak
+   - Riwayat transaksi
 
-### 6.7 Portability
-- Adaptability
-- Installability
-- Replaceability
-- Cloud deployment
+3. **Manajemen Produk**
+   - Katalog produk
+   - Varian produk
+   - Harga
+   - Gambar
 
-## 7. Constraints
+4. **Manajemen Inventori**
+   - Stok
+   - Perpindahan barang
+   - Penerimaan
+   - Pengiriman
 
-### 7.1 Technical Constraints
-- Development framework
-- Cloud services
-- Third-party integrations
-- Hardware limitations
+5. **Manajemen Penjualan**
+   - Transaksi
+   - Item pesanan
+   - Status pesanan
 
-### 7.2 Business Constraints
-- Budget limitations
-- Timeline requirements
-- Resource availability
-- Market regulations
+6. **Manajemen Pembayaran**
+   - Metode pembayaran
+   - Transaksi
+   - Cicilan
 
-### 7.3 Regulatory Constraints
-- Data privacy laws
-- Financial regulations
-- Industry standards
-- Local requirements
+7. **Manajemen Sumber Daya Manusia**
+   - Profil karyawan
+   - Jadwal
+   - Kehadiran
+   - Penggajian
 
-## 8. Assumptions and Dependencies
+### 6.6 Pertimbangan Keamanan
+1. **Enkripsi**
+   - Data sensitif dienkripsi
+   - Menggunakan algoritma enkripsi standar
 
-### 8.1 Assumptions
-- User technical capability
-- Internet availability
-- Hardware availability
-- Business processes
+2. **Audit Trail**
+   - Mencatat perubahan data
+   - Melacak siapa, kapan, dan apa yang diubah
 
-### 8.2 Dependencies
-- Third-party services
-- External systems
-- Hardware vendors
-- Cloud providers
+### 6.7 Migrasi & Versi Data
+1. **Skema Migrasi**
+   - Versi skema database
+   - Dukungan migrasi mundur
 
-## 9. Appendices
+2. **Cadangan**
+   - Prosedur pencadangan otomatis
+   - Pemulihan data terstruktur
 
-### 9.1 Glossary
-- Technical terms
-- Business terms
-- Abbreviations
-- Definitions
+### 6.8 Pertimbangan Performa
+1. **Kueri Optimasi**
+   - Indeks yang tepat
+   - Denormalisasi terbatas
+   - Kueri terukur
 
-### 9.2 References
-- Technical standards
-- Industry regulations
-- Related documents
-- External resources
+2. **Arsip Data**
+   - Strategi retensi data
+   - Pemindahan data historis
+
+## 7. System Requirements Specification
+
+### 7.1 Project Overview
+- **Project Name**: DearPOS
+- **Backend Framework**: Laravel 11
+- **Programming Language**: PHP 8.2
+- **Database**: MariaDB
+- **Deployment Environment**: Local development (HTTP localhost)
+- **Platforms**: Web Application, Server-Side Rendering
+
+### 7.2 System Architecture
+
+#### 7.2.1 Technical Stack
+- **Backend**: Laravel 11 PHP Framework
+- **Database**: MariaDB
+- **Caching**: Redis
+- **Session Management**: Database/File-based
+- **Authentication**: Laravel Sanctum
+- **API**: RESTful JSON API
+
+#### 7.2.2 Database Design Principles
+- **Primary Keys**: UUID
+- **Data Types**: 
+  - Strings: Variable length (3-255 characters)
+  - Numeric: Decimal(15,4) for monetary/quantity values
+  - Temporal: Appropriate date/timestamp types
+- **Soft Delete**: Implemented across all modules
+- **Indexing**: Strategic indexing for performance
+
+### 7.3 Functional Requirements
+
+#### 7.3.1 Core System Modules
+
+##### 7.3.1.1 Authentication and Authorization
+- User registration and login
+- Role-based access control
+- Password management
+- Multi-factor authentication support
+
+##### 7.3.1.2 System Configuration
+- Global settings management
+- Localization and internationalization
+- Logging and monitoring
+- Maintenance mode
+
+#### 7.3.2 Business Modules
+
+##### 7.3.2.1 Customer Management
+- Customer profile creation
+- Loyalty program integration
+- Transaction history tracking
+- Segmentation and targeting
+
+##### 7.3.2.2 Product Management
+- Product catalog management
+- Variant and pricing configuration
+- Image and multimedia support
+- Category and tag management
+
+##### 7.3.2.3 Inventory Management
+- Real-time stock tracking
+- Stock transfer and adjustment
+- Low stock alerts
+- Batch and serial number tracking
+
+##### 7.3.2.4 Sales and POS
+- Point of Sale transaction processing
+- Shopping cart management
+- Receipt generation
+- Discount and promotion application
+
+##### 7.3.2.5 Payment Processing
+- Multiple payment method support
+- Installment plan management
+- Refund and chargeback handling
+- Payment gateway integration
+
+##### 7.3.2.6 Supplier Management
+- Supplier information management
+- Purchase order creation
+- Goods receiving process
+- Supplier performance tracking
+
+##### 7.3.2.7 Accounting and Financial Management
+- Journal entry management
+- Financial reporting
+- Tax calculation
+- Reconciliation processes
+
+#### 7.3.3 Advanced Modules
+
+##### 7.3.3.1 HR and Payroll
+- Employee profile management
+- Work scheduling
+- Performance evaluation
+- Salary and tax calculation
+
+##### 7.3.3.2 Delivery Management
+- Shipping status tracking
+- Route optimization
+- Delivery cost calculation
+- Personnel management
+
+##### 7.3.3.3 Analytics and Reporting
+- Sales analytics
+- Inventory reports
+- Financial performance metrics
+- Predictive insights
+
+##### 7.3.3.4 Loyalty and Membership
+- Points system
+- Membership tiers
+- Rewards catalog
+- Customer engagement tracking
+
+### 7.4 Non-Functional Requirements
+
+#### 7.4.1 Performance
+- Response time < 200ms
+- Horizontal scalability
+- Efficient database query optimization
+- Caching mechanisms
+
+#### 7.4.2 Security
+- Role-based access control
+- Data encryption at rest and in transit
+- Comprehensive audit logging
+- Compliance with GDPR and data protection regulations
+
+#### 7.4.3 Reliability
+- 99.9% uptime
+- Automated backup systems
+- Error logging and monitoring
+- Graceful error handling
+
+#### 7.4.4 Usability
+- Responsive web design
+- Intuitive user interface
+- Accessibility compliance
+- Multi-language support
+
+### 7.5 Integration Requirements
+
+#### 7.5.1 External Integrations
+- Marketplace synchronization
+- Payment gateway APIs
+- Accounting software integration
+- Shipping provider APIs
+
+#### 7.5.2 Internal Integrations
+- Seamless module communication
+- Consistent data flow
+- Unified user experience
+
+### 7.6 Compliance and Regulatory Requirements
+
+#### 7.6.1 Financial Compliance
+- Accurate tax calculations
+- Audit trail maintenance
+- Financial reporting standards adherence
+
+#### 7.6.2 Data Privacy
+- User consent management
+- Data minimization
+- Right to erasure
+- Transparent data processing
+
+### 7.7 Deployment and Maintenance
+
+#### 7.7.1 Environment
+- Development: Local Docker setup
+- Staging: Containerized environment
+- Production: Cloud-based infrastructure
+
+#### 7.7.2 Continuous Integration/Deployment
+- Automated testing
+- Zero-downtime deployments
+- Rollback capabilities
+
+### 7.8 Future Extensibility
+- Modular architecture
+- Plugin support
+- API-first design
+- Microservices potential

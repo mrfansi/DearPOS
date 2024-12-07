@@ -1,5 +1,18 @@
 # Stock Management
 
+### Warehouses Table (`warehouses`)
+
+-   `id` - UUID, Primary Key
+-   `name` - String(100)
+-   `code` - String(20), Unique
+-   `location_id` - UUID, Foreign Key to locations
+-   `manager_id` - UUID, Nullable, Foreign Key to employees
+-   `is_active` - Boolean, Default true
+-   `notes` - Text, Nullable
+-   `created_at` - Timestamp
+-   `updated_at` - Timestamp
+-   `deleted_at` - Timestamp, Nullable
+
 ### Stock Movements Table (`stock_movements`)
 
 -   `id` - UUID, Primary Key
@@ -81,19 +94,6 @@
 -   `code` - String(20), Unique
 -   `description` - Text, Nullable
 -   `is_active` - Boolean, Default true
--   `created_at` - Timestamp
--   `updated_at` - Timestamp
--   `deleted_at` - Timestamp, Nullable
-
-### Warehouses Table (`warehouses`)
-
--   `id` - UUID, Primary Key
--   `name` - String(100)
--   `code` - String(20), Unique
--   `location_id` - UUID, Foreign Key to locations
--   `manager_id` - UUID, Nullable, Foreign Key to employees
--   `is_active` - Boolean, Default true
--   `notes` - Text, Nullable
 -   `created_at` - Timestamp
 -   `updated_at` - Timestamp
 -   `deleted_at` - Timestamp, Nullable

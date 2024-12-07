@@ -7,16 +7,23 @@ use Database\Seeders\CurrencySeeder;
 use Database\Seeders\CustomerCreditHistorySeeder;
 use Database\Seeders\CustomerGroupSeeder;
 use Database\Seeders\CustomerSeeder;
+use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\EmployeeSeeder;
+use Database\Seeders\JobPositionSeeder;
+use Database\Seeders\JobPostingSeeder;
+use Database\Seeders\LeaveTypeSeeder;
 use Database\Seeders\LocationSeeder;
 use Database\Seeders\PaymentInstallmentSeeder;
 use Database\Seeders\PaymentMethodSeeder;
 use Database\Seeders\PaymentSeeder;
+use Database\Seeders\PerformanceReviewSeeder;
 use Database\Seeders\PosCounterSeeder;
 use Database\Seeders\ProductBrandSeeder;
 use Database\Seeders\ProductCategorySeeder;
 use Database\Seeders\ProductPriceListSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\SalesTransactionSeeder;
+use Database\Seeders\ShiftSeeder;
 use Database\Seeders\SupplierAddressSeeder;
 use Database\Seeders\SupplierCategorySeeder;
 use Database\Seeders\SupplierContactSeeder;
@@ -62,6 +69,15 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             PaymentSeeder::class,
             PaymentInstallmentSeeder::class,
+            
+            // HR Management Seeders
+            DepartmentSeeder::class,
+            JobPositionSeeder::class,
+            JobPostingSeeder::class,
+            EmployeeSeeder::class,
+            LeaveTypeSeeder::class,
+            ShiftSeeder::class,
+            PerformanceReviewSeeder::class
         ]);
     }
 }
