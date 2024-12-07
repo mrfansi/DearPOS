@@ -99,6 +99,32 @@
 -   `updated_at` - Timestamp
 -   `deleted_at` - Timestamp, Nullable
 
+### Goods Receipts Table (`goods_receipts`)
+
+-   `id` - UUID, Primary Key
+-   `purchase_order_id` - UUID, Foreign Key to purchase_orders
+-   `receipt_number` - String(50), Unique
+-   `receipt_date` - Date
+-   `status` - Enum ['draft', 'confirmed', 'cancelled']
+-   `notes` - Text, Nullable
+-   `created_at` - Timestamp
+-   `updated_at` - Timestamp
+-   `deleted_at` - Timestamp, Nullable
+
+### Goods Receipt Items Table (`goods_receipt_items`)
+
+-   `id` - UUID, Primary Key
+-   `goods_receipt_id` - UUID, Foreign Key to goods_receipts
+-   `purchase_order_item_id` - UUID, Foreign Key to purchase_order_items
+-   `product_id` - UUID, Foreign Key to products
+-   `quantity` - Decimal(15,4)
+-   `unit_cost` - Decimal(15,4)
+-   `total_amount` - Decimal(15,4)
+-   `notes` - Text, Nullable
+-   `created_at` - Timestamp
+-   `updated_at` - Timestamp
+-   `deleted_at` - Timestamp, Nullable
+
 ### Purchase Audits Table (`purchase_audits`)
 
 -   `id` - UUID, Primary Key

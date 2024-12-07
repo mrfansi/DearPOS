@@ -14,6 +14,12 @@ use Database\Seeders\ProductCategorySeeder;
 use Database\Seeders\ProductPriceListSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\SalesTransactionSeeder;
+use Database\Seeders\SupplierAddressSeeder;
+use Database\Seeders\SupplierCategorySeeder;
+use Database\Seeders\SupplierContactSeeder;
+use Database\Seeders\SupplierProductSeeder;
+use Database\Seeders\SupplierReturnSeeder;
+use Database\Seeders\SupplierSeeder;
 use Database\Seeders\UnitOfMeasureSeeder;
 use Illuminate\Database\Seeder;
 
@@ -44,6 +50,12 @@ class DatabaseSeeder extends Seeder
             CustomerCreditHistorySeeder::class,
             PosCounterSeeder::class,
             SalesTransactionSeeder::class,
+            SupplierCategorySeeder::class,
+            SupplierSeeder::class,
+            SupplierProductSeeder::class,
+            SupplierAddressSeeder::class,
+            SupplierContactSeeder::class,
+            SupplierReturnSeeder::class,
         ]);
     }
 }
