@@ -19,10 +19,33 @@ class CurrencyFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'code' => strtoupper(fake()->unique()->lexify('???')),
-            'name' => fake()->unique()->currency(),
-            'exchange_rate' => fake()->randomFloat(4, 0.0001, 100),
+        static $usedCurrencies = [];
+
+        $currencies = [
+            ['code' => 'USD', 'name' => 'US Dollar', 'exchange_rate' => 1],
+            ['code' => 'EUR', 'name' => 'Euro', 'exchange_rate' => 0.93],
+            ['code' => 'GBP', 'name' => 'British Pound', 'exchange_rate' => 0.79],
+            ['code' => 'JPY', 'name' => 'Japanese Yen', 'exchange_rate' => 149.50],
+            ['code' => 'IDR', 'name' => 'Indonesian Rupiah', 'exchange_rate' => 15500],
         ];
+
+        // Filter out already used currencies
+        $availableCurrencies = array_filter($currencies, function($currency) use (&$usedCurrencies) {
+            return !in_array($currency['code'], $usedCurrencies);
+        });
+
+        // If all currencies have been used, reset the used list
+        if (empty($availableCurrencies)) {
+            $usedCurrencies = [];
+            $availableCurrencies = $currencies;
+        }
+
+        // Select a random currency
+        $currency = fake()->randomElement($availableCurrencies);
+        
+        // Mark this currency as used
+        $usedCurrencies[] = $currency['code'];
+
+        return $currency;
     }
 }

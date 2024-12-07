@@ -8,10 +8,12 @@ use Database\Seeders\CustomerCreditHistorySeeder;
 use Database\Seeders\CustomerGroupSeeder;
 use Database\Seeders\CustomerSeeder;
 use Database\Seeders\LocationSeeder;
+use Database\Seeders\PosCounterSeeder;
 use Database\Seeders\ProductBrandSeeder;
 use Database\Seeders\ProductCategorySeeder;
 use Database\Seeders\ProductPriceListSeeder;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\SalesTransactionSeeder;
 use Database\Seeders\UnitOfMeasureSeeder;
 use Illuminate\Database\Seeder;
 
@@ -40,6 +42,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             ProductPriceListSeeder::class,
             CustomerCreditHistorySeeder::class,
+            PosCounterSeeder::class,
+            SalesTransactionSeeder::class,
         ]);
     }
 }
