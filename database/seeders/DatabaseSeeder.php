@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\CurrencySeeder;
+use Database\Seeders\CustomerCreditHistorySeeder;
+use Database\Seeders\CustomerGroupSeeder;
+use Database\Seeders\CustomerSeeder;
 use Database\Seeders\LocationSeeder;
 use Database\Seeders\UnitOfMeasureSeeder;
 use Illuminate\Database\Seeder;
@@ -26,6 +29,9 @@ class DatabaseSeeder extends Seeder
             CurrencySeeder::class,
             UnitOfMeasureSeeder::class,
             LocationSeeder::class,
+            CustomerGroupSeeder::class,
+            CustomerSeeder::class,
+            CustomerCreditHistorySeeder::class,
         ]);
     }
 }
