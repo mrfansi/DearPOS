@@ -11,13 +11,13 @@ class LeaveTypeFactory extends Factory
 
     public function definition(): array
     {
+        $name = $this->generateLeaveName();
         return [
-            'name' => $this->generateLeaveName(),
+            'name' => $name,
+            'code' => $this->generateLeaveCode($name),
             'description' => $this->faker->optional()->paragraph,
             'default_days' => $this->faker->numberBetween(5, 30),
-            'is_accumulative' => $this->faker->boolean(50),
             'is_paid' => $this->faker->boolean(80),
-            'requires_approval' => $this->faker->boolean(90),
             'is_active' => $this->faker->boolean(90)
         ];
     }
@@ -26,11 +26,10 @@ class LeaveTypeFactory extends Factory
     {
         return $this->state([
             'name' => 'Annual Leave',
+            'code' => 'AL',
             'description' => 'Paid time off for vacation or personal reasons',
             'default_days' => 14,
-            'is_accumulative' => true,
-            'is_paid' => true,
-            'requires_approval' => true
+            'is_paid' => true
         ]);
     }
 
@@ -38,11 +37,10 @@ class LeaveTypeFactory extends Factory
     {
         return $this->state([
             'name' => 'Sick Leave',
+            'code' => 'SL',
             'description' => 'Time off for medical reasons or personal illness',
             'default_days' => 10,
-            'is_accumulative' => false,
-            'is_paid' => true,
-            'requires_approval' => false
+            'is_paid' => true
         ]);
     }
 
@@ -50,11 +48,10 @@ class LeaveTypeFactory extends Factory
     {
         return $this->state([
             'name' => 'Unpaid Leave',
+            'code' => 'UL',
             'description' => 'Leave without pay',
             'default_days' => 0,
-            'is_accumulative' => false,
-            'is_paid' => false,
-            'requires_approval' => true
+            'is_paid' => false
         ]);
     }
 
@@ -67,9 +64,24 @@ class LeaveTypeFactory extends Factory
             'Paternity Leave',
             'Bereavement Leave',
             'Study Leave',
-            'Compensatory Leave'
+            'Compensatory Leave',
+            'Sabbatical Leave',
+            'Family Care Leave',
+            'Professional Development Leave'
         ];
 
-        return $this->faker->unique()->randomElement($leaveTypes);
+        return $this->faker->randomElement($leaveTypes) . ' ' . $this->faker->randomNumber(3);
+    }
+
+    private function generateLeaveCode($name)
+    {
+        $predefinedCodes = ['AL', 'SL', 'UL', 'ML', 'PL'];
+        
+        do {
+            // Generate a code with 2 letters and a UUID-like suffix
+            $code = strtoupper(substr($name, 0, 2)) . substr(uniqid(), -4);
+        } while (in_array($code, $predefinedCodes));
+
+        return $code;
     }
 }

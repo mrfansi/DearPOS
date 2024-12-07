@@ -11,11 +11,12 @@ return new class extends Migration
         Schema::create('shifts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 100);
+            $table->string('code', 20)->unique();
             $table->time('start_time');
             $table->time('end_time');
-            $table->integer('duration_minutes');
+            $table->integer('break_duration'); // in minutes
             $table->text('description')->nullable();
-            $table->boolean('is_night_shift')->default(false);
+            $table->boolean('is_overnight')->default(false);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

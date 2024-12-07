@@ -9,24 +9,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeShift extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'employee_id',
         'shift_id',
-        'shift_date',
+        'date',
+        'actual_start',
+        'actual_end',
         'status',
-        'actual_start_time',
-        'actual_end_time',
         'notes'
     ];
 
     protected $casts = [
-        'shift_date' => 'date',
-        'actual_start_time' => 'datetime:H:i',
-        'actual_end_time' => 'datetime:H:i'
+        'date' => 'date',
+        'actual_start' => 'datetime',
+        'actual_end' => 'datetime'
     ];
 
+    // Relationships
     public function employee()
     {
         return $this->belongsTo(Employee::class);
@@ -35,20 +36,5 @@ class EmployeeShift extends Model
     public function shift()
     {
         return $this->belongsTo(Shift::class);
-    }
-
-    public function scopeWorked($query)
-    {
-        return $query->where('status', 'worked');
-    }
-
-    public function scopeAbsent($query)
-    {
-        return $query->where('status', 'absent');
-    }
-
-    public function scopeLate($query)
-    {
-        return $query->where('status', 'late');
     }
 }

@@ -12,10 +12,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('employee_id');
             $table->uuid('shift_id');
-            $table->date('shift_date');
-            $table->enum('status', ['scheduled', 'worked', 'absent', 'late', 'early_leave'])->default('scheduled');
-            $table->time('actual_start_time')->nullable();
-            $table->time('actual_end_time')->nullable();
+            $table->date('date');
+            $table->timestamp('actual_start')->nullable();
+            $table->timestamp('actual_end')->nullable();
+            $table->enum('status', ['scheduled', 'in_progress', 'completed', 'absent', 'cancelled']);
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

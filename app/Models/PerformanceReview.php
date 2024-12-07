@@ -9,26 +9,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PerformanceReview extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'employee_id',
         'reviewer_id',
-        'review_date',
-        'review_period',
+        'review_period_start',
+        'review_period_end',
         'overall_rating',
         'strengths',
-        'areas_for_improvement',
-        'goals_for_next_period',
-        'reviewer_comments',
-        'is_final'
+        'improvements',
+        'goals',
+        'status'
     ];
 
     protected $casts = [
-        'review_date' => 'date',
-        'is_final' => 'boolean'
+        'review_period_start' => 'date',
+        'review_period_end' => 'date',
+        'overall_rating' => 'decimal:1'
     ];
 
+    // Relationships
     public function employee()
     {
         return $this->belongsTo(Employee::class);
@@ -37,15 +38,5 @@ class PerformanceReview extends Model
     public function reviewer()
     {
         return $this->belongsTo(Employee::class, 'reviewer_id');
-    }
-
-    public function scopeFinal($query)
-    {
-        return $query->where('is_final', true);
-    }
-
-    public function scopeByPeriod($query, $period)
-    {
-        return $query->where('review_period', $period);
     }
 }

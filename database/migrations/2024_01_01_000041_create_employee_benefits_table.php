@@ -11,11 +11,12 @@ return new class extends Migration
         Schema::create('employee_benefits', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('employee_id');
-            $table->string('benefit_name', 100);
-            $table->text('description')->nullable();
-            $table->enum('benefit_type', ['health', 'dental', 'vision', 'life_insurance', 'retirement', 'other']);
-            $table->decimal('employer_contribution', 10, 2)->nullable();
-            $table->decimal('employee_contribution', 10, 2)->nullable();
+            $table->enum('benefit_type', ['health_insurance', 'life_insurance', 'meal_allowance', 'transportation', 'dental_insurance', 'retirement_plan', 'other']);
+            $table->string('name');
+            $table->text('description');
+            $table->decimal('amount', 15, 4);
+            $table->decimal('employer_contribution', 5, 2)->default(0);
+            $table->decimal('employee_contribution', 5, 2)->default(0);
             $table->date('effective_date');
             $table->date('expiry_date')->nullable();
             $table->boolean('is_active')->default(true);

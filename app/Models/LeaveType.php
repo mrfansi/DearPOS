@@ -9,26 +9,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LeaveType extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'name',
+        'code',
         'description',
-        'default_days',
-        'is_accumulative',
         'is_paid',
-        'requires_approval',
+        'default_days',
         'is_active'
     ];
 
     protected $casts = [
-        'default_days' => 'integer',
-        'is_accumulative' => 'boolean',
         'is_paid' => 'boolean',
-        'requires_approval' => 'boolean',
+        'default_days' => 'integer',
         'is_active' => 'boolean'
     ];
 
+    // Relationships
     public function leaveRequests()
     {
         return $this->hasMany(LeaveRequest::class);

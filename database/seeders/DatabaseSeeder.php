@@ -8,9 +8,15 @@ use Database\Seeders\CustomerCreditHistorySeeder;
 use Database\Seeders\CustomerGroupSeeder;
 use Database\Seeders\CustomerSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\EmployeeAddressSeeder;
+use Database\Seeders\EmployeeBenefitSeeder;
+use Database\Seeders\EmployeeDocumentSeeder;
 use Database\Seeders\EmployeeSeeder;
+use Database\Seeders\EmployeeShiftSeeder;
+use Database\Seeders\HrAuditSeeder;
 use Database\Seeders\JobPositionSeeder;
 use Database\Seeders\JobPostingSeeder;
+use Database\Seeders\LeaveRequestSeeder;
 use Database\Seeders\LeaveTypeSeeder;
 use Database\Seeders\LocationSeeder;
 use Database\Seeders\PaymentInstallmentSeeder;
@@ -69,15 +75,20 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             PaymentSeeder::class,
             PaymentInstallmentSeeder::class,
-            
-            // HR Management Seeders
+
+                // HR Management Seeders
             DepartmentSeeder::class,
             JobPositionSeeder::class,
             JobPostingSeeder::class,
             EmployeeSeeder::class,
             LeaveTypeSeeder::class,
             ShiftSeeder::class,
-            PerformanceReviewSeeder::class
+            PerformanceReviewSeeder::class,
+            EmployeeAddressSeeder::class,
+            EmployeeBenefitSeeder::class,
+            EmployeeDocumentSeeder::class,
+            LeaveRequestSeeder::class,
+            EmployeeShiftSeeder::class,
         ]);
     }
 }

@@ -16,18 +16,31 @@ class EmployeeShiftFactory extends Factory
     {
         $employee = Employee::factory()->create();
         $shift = Shift::factory()->create();
-        $shiftDate = $this->faker->dateTimeBetween('-3 months', '+3 months');
-        $status = $this->faker->randomElement(['scheduled', 'worked', 'absent', 'late', 'early_leave']);
+        $date = $this->faker->dateTimeBetween('-3 months', '+3 months');
+        $status = $this->faker->randomElement(['scheduled', 'in_progress', 'completed', 'absent', 'cancelled']);
 
         return [
             'employee_id' => $employee->id,
             'shift_id' => $shift->id,
-            'shift_date' => $shiftDate,
+            'date' => $date,
             'status' => $status,
-            'actual_start_time' => $this->generateActualTime($shift, $status, 'start'),
-            'actual_end_time' => $this->generateActualTime($shift, $status, 'end'),
+            'actual_start' => $this->generateActualTime($shift, $status, 'start'),
+            'actual_end' => $this->generateActualTime($shift, $status, 'end'),
             'notes' => $this->faker->optional()->sentence
         ];
+    }
+
+    private function generateActualTime($shift, $status, $type): ?string
+    {
+        if ($status === 'scheduled' || $status === 'cancelled' || $status === 'absent') {
+            return null;
+        }
+
+        $date = Carbon::now();
+        $baseTime = $type === 'start' ? $shift->start_time : $shift->end_time;
+        $variance = $this->faker->numberBetween(-30, 30); // minutes of variance
+
+        return $date->setTimeFromTimeString($baseTime)->addMinutes($variance);
     }
 
     public function withEmployee(Employee $employee)
@@ -44,10 +57,27 @@ class EmployeeShiftFactory extends Factory
         ]);
     }
 
-    public function worked()
+    public function scheduled()
     {
         return $this->state([
-            'status' => 'worked'
+            'status' => 'scheduled',
+            'actual_start' => null,
+            'actual_end' => null
+        ]);
+    }
+
+    public function inProgress()
+    {
+        return $this->state([
+            'status' => 'in_progress',
+            'actual_end' => null
+        ]);
+    }
+
+    public function completed()
+    {
+        return $this->state([
+            'status' => 'completed'
         ]);
     }
 
@@ -55,34 +85,17 @@ class EmployeeShiftFactory extends Factory
     {
         return $this->state([
             'status' => 'absent',
-            'actual_start_time' => null,
-            'actual_end_time' => null
+            'actual_start' => null,
+            'actual_end' => null
         ]);
     }
 
-    public function late()
+    public function cancelled()
     {
         return $this->state([
-            'status' => 'late'
+            'status' => 'cancelled',
+            'actual_start' => null,
+            'actual_end' => null
         ]);
-    }
-
-    private function generateActualTime(Shift $shift, $status, $timeType)
-    {
-        if ($status === 'absent') {
-            return null;
-        }
-
-        $shiftTime = Carbon::parse($timeType === 'start' ? $shift->start_time : $shift->end_time);
-
-        return match($status) {
-            'late' => $timeType === 'start' 
-                ? $shiftTime->addMinutes($this->faker->numberBetween(5, 60))->format('H:i') 
-                : $shiftTime->format('H:i'),
-            'early_leave' => $timeType === 'end'
-                ? $shiftTime->subMinutes($this->faker->numberBetween(5, 60))->format('H:i')
-                : $shiftTime->format('H:i'),
-            default => $shiftTime->format('H:i')
-        };
     }
 }

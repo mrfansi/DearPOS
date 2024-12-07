@@ -12,65 +12,53 @@ class ShiftSeeder extends Seeder
         $shifts = [
             [
                 'name' => 'Morning Shift',
-                'start_time' => '06:00',
-                'end_time' => '14:00',
-                'duration_minutes' => 480,
-                'description' => 'Standard morning work shift',
-                'is_night_shift' => false,
+                'code' => 'SH-MORN',
+                'start_time' => '07:00',
+                'end_time' => '15:00',
+                'break_duration' => 60,
+                'is_overnight' => false,
                 'is_active' => true
             ],
             [
                 'name' => 'Afternoon Shift',
-                'start_time' => '14:00',
-                'end_time' => '22:00',
-                'duration_minutes' => 480,
-                'description' => 'Standard afternoon work shift',
-                'is_night_shift' => false,
+                'code' => 'SH-NOON',
+                'start_time' => '15:00',
+                'end_time' => '23:00',
+                'break_duration' => 60,
+                'is_overnight' => false,
                 'is_active' => true
             ],
             [
                 'name' => 'Night Shift',
-                'start_time' => '22:00',
-                'end_time' => '06:00',
-                'duration_minutes' => 480,
-                'description' => 'Night-time work shift',
-                'is_night_shift' => true,
+                'code' => 'SH-NITE',
+                'start_time' => '23:00',
+                'end_time' => '07:00',
+                'break_duration' => 60,
+                'is_overnight' => true,
                 'is_active' => true
             ],
             [
                 'name' => 'Split Shift',
+                'code' => 'SH-SPLT',
                 'start_time' => '06:00',
-                'end_time' => '10:00',
-                'duration_minutes' => 240,
-                'description' => 'First part of split shift',
-                'is_night_shift' => false,
-                'is_active' => true
-            ],
-            [
-                'name' => 'Split Shift (Second Part)',
-                'start_time' => '16:00',
                 'end_time' => '20:00',
-                'duration_minutes' => 240,
-                'description' => 'Second part of split shift',
-                'is_night_shift' => false,
+                'break_duration' => 120,
+                'is_overnight' => false,
                 'is_active' => true
             ],
             [
                 'name' => 'Weekend Shift',
-                'start_time' => '08:00',
-                'end_time' => '16:00',
-                'duration_minutes' => 480,
-                'description' => 'Weekend work shift',
-                'is_night_shift' => false,
+                'code' => 'SH-WKND',
+                'start_time' => '09:00',
+                'end_time' => '17:00',
+                'break_duration' => 60,
+                'is_overnight' => false,
                 'is_active' => true
             ]
         ];
 
-        foreach ($shifts as $shiftData) {
-            Shift::create($shiftData);
+        foreach ($shifts as $shift) {
+            Shift::create($shift);
         }
-
-        // Add some additional random shifts
-        Shift::factory()->count(3)->create();
     }
 }

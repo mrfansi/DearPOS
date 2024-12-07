@@ -11,11 +11,10 @@ return new class extends Migration
         Schema::create('leave_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 100);
+            $table->string('code', 20)->unique();
             $table->text('description')->nullable();
-            $table->integer('default_days')->default(0);
-            $table->boolean('is_accumulative')->default(false);
             $table->boolean('is_paid')->default(true);
-            $table->boolean('requires_approval')->default(true);
+            $table->integer('default_days')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

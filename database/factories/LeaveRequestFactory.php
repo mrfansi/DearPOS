@@ -16,7 +16,7 @@ class LeaveRequestFactory extends Factory
     {
         $startDate = $this->faker->dateTimeBetween('-6 months', '+6 months');
         $endDate = Carbon::parse($startDate)->addDays($this->faker->numberBetween(1, 10));
-        $totalDays = Carbon::parse($startDate)->diffInDays($endDate) + 1;
+        $daysRequested = Carbon::parse($startDate)->diffInDays($endDate) + 1;
 
         $employee = Employee::factory()->create();
         $leaveType = LeaveType::factory()->create();
@@ -24,13 +24,13 @@ class LeaveRequestFactory extends Factory
         return [
             'employee_id' => $employee->id,
             'leave_type_id' => $leaveType->id,
-            'approver_id' => Employee::factory()->create()->id,
+            'approved_by' => $this->faker->optional()->passthrough(Employee::factory()->create()->id),
             'start_date' => $startDate,
             'end_date' => $endDate,
-            'total_days' => $totalDays,
+            'days_requested' => $daysRequested,
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected', 'cancelled']),
             'reason' => $this->faker->sentence,
-            'approver_comments' => $this->faker->optional()->paragraph,
+            'notes' => $this->faker->optional()->sentence,
             'approved_at' => $this->faker->optional()->dateTimeBetween($startDate, $endDate)
         ];
     }
@@ -69,7 +69,7 @@ class LeaveRequestFactory extends Factory
     {
         return $this->state([
             'status' => 'rejected',
-            'approver_comments' => $this->faker->paragraph
+            'notes' => $this->faker->paragraph
         ]);
     }
 }

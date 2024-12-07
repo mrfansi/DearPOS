@@ -14,15 +14,15 @@ class ShiftFactory extends Factory
     {
         $startTime = $this->generateShiftTime();
         $endTime = $this->calculateEndTime($startTime);
-        $durationMinutes = Carbon::parse($startTime)->diffInMinutes($endTime);
 
         return [
             'name' => $this->generateShiftName(),
+            'code' => $this->generateShiftCode(),
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'duration_minutes' => $durationMinutes,
+            'break_duration' => $this->faker->numberBetween(30, 90),
             'description' => $this->faker->optional()->sentence,
-            'is_night_shift' => $this->isNightShift($startTime),
+            'is_overnight' => $this->isOvernight($startTime, $endTime),
             'is_active' => $this->faker->boolean(90)
         ];
     }
@@ -31,10 +31,11 @@ class ShiftFactory extends Factory
     {
         return $this->state([
             'name' => 'Morning Shift',
-            'start_time' => '06:00',
-            'end_time' => '14:00',
-            'duration_minutes' => 480,
-            'is_night_shift' => false
+            'code' => 'SH-MORN',
+            'start_time' => '07:00',
+            'end_time' => '15:00',
+            'break_duration' => 60,
+            'is_overnight' => false
         ]);
     }
 
@@ -42,10 +43,11 @@ class ShiftFactory extends Factory
     {
         return $this->state([
             'name' => 'Afternoon Shift',
+            'code' => 'SH-NOON',
             'start_time' => '14:00',
             'end_time' => '22:00',
-            'duration_minutes' => 480,
-            'is_night_shift' => false
+            'break_duration' => 60,
+            'is_overnight' => false
         ]);
     }
 
@@ -53,10 +55,11 @@ class ShiftFactory extends Factory
     {
         return $this->state([
             'name' => 'Night Shift',
+            'code' => 'SH-NITE',
             'start_time' => '22:00',
             'end_time' => '06:00',
-            'duration_minutes' => 480,
-            'is_night_shift' => true
+            'break_duration' => 60,
+            'is_overnight' => true
         ]);
     }
 
@@ -88,9 +91,17 @@ class ShiftFactory extends Factory
         return $end->format('H:i');
     }
 
-    private function isNightShift($startTime)
+    private function generateShiftCode(): string 
+    {
+        $prefix = 'SH';
+        $suffix = strtoupper(substr(uniqid(), -8));
+        return "{$prefix}-{$suffix}";
+    }
+
+    private function isOvernight($startTime, $endTime): bool
     {
         $start = Carbon::parse($startTime);
-        return $start->hour >= 22 || $start->hour < 6;
+        $end = Carbon::parse($endTime);
+        return $start->gt($end);
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('document_number', 50)->nullable();
             $table->string('file_name', 255);
             $table->string('file_path', 500);
-            $table->string('file_type', 50);
+            $table->string('file_type', 100);
             $table->integer('file_size');
             $table->date('issue_date')->nullable();
             $table->date('expiry_date')->nullable();

@@ -9,28 +9,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LeaveRequest extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'employee_id',
         'leave_type_id',
-        'approver_id',
         'start_date',
         'end_date',
-        'total_days',
-        'status',
+        'days_requested',
         'reason',
-        'approver_comments',
-        'approved_at'
+        'status',
+        'approved_by',
+        'approved_at',
+        'notes'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'total_days' => 'decimal:2',
+        'days_requested' => 'integer',
         'approved_at' => 'datetime'
     ];
 
+    // Relationships
     public function employee()
     {
         return $this->belongsTo(Employee::class);
@@ -43,21 +44,6 @@ class LeaveRequest extends Model
 
     public function approver()
     {
-        return $this->belongsTo(Employee::class, 'approver_id');
-    }
-
-    public function scopePending($query)
-    {
-        return $query->where('status', 'pending');
-    }
-
-    public function scopeApproved($query)
-    {
-        return $query->where('status', 'approved');
-    }
-
-    public function scopeRejected($query)
-    {
-        return $query->where('status', 'rejected');
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }
