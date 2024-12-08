@@ -30,6 +30,10 @@ use Database\Seeders\ProductPriceListSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\SalesTransactionSeeder;
 use Database\Seeders\ShiftSeeder;
+use Database\Seeders\StockAlertSeeder;
+use Database\Seeders\StockMovementSeeder;
+use Database\Seeders\StockTransferSeeder;
+use Database\Seeders\StorageLocationSeeder;
 use Database\Seeders\SupplierAddressSeeder;
 use Database\Seeders\SupplierCategorySeeder;
 use Database\Seeders\SupplierContactSeeder;
@@ -37,6 +41,7 @@ use Database\Seeders\SupplierProductSeeder;
 use Database\Seeders\SupplierReturnSeeder;
 use Database\Seeders\SupplierSeeder;
 use Database\Seeders\UnitOfMeasureSeeder;
+use Database\Seeders\WarehouseSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -76,7 +81,7 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             PaymentInstallmentSeeder::class,
 
-                // HR Management Seeders
+            // HR Management Seeders
             DepartmentSeeder::class,
             JobPositionSeeder::class,
             JobPostingSeeder::class,
@@ -89,6 +94,13 @@ class DatabaseSeeder extends Seeder
             EmployeeDocumentSeeder::class,
             LeaveRequestSeeder::class,
             EmployeeShiftSeeder::class,
+
+            // Stock Management Seeders
+            WarehouseSeeder::class,
+            StorageLocationSeeder::class,
+            StockMovementSeeder::class,
+            StockAlertSeeder::class,
+            StockTransferSeeder::class,
         ]);
     }
 }

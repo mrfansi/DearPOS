@@ -2,96 +2,63 @@
 
 namespace Database\Seeders;
 
-use App\Models\Department;
 use App\Models\Employee;
-use App\Models\JobPosition;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create predefined key employees
-        $keyEmployees = [
-            [
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'email' => 'john.doe@company.com',
-                'department_code' => 'EXEC',
-                'position_title' => 'Chief Executive Officer',
-                'status' => 'active'
-            ],
-            [
-                'first_name' => 'Jane',
-                'last_name' => 'Smith',
-                'email' => 'jane.smith@company.com',
-                'department_code' => 'HR',
-                'position_title' => 'HR Director',
-                'status' => 'active'
-            ],
-            [
-                'first_name' => 'Michael',
-                'last_name' => 'Johnson',
-                'email' => 'michael.johnson@company.com',
-                'department_code' => 'FIN',
-                'position_title' => 'Chief Financial Officer',
-                'status' => 'active'
-            ],
-            [
-                'first_name' => 'Emily',
-                'last_name' => 'Brown',
-                'email' => 'emily.brown@company.com',
-                'department_code' => 'TECH',
-                'position_title' => 'Chief Technology Officer',
-                'status' => 'active'
-            ],
-            [
-                'first_name' => 'David',
-                'last_name' => 'Wilson',
-                'email' => 'david.wilson@company.com',
-                'department_code' => 'OPS',
-                'position_title' => 'Chief Operating Officer',
-                'status' => 'active'
-            ]
-        ];
+        // Create admin user first
+        $adminUser = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
+        ]);
 
-        foreach ($keyEmployees as $employeeData) {
-            // Find department and position
-            $department = Department::where('code', $employeeData['department_code'])->first();
-            $position = JobPosition::where('title', $employeeData['position_title'])->first();
+        // Create admin employee
+        Employee::factory()->create([
+            'user_id' => $adminUser->id,
+            'status' => 'active',
+        ]);
 
-            if ($department && $position) {
-                // Create user
-                $user = User::create([
-                    'name' => $employeeData['first_name'] . ' ' . $employeeData['last_name'],
-                    'email' => $employeeData['email'],
-                    'password' => Hash::make('password'), // Default password
-                    'email_verified_at' => now()
-                ]);
-
-                // Create employee
-                $employee = Employee::create([
-                    'user_id' => $user->id,
-                    'department_id' => $department->id,
-                    'position_id' => $position->id,
-                    'employee_code' => 'EMP-' . strtoupper(substr($employeeData['first_name'], 0, 1) . substr($employeeData['last_name'], 0, 1) . rand(100, 999)),
-                    'first_name' => $employeeData['first_name'],
-                    'last_name' => $employeeData['last_name'],
-                    'email' => $employeeData['email'],
-                    'hire_date' => now(),
-                    'status' => $employeeData['status']
-                ]);
-
-                // Update department manager if it's a director/executive
-                if (strpos($position->title, 'Director') !== false || strpos($position->title, 'Chief') !== false) {
-                    $department->update(['manager_id' => $employee->id]);
+        // Create regular employees (reduced from default to 10)
+        $users = [];
+        $employees = [];
+        $defaultPassword = Hash::make('password');
+        
+        // Generate 10 users and employees
+        for ($i = 0; $i < 10; $i++) {
+            $userData = User::factory()->make()->toArray();
+            $userData['id'] = fake()->uuid();
+            $userData['password'] = $defaultPassword;
+            // Format email_verified_at to MySQL datetime format
+            $userData['email_verified_at'] = now()->format('Y-m-d H:i:s');
+            $users[] = $userData;
+            
+            $employeeData = Employee::factory()->make([
+                'user_id' => $userData['id'],
+                'status' => fake()->randomElement(['active', 'on_leave', 'suspended']), // Exclude 'terminated' for active employees
+            ])->toArray();
+            
+            // Add id for employee
+            $employeeData['id'] = fake()->uuid();
+            
+            // Format dates to MySQL format
+            foreach (['birth_date', 'hire_date', 'contract_start_date', 'contract_end_date', 'termination_date'] as $dateField) {
+                if (isset($employeeData[$dateField]) && $employeeData[$dateField]) {
+                    $employeeData[$dateField] = \Carbon\Carbon::parse($employeeData[$dateField])->format('Y-m-d H:i:s');
                 }
             }
+            
+            $employees[] = $employeeData;
         }
 
-        // Create additional random employees
-        Employee::factory()->count(50)->create();
+        // Bulk insert users and employees
+        DB::table('users')->insert($users);
+        DB::table('employees')->insert($employees);
     }
 }

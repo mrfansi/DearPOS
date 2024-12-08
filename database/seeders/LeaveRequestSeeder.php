@@ -5,48 +5,45 @@ namespace Database\Seeders;
 use App\Models\Employee;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Faker\Factory;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class LeaveRequestSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Factory::create();
-
-        // Get all employees, leave types and users
-        $employees = Employee::all();
+        // Get active employees and leave types
+        $employees = Employee::where('status', 'active')->limit(10)->get();
         $leaveTypes = LeaveType::all();
-        $approvers = User::all();
+
+        $leaveRequests = [];
+        $now = now();
 
         foreach ($employees as $employee) {
-            // Create 2-4 leave requests for each employee
-            $numberOfRequests = $faker->numberBetween(2, 4);
-
-            for ($i = 0; $i < $numberOfRequests; $i++) {
-                // Generate start date between 6 months ago and 6 months from now
-                $startDate = Carbon::now()->subMonths(6)->addDays($faker->numberBetween(0, 365));
+            // Create 2 leave requests per employee (reduced from previous amount)
+            for ($i = 0; $i < 2; $i++) {
+                $startDate = $now->copy()->addDays(rand(1, 30));
+                $endDate = $startDate->copy()->addDays(rand(1, 5));
                 
-                // Generate end date between 1 and 14 days after start date
-                $endDate = $startDate->copy()->addDays($faker->numberBetween(1, 14));
-
-                $status = $faker->randomElement(['pending', 'approved', 'rejected', 'cancelled']);
-
-                $leaveRequest = LeaveRequest::factory()->create([
+                $leaveRequests[] = [
+                    'id' => fake()->uuid(),
                     'employee_id' => $employee->id,
                     'leave_type_id' => $leaveTypes->random()->id,
                     'start_date' => $startDate,
                     'end_date' => $endDate,
-                    'days_requested' => Carbon::parse($startDate)->diffInDays($endDate) + 1,
-                    'reason' => $faker->sentence(),
-                    'status' => $status,
-                    'approved_by' => $status === 'approved' ? $approvers->random()->id : null,
-                    'approved_at' => $status === 'approved' ? Carbon::parse($startDate)->subDays($faker->numberBetween(1, 7)) : null,
-                    'notes' => $faker->optional()->sentence()
-                ]);
+                    'days_requested' => $startDate->diffInDays($endDate) + 1,
+                    'status' => fake()->randomElement(['pending', 'approved', 'rejected']),
+                    'reason' => fake()->sentence(),
+                    'notes' => fake()->optional()->paragraph(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
+        }
+
+        // Bulk insert all leave requests
+        foreach (array_chunk($leaveRequests, 50) as $chunk) {
+            DB::table('leave_requests')->insert($chunk);
         }
     }
 }

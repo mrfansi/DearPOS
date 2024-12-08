@@ -14,32 +14,41 @@ class EmployeeShiftSeeder extends Seeder
     {
         $faker = Factory::create();
 
-        // Get all employees and shifts
-        $employees = Employee::all();
+        // Get active employees and shifts
+        $employees = Employee::where('status', 'active')->limit(10)->get();
         $shifts = Shift::all();
 
-        // For each employee
+        $shiftData = [];
+        
+        // Create shifts for the next 7 days only
         foreach ($employees as $employee) {
-            // Create shifts for the next 30 days
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 0; $i < 7; $i++) {
                 $date = now()->addDays($i);
                 
-                // 70% chance of having a shift on any given day
+                // 70% chance of having a shift
                 if ($faker->boolean(70)) {
                     $shift = $shifts->random();
-                    $status = $faker->randomElement(['scheduled', 'in_progress', 'completed', 'absent', 'cancelled']);
-
-                    EmployeeShift::factory()->create([
+                    $status = $faker->randomElement(['scheduled', 'in_progress']);
+                    
+                    $shiftData[] = [
+                        'id' => $faker->uuid(),
                         'employee_id' => $employee->id,
                         'shift_id' => $shift->id,
                         'date' => $date,
-                        'actual_start' => $status === 'completed' ? $date->copy()->setTimeFromTimeString($shift->start_time) : null,
-                        'actual_end' => $status === 'completed' ? $date->copy()->setTimeFromTimeString($shift->end_time) : null,
+                        'actual_start' => null,
+                        'actual_end' => null,
                         'status' => $status,
-                        'notes' => $faker->optional()->sentence()
-                    ]);
+                        'notes' => $faker->optional(0.3)->sentence(),
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
                 }
             }
+        }
+
+        // Bulk insert all shifts at once
+        foreach (array_chunk($shiftData, 100) as $chunk) {
+            EmployeeShift::insert($chunk);
         }
     }
 }
