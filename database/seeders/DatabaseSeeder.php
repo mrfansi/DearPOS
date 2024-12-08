@@ -31,6 +31,7 @@ use Database\Seeders\ProductBrandSeeder;
 use Database\Seeders\ProductCategorySeeder;
 use Database\Seeders\ProductPriceListSeeder;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\PurchaseManagementSeeder;
 use Database\Seeders\SalesTransactionSeeder;
 use Database\Seeders\ShiftSeeder;
 use Database\Seeders\StockAlertSeeder;
@@ -108,6 +109,8 @@ class DatabaseSeeder extends Seeder
             StockMovementSeeder::class,
             StockAlertSeeder::class,
             StockTransferSeeder::class,
+            // Purchase Management Seeders
+            PurchaseManagementSeeder::class,
         ]);
     }
 }
