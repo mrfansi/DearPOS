@@ -16,11 +16,11 @@ class StorageLocation extends Model
         'name',
         'code',
         'description',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     public function warehouse()

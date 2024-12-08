@@ -33,35 +33,35 @@ class StockMovementFactory extends Factory
             'lot_number' => $this->faker->optional()->bothify('LOT-####??'),
             'expiry_date' => $this->faker->optional()->dateTimeBetween('+1 month', '+2 years'),
             'notes' => $this->faker->optional()->sentence,
-            'created_by' => $user->id
+            'created_by' => $user->id,
         ];
     }
 
     public function in()
     {
         return $this->state([
-            'movement_type' => 'in'
+            'movement_type' => 'in',
         ]);
     }
 
     public function out()
     {
         return $this->state([
-            'movement_type' => 'out'
+            'movement_type' => 'out',
         ]);
     }
 
     public function transfer()
     {
         return $this->state([
-            'movement_type' => 'transfer'
+            'movement_type' => 'transfer',
         ]);
     }
 
     public function adjustment()
     {
         return $this->state([
-            'movement_type' => 'adjustment'
+            'movement_type' => 'adjustment',
         ]);
     }
 }

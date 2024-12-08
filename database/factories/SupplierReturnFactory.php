@@ -22,28 +22,28 @@ class SupplierReturnFactory extends Factory
             'return_date' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'status' => $this->faker->randomElement(['draft', 'confirmed', 'cancelled']),
             'total_amount' => $totalAmount,
-            'notes' => $this->faker->optional()->paragraph()
+            'notes' => $this->faker->optional()->paragraph(),
         ];
     }
 
     public function draft()
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'draft'
+            'status' => 'draft',
         ]);
     }
 
     public function confirmed()
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'confirmed'
+            'status' => 'confirmed',
         ]);
     }
 
     public function cancelled()
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'cancelled'
+            'status' => 'cancelled',
         ]);
     }
 
@@ -52,13 +52,13 @@ class SupplierReturnFactory extends Factory
         return $this->afterCreating(function (SupplierReturn $supplierReturn) {
             // Create supplier return items
             $products = Product::inRandomOrder()->limit(rand(1, 5))->get();
-            
+
             $products->each(function ($product) use ($supplierReturn) {
                 SupplierReturnItem::factory()->create([
                     'supplier_return_id' => $supplierReturn->id,
-                    'product_id' => $product->id
+                    'product_id' => $product->id,
                 ]);
             });
         });
     }
-};
+}

@@ -26,12 +26,13 @@ class ProductImageFactory extends Factory
      */
     public function definition(): array
     {
-        $fileName = fake()->uuid() . '.jpg';
+        $fileName = fake()->uuid().'.jpg';
+
         return [
             'product_id' => Product::factory(),
             'variant_id' => null,
             'file_name' => $fileName,
-            'file_path' => 'products/' . $fileName,
+            'file_path' => 'products/'.$fileName,
             'file_type' => 'image/jpeg',
             'file_size' => fake()->numberBetween(50000, 5000000),
             'is_primary' => false,
@@ -46,6 +47,7 @@ class ProductImageFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $variant = ProductVariant::factory()->create();
+
             return [
                 'product_id' => $variant->product_id,
                 'variant_id' => $variant->id,

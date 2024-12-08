@@ -24,14 +24,14 @@ class CustomerContactSeeder extends Seeder
             // Create a primary contact
             CustomerContact::factory()->create([
                 'customer_id' => $customer->id,
-                'is_primary' => true
+                'is_primary' => true,
             ]);
 
             // Optionally create an additional contact
             if (rand(0, 1)) {
                 CustomerContact::factory()->create([
                     'customer_id' => $customer->id,
-                    'is_primary' => false
+                    'is_primary' => false,
                 ]);
             }
         });

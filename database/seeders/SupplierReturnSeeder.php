@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\ProductVariant;
 use App\Models\Supplier;
-use App\Models\SupplierReturn;
-use App\Models\SupplierReturnItem;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +13,7 @@ class SupplierReturnSeeder extends Seeder
     {
         // Get a limited number of suppliers and variants
         $suppliers = Supplier::limit(5)->get();
-            
+
         $variants = ProductVariant::where('is_active', true)
             ->limit(10)
             ->with('product') // Load the product relation
@@ -31,7 +29,7 @@ class SupplierReturnSeeder extends Seeder
             $return = [
                 'id' => fake()->uuid(),
                 'supplier_id' => $supplier->id,
-                'return_number' => 'RTN-' . str_pad($returnNumber++, 6, '0', STR_PAD_LEFT),
+                'return_number' => 'RTN-'.str_pad($returnNumber++, 6, '0', STR_PAD_LEFT),
                 'return_date' => $now,
                 'status' => fake()->randomElement(['draft', 'confirmed', 'cancelled']),
                 'notes' => fake()->optional()->sentence(),
@@ -39,7 +37,7 @@ class SupplierReturnSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
-            
+
             $returns[] = $return;
 
             // Add 2-3 items to each return

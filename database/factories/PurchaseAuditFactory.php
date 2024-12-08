@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\PurchaseAudit;
-use App\Models\User;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseReturn;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PurchaseAuditFactory extends Factory

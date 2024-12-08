@@ -9,18 +9,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobPosition extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'department_id',
         'title',
         'code',
         'description',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     public function department()

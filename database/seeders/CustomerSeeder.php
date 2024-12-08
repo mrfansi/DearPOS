@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
-use App\Models\CustomerGroup;
 use App\Models\CustomerAddress;
 use App\Models\CustomerContact;
+use App\Models\CustomerGroup;
 use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder

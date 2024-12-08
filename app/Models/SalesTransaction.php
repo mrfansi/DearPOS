@@ -17,14 +17,18 @@ class SalesTransaction extends Model
      * Payment status constants
      */
     public const PAYMENT_STATUS_UNPAID = 'unpaid';
+
     public const PAYMENT_STATUS_PARTIAL = 'partial';
+
     public const PAYMENT_STATUS_PAID = 'paid';
 
     /**
      * Transaction status constants
      */
     public const STATUS_DRAFT = 'draft';
+
     public const STATUS_COMPLETED = 'completed';
+
     public const STATUS_VOIDED = 'voided';
 
     /**
@@ -102,4 +106,4 @@ class SalesTransaction extends Model
     {
         return SalesTransactionFactory::new();
     }
-};
+}

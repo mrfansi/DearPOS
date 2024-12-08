@@ -17,10 +17,10 @@ class CreatePurchaseReturnItemsTable extends Migration
             $table->decimal('total_amount', 15, 4);
             $table->enum('reason', ['defective', 'wrong_item', 'excess_quantity', 'damaged', 'other']);
             $table->text('notes')->nullable();
-            
+
             $table->foreign('return_id')->references('id')->on('purchase_returns');
             $table->foreign('purchase_order_item_id')->references('id')->on('purchase_order_items');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

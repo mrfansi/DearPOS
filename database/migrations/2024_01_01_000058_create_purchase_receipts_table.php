@@ -16,10 +16,10 @@ class CreatePurchaseReceiptsTable extends Migration
             $table->enum('status', ['draft', 'confirmed', 'cancelled']);
             $table->text('notes')->nullable();
             $table->uuid('received_by');
-            
+
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
             $table->foreign('received_by')->references('id')->on('users');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

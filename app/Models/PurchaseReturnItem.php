@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseReturnItem extends Model
 {
@@ -20,13 +20,13 @@ class PurchaseReturnItem extends Model
         'unit_price',
         'total_amount',
         'reason',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'quantity' => 'decimal:4',
         'unit_price' => 'decimal:4',
-        'total_amount' => 'decimal:4'
+        'total_amount' => 'decimal:4',
     ];
 
     public function purchaseReturn()

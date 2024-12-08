@@ -23,12 +23,12 @@ class StockMovement extends Model
         'lot_number',
         'expiry_date',
         'notes',
-        'created_by'
+        'created_by',
     ];
 
     protected $casts = [
         'quantity' => 'decimal:4',
-        'expiry_date' => 'date'
+        'expiry_date' => 'date',
     ];
 
     public function product()

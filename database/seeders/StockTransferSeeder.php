@@ -8,8 +8,8 @@ use App\Models\StockTransferItem;
 use App\Models\UnitOfMeasure;
 use App\Models\User;
 use App\Models\Warehouse;
-use Illuminate\Database\Seeder;
 use Faker\Factory;
+use Illuminate\Database\Seeder;
 
 class StockTransferSeeder extends Seeder
 {
@@ -31,15 +31,15 @@ class StockTransferSeeder extends Seeder
             // Get random source and destination warehouses
             $sourceWarehouse = $warehouses->random();
             $destinationWarehouse = $warehouses->where('id', '!=', $sourceWarehouse->id)->random();
-            
+
             $status = $faker->randomElement(['draft', 'pending', 'completed']);
             $transferDate = now()->subDays(rand(0, 30));
-            
+
             $transferId = $faker->uuid();
-            
+
             $transferData[] = [
                 'id' => $transferId,
-                'transfer_number' => 'TRF-' . strtoupper(substr(uniqid(), -8)),
+                'transfer_number' => 'TRF-'.strtoupper(substr(uniqid(), -8)),
                 'source_warehouse_id' => $sourceWarehouse->id,
                 'destination_warehouse_id' => $destinationWarehouse->id,
                 'status' => $status,
@@ -51,13 +51,13 @@ class StockTransferSeeder extends Seeder
                 'completed_by' => $status === 'completed' ? $user->id : null,
                 'completed_at' => $status === 'completed' ? $transferDate->addHours(2) : null,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
 
             // Create 2-3 items for each transfer
             foreach ($products->random(rand(2, 3)) as $product) {
                 $quantityRequested = $faker->randomFloat(2, 1, 100);
-                
+
                 $transferItemData[] = [
                     'id' => $faker->uuid(),
                     'transfer_id' => $transferId,
@@ -67,11 +67,11 @@ class StockTransferSeeder extends Seeder
                     'quantity_sent' => $status !== 'draft' ? $faker->randomFloat(2, 0, $quantityRequested) : null,
                     'quantity_received' => $status === 'completed' ? $faker->randomFloat(2, 0, $quantityRequested) : null,
                     'unit_id' => $units->random()->id,
-                    'lot_number' => $faker->boolean(30) ? 'LOT-' . strtoupper($faker->bothify('##??')) : null,
+                    'lot_number' => $faker->boolean(30) ? 'LOT-'.strtoupper($faker->bothify('##??')) : null,
                     'expiry_date' => $faker->boolean(30) ? $faker->dateTimeBetween('+1 month', '+1 year') : null,
                     'notes' => $faker->boolean(20) ? $faker->sentence : null,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ];
             }
         }

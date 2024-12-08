@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseOrderItem extends Model
 {
@@ -24,7 +24,7 @@ class PurchaseOrderItem extends Model
         'tax_amount',
         'discount_amount',
         'total_amount',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
@@ -33,7 +33,7 @@ class PurchaseOrderItem extends Model
         'unit_price' => 'decimal:4',
         'tax_amount' => 'decimal:4',
         'discount_amount' => 'decimal:4',
-        'total_amount' => 'decimal:4'
+        'total_amount' => 'decimal:4',
     ];
 
     public function purchaseOrder()

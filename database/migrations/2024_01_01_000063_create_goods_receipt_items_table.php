@@ -17,11 +17,11 @@ class CreateGoodsReceiptItemsTable extends Migration
             $table->decimal('unit_cost', 15, 4);
             $table->decimal('total_amount', 15, 4);
             $table->text('notes')->nullable();
-            
+
             $table->foreign('goods_receipt_id')->references('id')->on('goods_receipts');
             $table->foreign('purchase_order_item_id')->references('id')->on('purchase_order_items');
             $table->foreign('product_id')->references('id')->on('products');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

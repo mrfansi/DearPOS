@@ -7,8 +7,8 @@ use App\Models\StockMovement;
 use App\Models\UnitOfMeasure;
 use App\Models\User;
 use App\Models\Warehouse;
-use Illuminate\Database\Seeder;
 use Faker\Factory;
+use Illuminate\Database\Seeder;
 
 class StockMovementSeeder extends Seeder
 {
@@ -44,12 +44,12 @@ class StockMovementSeeder extends Seeder
                         'unit_id' => $units->random()->id,
                         'reference_type' => $referenceType,
                         'reference_id' => $faker->uuid(),
-                        'lot_number' => $faker->boolean(30) ? 'LOT-' . strtoupper($faker->bothify('##??')) : null,
+                        'lot_number' => $faker->boolean(30) ? 'LOT-'.strtoupper($faker->bothify('##??')) : null,
                         'expiry_date' => $faker->boolean(30) ? $faker->dateTimeBetween('+1 month', '+1 year') : null,
                         'notes' => $faker->boolean(20) ? $faker->sentence : null,
                         'created_by' => $user->id,
                         'created_at' => now(),
-                        'updated_at' => now()
+                        'updated_at' => now(),
                     ];
                 }
             }

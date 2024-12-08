@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('payment_installments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('payment_id');
-            $table->uuid('currency_id');
+            $table->foreignId('currency_id')->constrained('currencies');
             $table->integer('installment_number');
             $table->decimal('amount', 15, 4);
             $table->date('due_date');
@@ -22,7 +22,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('payment_id')->references('id')->on('payments');
-            $table->foreign('currency_id')->references('id')->on('currencies');
         });
     }
 

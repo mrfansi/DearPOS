@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         // Reduce the number of products and use chunk insert
-        
+
         // Simple products (reduced from 20 to 10)
         $simpleProducts = Product::factory()
             ->count(10)
@@ -28,19 +28,19 @@ class ProductSeeder extends Seeder
             $variant = ProductVariant::factory()
                 ->state(['is_active' => true, 'product_id' => $product->id])
                 ->make();
-            
+
             $variantArray = $variant->toArray();
             $variantArray['id'] = fake()->uuid(); // Add UUID
             $simpleVariants[] = $variantArray;
-            
+
             // 1 image per variant instead of 2
             $image = ProductImage::factory()
                 ->state([
                     'product_id' => $product->id,
-                    'variant_id' => $variantArray['id']
+                    'variant_id' => $variantArray['id'],
                 ])
                 ->make();
-            
+
             $imageArray = $image->toArray();
             $imageArray['id'] = fake()->uuid(); // Add UUID
             $simpleImages[] = $imageArray;
@@ -66,10 +66,10 @@ class ProductSeeder extends Seeder
                 $variant = ProductVariant::factory()
                     ->state([
                         'is_active' => true,
-                        'product_id' => $product->id
+                        'product_id' => $product->id,
                     ])
                     ->make();
-                
+
                 $variantArray = $variant->toArray();
                 $variantArray['id'] = fake()->uuid(); // Add UUID
                 $variantProductVariants[] = $variantArray;
@@ -77,10 +77,10 @@ class ProductSeeder extends Seeder
                 // 1 attribute per variant instead of 2
                 $attribute = ProductVariantAttribute::factory()
                     ->state([
-                        'variant_id' => $variantArray['id']
+                        'variant_id' => $variantArray['id'],
                     ])
                     ->make();
-                
+
                 $attributeArray = $attribute->toArray();
                 $attributeArray['id'] = fake()->uuid(); // Add UUID
                 $variantAttributes[] = $attributeArray;
@@ -89,10 +89,10 @@ class ProductSeeder extends Seeder
                 $image = ProductImage::factory()
                     ->state([
                         'product_id' => $product->id,
-                        'variant_id' => $variantArray['id']
+                        'variant_id' => $variantArray['id'],
                     ])
                     ->make();
-                
+
                 $imageArray = $image->toArray();
                 $imageArray['id'] = fake()->uuid(); // Add UUID
                 $variantImages[] = $imageArray;
@@ -102,10 +102,10 @@ class ProductSeeder extends Seeder
             $productImage = ProductImage::factory()
                 ->state([
                     'product_id' => $product->id,
-                    'variant_id' => null
+                    'variant_id' => null,
                 ])
                 ->make();
-            
+
             $imageArray = $productImage->toArray();
             $imageArray['id'] = fake()->uuid(); // Add UUID
             $variantImages[] = $imageArray;
@@ -127,10 +127,10 @@ class ProductSeeder extends Seeder
             $variant = ProductVariant::factory()
                 ->state([
                     'is_active' => true,
-                    'product_id' => $product->id
+                    'product_id' => $product->id,
                 ])
                 ->make();
-            
+
             $variantArray = $variant->toArray();
             $variantArray['id'] = fake()->uuid(); // Add UUID
             $serviceVariants[] = $variantArray;

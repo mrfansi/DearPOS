@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\PurchaseReturn;
 use App\Models\PurchaseOrder;
-use App\Models\Supplier;
+use App\Models\PurchaseReturn;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +17,7 @@ class PurchaseReturnFactory extends Factory
         $totalAmount = $this->faker->randomFloat(4, 50, 5000);
 
         return [
-            'return_number' => 'PR-' . $this->faker->unique()->numberBetween(1000, 9999),
+            'return_number' => 'PR-'.$this->faker->unique()->numberBetween(1000, 9999),
             'purchase_order_id' => $purchaseOrder,
             'supplier_id' => $purchaseOrder->supplier_id,
             'return_date' => $this->faker->date(),

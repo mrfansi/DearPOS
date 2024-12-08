@@ -28,6 +28,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $name = fake()->unique()->words(3, true);
+
         return [
             'category_id' => ProductCategory::factory(),
             'brand_id' => ProductBrand::factory(),

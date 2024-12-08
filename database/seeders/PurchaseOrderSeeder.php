@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\PurchaseOrder;
-use App\Models\Supplier;
-use App\Models\Warehouse;
 use App\Models\Currency;
-use App\Models\User;
+use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
-use Illuminate\Support\Facades\DB;
+use App\Models\Supplier;
+use App\Models\User;
+use App\Models\Warehouse;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderSeeder extends Seeder
 {
@@ -29,32 +29,32 @@ class PurchaseOrderSeeder extends Seeder
             [
                 'status' => 'draft',
                 'quantity_items' => 2,
-                'approved' => false
+                'approved' => false,
             ],
             // Pending Purchase Orders
             [
                 'status' => 'pending',
                 'quantity_items' => 3,
-                'approved' => false
+                'approved' => false,
             ],
             // Approved Purchase Orders
             [
                 'status' => 'approved',
                 'quantity_items' => 4,
-                'approved' => true
+                'approved' => true,
             ],
             // Received Purchase Orders
             [
                 'status' => 'received',
                 'quantity_items' => 3,
-                'approved' => true
+                'approved' => true,
             ],
             // Cancelled Purchase Orders
             [
                 'status' => 'cancelled',
                 'quantity_items' => 1,
-                'approved' => false
-            ]
+                'approved' => false,
+            ],
         ];
 
         DB::transaction(function () use ($purchaseOrders, $suppliers, $warehouses, $currencies, $users, $faker) {
@@ -96,7 +96,7 @@ class PurchaseOrderSeeder extends Seeder
                     'tax_amount' => $taxAmount,
                     'discount_amount' => $discountAmount,
                     'shipping_amount' => $faker->randomFloat(4, 10, 100),
-                    'grand_total' => $totalAmount + $taxAmount - $discountAmount
+                    'grand_total' => $totalAmount + $taxAmount - $discountAmount,
                 ]);
             }
         });

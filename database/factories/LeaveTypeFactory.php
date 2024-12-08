@@ -12,13 +12,14 @@ class LeaveTypeFactory extends Factory
     public function definition(): array
     {
         $name = $this->generateLeaveName();
+
         return [
             'name' => $name,
             'code' => $this->generateLeaveCode($name),
             'description' => $this->faker->optional()->paragraph,
             'default_days' => $this->faker->numberBetween(5, 30),
             'is_paid' => $this->faker->boolean(80),
-            'is_active' => $this->faker->boolean(90)
+            'is_active' => $this->faker->boolean(90),
         ];
     }
 
@@ -29,7 +30,7 @@ class LeaveTypeFactory extends Factory
             'code' => 'AL',
             'description' => 'Paid time off for vacation or personal reasons',
             'default_days' => 14,
-            'is_paid' => true
+            'is_paid' => true,
         ]);
     }
 
@@ -40,7 +41,7 @@ class LeaveTypeFactory extends Factory
             'code' => 'SL',
             'description' => 'Time off for medical reasons or personal illness',
             'default_days' => 10,
-            'is_paid' => true
+            'is_paid' => true,
         ]);
     }
 
@@ -51,7 +52,7 @@ class LeaveTypeFactory extends Factory
             'code' => 'UL',
             'description' => 'Leave without pay',
             'default_days' => 0,
-            'is_paid' => false
+            'is_paid' => false,
         ]);
     }
 
@@ -67,19 +68,19 @@ class LeaveTypeFactory extends Factory
             'Compensatory Leave',
             'Sabbatical Leave',
             'Family Care Leave',
-            'Professional Development Leave'
+            'Professional Development Leave',
         ];
 
-        return $this->faker->randomElement($leaveTypes) . ' ' . $this->faker->randomNumber(3);
+        return $this->faker->randomElement($leaveTypes).' '.$this->faker->randomNumber(3);
     }
 
     private function generateLeaveCode($name)
     {
         $predefinedCodes = ['AL', 'SL', 'UL', 'ML', 'PL'];
-        
+
         do {
             // Generate a code with 2 letters and a UUID-like suffix
-            $code = strtoupper(substr($name, 0, 2)) . substr(uniqid(), -4);
+            $code = strtoupper(substr($name, 0, 2)).substr(uniqid(), -4);
         } while (in_array($code, $predefinedCodes));
 
         return $code;

@@ -56,7 +56,7 @@ class PosCounterSeeder extends Seeder
                 'code' => 'MAIN-03',
                 'name' => 'Main Store - Express Checkout',
                 'location_id' => $mainLocation->id,
-            ]
+            ],
         ]);
 
         // Create POS counters for branch location
@@ -70,10 +70,10 @@ class PosCounterSeeder extends Seeder
                 'code' => 'BRANCH-02',
                 'name' => 'Branch Store - Customer Service',
                 'location_id' => $branchLocation->id,
-            ]
+            ],
         ]);
 
         // Create some additional random POS counters
         PosCounter::factory()->count(5)->create();
     }
-};
+}

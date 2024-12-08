@@ -26,6 +26,7 @@ class ProductBrandFactory extends Factory
     public function definition(): array
     {
         $name = fake()->unique()->company();
+
         return [
             'name' => $name,
             'slug' => Str::slug($name),

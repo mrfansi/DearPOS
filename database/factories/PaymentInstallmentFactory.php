@@ -18,8 +18,9 @@ class PaymentInstallmentFactory extends Factory
         return [
             'payment_id' => Payment::factory(),
             'currency_id' => function (array $attributes) {
-                $payment = Payment::find($attributes['payment_id']) 
+                $payment = Payment::find($attributes['payment_id'])
                     ?? Payment::factory()->create();
+
                 return $payment->currency_id;
             },
             'installment_number' => $this->faker->numberBetween(1, 12),
@@ -27,7 +28,7 @@ class PaymentInstallmentFactory extends Factory
             'due_date' => $dueDate,
             'paid_date' => $paidDate,
             'status' => $paidDate ? 'paid' : 'pending',
-            'notes' => $this->faker->optional()->sentence()
+            'notes' => $this->faker->optional()->sentence(),
         ];
     }
 
@@ -35,7 +36,7 @@ class PaymentInstallmentFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'paid_date' => null,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
     }
 
@@ -43,7 +44,7 @@ class PaymentInstallmentFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'paid_date' => $this->faker->dateTimeBetween('-1 month', 'now'),
-            'status' => 'paid'
+            'status' => 'paid',
         ]);
     }
-};
+}

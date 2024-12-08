@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseAudit extends Model
@@ -19,12 +19,12 @@ class PurchaseAudit extends Model
         'event',
         'old_values',
         'new_values',
-        'user_id'
+        'user_id',
     ];
 
     protected $casts = [
         'old_values' => 'json',
-        'new_values' => 'json'
+        'new_values' => 'json',
     ];
 
     public $timestamps = false;

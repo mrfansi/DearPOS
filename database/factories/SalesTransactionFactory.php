@@ -36,11 +36,14 @@ class SalesTransactionFactory extends Factory
         $discountAmount = $subtotal * $discountRate;
         $totalAmount = $subtotal + $taxAmount - $discountAmount;
 
+        // Get the default currency (USD or first available currency)
+        $defaultCurrency = Currency::where('code', 'USD')->first() ?? Currency::first();
+
         return [
-            'transaction_number' => 'SALE-' . Str::upper(Str::random(8)),
+            'transaction_number' => 'SALE-'.Str::upper(Str::random(8)),
             'customer_id' => fake()->boolean(70) ? Customer::factory() : null,
             'pos_counter_id' => PosCounter::factory(),
-            'currency_id' => Currency::factory(),
+            'currency_id' => $defaultCurrency->id,
             'transaction_date' => fake()->dateTimeBetween('-1 month', 'now'),
             'subtotal' => $subtotal,
             'tax_amount' => $taxAmount,
@@ -49,12 +52,12 @@ class SalesTransactionFactory extends Factory
             'payment_status' => fake()->randomElement([
                 SalesTransaction::PAYMENT_STATUS_UNPAID,
                 SalesTransaction::PAYMENT_STATUS_PARTIAL,
-                SalesTransaction::PAYMENT_STATUS_PAID
+                SalesTransaction::PAYMENT_STATUS_PAID,
             ]),
             'status' => fake()->randomElement([
                 SalesTransaction::STATUS_DRAFT,
                 SalesTransaction::STATUS_COMPLETED,
-                SalesTransaction::STATUS_VOIDED
+                SalesTransaction::STATUS_VOIDED,
             ]),
             'notes' => fake()->boolean(30) ? fake()->sentence() : null,
             'created_by' => User::factory(),
@@ -93,4 +96,4 @@ class SalesTransactionFactory extends Factory
             'status' => SalesTransaction::STATUS_VOIDED,
         ]);
     }
-};
+}

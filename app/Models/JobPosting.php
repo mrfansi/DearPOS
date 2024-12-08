@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobPosting extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'position_id',
@@ -18,12 +18,12 @@ class JobPosting extends Model
         'requirements',
         'status',
         'posted_date',
-        'closing_date'
+        'closing_date',
     ];
 
     protected $casts = [
         'posted_date' => 'date',
-        'closing_date' => 'date'
+        'closing_date' => 'date',
     ];
 
     public function jobPosition()

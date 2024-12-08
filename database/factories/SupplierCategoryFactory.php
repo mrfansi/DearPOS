@@ -14,14 +14,14 @@ class SupplierCategoryFactory extends Factory
         return [
             'name' => $this->faker->unique()->word(),
             'description' => $this->faker->optional()->sentence(),
-            'is_active' => $this->faker->boolean(80)
+            'is_active' => $this->faker->boolean(80),
         ];
     }
 
     public function inactive()
     {
         return $this->state(fn (array $attributes) => [
-            'is_active' => false
+            'is_active' => false,
         ]);
     }
-};
+}

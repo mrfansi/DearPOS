@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Currency;
 use App\Models\Payment;
 use App\Models\PaymentInstallment;
-use App\Models\Currency;
 use Illuminate\Database\Seeder;
 
 class PaymentInstallmentSeeder extends Seeder
@@ -15,8 +15,8 @@ class PaymentInstallmentSeeder extends Seeder
         $payments = Payment::all();
 
         // Ensure we have currencies
-        $currency = Currency::where('code', 'USD')->first() 
-            ?? Currency::first() 
+        $currency = Currency::where('code', 'USD')->first()
+            ?? Currency::first()
             ?? Currency::factory()->create(['code' => 'USD']);
 
         // Create payment installments for each payment
@@ -28,9 +28,9 @@ class PaymentInstallmentSeeder extends Seeder
                 $remainingAmount = $totalAmount;
 
                 for ($i = 0; $i < $installmentCount; $i++) {
-                    $installmentAmount = $i === $installmentCount - 1 
-                        ? $remainingAmount 
-                        : rand(10, (int)$remainingAmount);
+                    $installmentAmount = $i === $installmentCount - 1
+                        ? $remainingAmount
+                        : rand(10, (int) $remainingAmount);
 
                     PaymentInstallment::factory()->create([
                         'payment_id' => $payment->id,
@@ -44,4 +44,4 @@ class PaymentInstallmentSeeder extends Seeder
             }
         }
     }
-};
+}

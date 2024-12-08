@@ -21,12 +21,12 @@ class UnitOfMeasureFactory extends Factory
     {
         $units = ['PCS', 'BOX', 'KG', 'GR', 'LTR', 'ML', 'MTR', 'CM'];
         $names = [
-            'Pieces', 'Box', 'Kilogram', 'Gram', 
-            'Liter', 'Milliliter', 'Meter', 'Centimeter'
+            'Pieces', 'Box', 'Kilogram', 'Gram',
+            'Liter', 'Milliliter', 'Meter', 'Centimeter',
         ];
-        
+
         $index = array_rand($units);
-        
+
         return [
             'code' => $units[$index],
             'name' => $names[$index],

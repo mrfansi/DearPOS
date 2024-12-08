@@ -17,40 +17,40 @@ class WarehouseFactory extends Factory
         $manager = Employee::factory()->create();
 
         return [
-            'name' => $this->faker->company() . ' Warehouse',
-            'code' => 'WH-' . strtoupper(substr(uniqid(), -8)),
+            'name' => $this->faker->company().' Warehouse',
+            'code' => 'WH-'.strtoupper(substr(uniqid(), -8)),
             'location_id' => $location->id,
             'manager_id' => $manager->id,
             'is_active' => $this->faker->boolean(90),
-            'notes' => $this->faker->optional()->sentence
+            'notes' => $this->faker->optional()->sentence,
         ];
     }
 
     public function withLocation(Location $location)
     {
         return $this->state([
-            'location_id' => $location->id
+            'location_id' => $location->id,
         ]);
     }
 
     public function withManager(Employee $manager)
     {
         return $this->state([
-            'manager_id' => $manager->id
+            'manager_id' => $manager->id,
         ]);
     }
 
     public function active()
     {
         return $this->state([
-            'is_active' => true
+            'is_active' => true,
         ]);
     }
 
     public function inactive()
     {
         return $this->state([
-            'is_active' => false
+            'is_active' => false,
         ]);
     }
 }

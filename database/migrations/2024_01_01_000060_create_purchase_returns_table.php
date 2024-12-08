@@ -21,12 +21,12 @@ class CreatePurchaseReturnsTable extends Migration
             $table->uuid('created_by');
             $table->uuid('approved_by')->nullable();
             $table->timestamp('approved_at')->nullable();
-            
+
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('approved_by')->references('id')->on('users');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

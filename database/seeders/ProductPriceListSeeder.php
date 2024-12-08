@@ -75,19 +75,19 @@ class ProductPriceListSeeder extends Seeder
 
         // Create only 1 additional price list instead of 3
         $additionalPriceList = ProductPriceList::factory()->create();
-        
+
         // Create 10 items instead of 20
         $additionalItems = [];
         for ($i = 0; $i < 10; $i++) {
             $item = ProductPriceListItem::factory()
                 ->state(['price_list_id' => $additionalPriceList->id])
                 ->make();
-            
+
             $itemArray = $item->toArray();
             $itemArray['id'] = fake()->uuid();
             $additionalItems[] = $itemArray;
         }
-        
+
         DB::table('product_price_list_items')->insert($additionalItems);
     }
 }

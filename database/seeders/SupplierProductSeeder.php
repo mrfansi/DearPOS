@@ -24,15 +24,15 @@ class SupplierProductSeeder extends Seeder
                 SupplierProduct::firstOrCreate(
                     [
                         'supplier_id' => $supplier->id,
-                        'product_id' => $product->id
+                        'product_id' => $product->id,
                     ],
                     [
-                        'supplier_product_code' => 'SP-' . $supplier->code . '-' . $product->code,
-                        'supplier_product_name' => $product->name . ' from ' . $supplier->name,
+                        'supplier_product_code' => 'SP-'.$supplier->code.'-'.$product->code,
+                        'supplier_product_name' => $product->name.' from '.$supplier->name,
                         'unit_cost' => rand(10, 500) / 10,
                         'minimum_order_quantity' => rand(1, 50),
                         'lead_time_days' => rand(1, 30),
-                        'is_preferred' => rand(0, 10) < 2 // 20% chance of being preferred
+                        'is_preferred' => rand(0, 10) < 2, // 20% chance of being preferred
                     ]
                 );
             });
@@ -41,4 +41,4 @@ class SupplierProductSeeder extends Seeder
         // Add some additional random supplier products
         SupplierProduct::factory()->count(20)->create();
     }
-};
+}

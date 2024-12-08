@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
-use App\Models\Employee;
 use Illuminate\Database\Seeder;
 
 class DepartmentSeeder extends Seeder
@@ -21,14 +20,14 @@ class DepartmentSeeder extends Seeder
                     [
                         'name' => 'CEO Office',
                         'code' => 'CEO',
-                        'description' => 'Chief Executive Officer\'s direct team'
+                        'description' => 'Chief Executive Officer\'s direct team',
                     ],
                     [
                         'name' => 'Board of Directors',
                         'code' => 'BOD',
-                        'description' => 'Governance and strategic oversight'
-                    ]
-                ]
+                        'description' => 'Governance and strategic oversight',
+                    ],
+                ],
             ],
             [
                 'name' => 'Human Resources',
@@ -39,19 +38,19 @@ class DepartmentSeeder extends Seeder
                     [
                         'name' => 'Recruitment',
                         'code' => 'RECRUIT',
-                        'description' => 'Talent acquisition and hiring'
+                        'description' => 'Talent acquisition and hiring',
                     ],
                     [
                         'name' => 'Training & Development',
                         'code' => 'T&D',
-                        'description' => 'Employee training and skill development'
+                        'description' => 'Employee training and skill development',
                     ],
                     [
                         'name' => 'Employee Relations',
                         'code' => 'ER',
-                        'description' => 'Managing employee engagement and conflicts'
-                    ]
-                ]
+                        'description' => 'Managing employee engagement and conflicts',
+                    ],
+                ],
             ],
             [
                 'name' => 'Finance',
@@ -62,19 +61,19 @@ class DepartmentSeeder extends Seeder
                     [
                         'name' => 'Accounting',
                         'code' => 'ACC',
-                        'description' => 'Financial reporting and bookkeeping'
+                        'description' => 'Financial reporting and bookkeeping',
                     ],
                     [
                         'name' => 'Payroll',
                         'code' => 'PAYROLL',
-                        'description' => 'Employee compensation and benefits'
+                        'description' => 'Employee compensation and benefits',
                     ],
                     [
                         'name' => 'Financial Planning',
                         'code' => 'FP',
-                        'description' => 'Strategic financial forecasting'
-                    ]
-                ]
+                        'description' => 'Strategic financial forecasting',
+                    ],
+                ],
             ],
             [
                 'name' => 'Operations',
@@ -85,19 +84,19 @@ class DepartmentSeeder extends Seeder
                     [
                         'name' => 'Production',
                         'code' => 'PROD',
-                        'description' => 'Manufacturing and production management'
+                        'description' => 'Manufacturing and production management',
                     ],
                     [
                         'name' => 'Logistics',
                         'code' => 'LOG',
-                        'description' => 'Supply chain and distribution'
+                        'description' => 'Supply chain and distribution',
                     ],
                     [
                         'name' => 'Quality Control',
                         'code' => 'QC',
-                        'description' => 'Product and service quality assurance'
-                    ]
-                ]
+                        'description' => 'Product and service quality assurance',
+                    ],
+                ],
             ],
             [
                 'name' => 'Technology',
@@ -108,20 +107,20 @@ class DepartmentSeeder extends Seeder
                     [
                         'name' => 'Software Development',
                         'code' => 'DEV',
-                        'description' => 'Application and software engineering'
+                        'description' => 'Application and software engineering',
                     ],
                     [
                         'name' => 'IT Support',
                         'code' => 'IT-SUP',
-                        'description' => 'Technical support and infrastructure'
+                        'description' => 'Technical support and infrastructure',
                     ],
                     [
                         'name' => 'Cybersecurity',
                         'code' => 'CYBER',
-                        'description' => 'Network and data security'
-                    ]
-                ]
-            ]
+                        'description' => 'Network and data security',
+                    ],
+                ],
+            ],
         ];
 
         foreach ($departments as $deptData) {
@@ -129,7 +128,7 @@ class DepartmentSeeder extends Seeder
                 'name' => $deptData['name'],
                 'code' => $deptData['code'],
                 'description' => $deptData['description'],
-                'is_active' => $deptData['is_active'] ?? true
+                'is_active' => $deptData['is_active'] ?? true,
             ]);
 
             // Create sub-departments
@@ -140,7 +139,7 @@ class DepartmentSeeder extends Seeder
                         'code' => $subDeptData['code'],
                         'description' => $subDeptData['description'],
                         'parent_id' => $parentDepartment->id,
-                        'is_active' => true
+                        'is_active' => true,
                     ]);
                 }
             }

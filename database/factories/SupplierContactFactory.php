@@ -20,14 +20,14 @@ class SupplierContactFactory extends Factory
             'phone' => $this->faker->optional()->phoneNumber(),
             'mobile' => $this->faker->optional()->phoneNumber(),
             'is_primary' => $this->faker->boolean(20),
-            'notes' => $this->faker->optional()->paragraph()
+            'notes' => $this->faker->optional()->paragraph(),
         ];
     }
 
     public function primaryContact()
     {
         return $this->state(fn (array $attributes) => [
-            'is_primary' => true
+            'is_primary' => true,
         ]);
     }
-};
+}

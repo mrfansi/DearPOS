@@ -18,21 +18,21 @@ class DepartmentFactory extends Factory
             'description' => $this->faker->optional()->paragraph,
             'parent_id' => null,
             'manager_id' => null,
-            'is_active' => $this->faker->boolean(90)
+            'is_active' => $this->faker->boolean(90),
         ];
     }
 
     public function withParent(Department $parentDepartment)
     {
         return $this->state([
-            'parent_id' => $parentDepartment->id
+            'parent_id' => $parentDepartment->id,
         ]);
     }
 
     public function withManager(Employee $manager)
     {
         return $this->state([
-            'manager_id' => $manager->id
+            'manager_id' => $manager->id,
         ]);
     }
 }

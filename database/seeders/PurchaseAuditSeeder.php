@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\PurchaseAudit;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseReturn;
-use App\Models\PurchaseAudit;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseAuditSeeder extends Seeder
 {
@@ -30,7 +30,7 @@ class PurchaseAuditSeeder extends Seeder
         // Ensure we have users to reference
         $users = User::count() > 0 ? User::all() : User::factory(3)->create();
 
-        DB::transaction(function () use ($purchaseOrders, $purchaseReturns, $users, $faker) {
+        DB::transaction(function () use ($purchaseOrders, $purchaseReturns, $users) {
             // Audit for Purchase Orders
             foreach ($purchaseOrders as $purchaseOrder) {
                 $auditEvents = ['created', 'updated', 'status_changed'];

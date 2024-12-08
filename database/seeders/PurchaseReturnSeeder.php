@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnItem;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseReturnSeeder extends Seeder
 {
@@ -45,9 +45,9 @@ class PurchaseReturnSeeder extends Seeder
                         PurchaseReturnItem::factory()->create([
                             'return_id' => $return->id,
                             'purchase_order_item_id' => $orderItem->id,
-                            'quantity' => $status === 'completed' 
-                                ? $orderItem->quantity 
-                                : $faker->randomFloat(4, 0, $orderItem->quantity)
+                            'quantity' => $status === 'completed'
+                                ? $orderItem->quantity
+                                : $faker->randomFloat(4, 0, $orderItem->quantity),
                         ]);
                     }
                 }

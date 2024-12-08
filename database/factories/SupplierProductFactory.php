@@ -22,14 +22,14 @@ class SupplierProductFactory extends Factory
             'minimum_order_quantity' => $this->faker->randomFloat(4, 1, 100),
             'lead_time_days' => $this->faker->numberBetween(1, 30),
             'is_preferred' => $this->faker->boolean(20),
-            'notes' => $this->faker->optional()->paragraph()
+            'notes' => $this->faker->optional()->paragraph(),
         ];
     }
 
     public function preferred()
     {
         return $this->state(fn (array $attributes) => [
-            'is_preferred' => true
+            'is_preferred' => true,
         ]);
     }
-};
+}

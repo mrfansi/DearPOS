@@ -25,7 +25,7 @@ class CustomerAuditSeeder extends Seeder
         $customers->each(function (Customer $customer) use ($users) {
             // Randomly select events to create audit logs
             $events = ['created', 'updated', 'status_changed', 'credit_changed'];
-            
+
             foreach ($events as $event) {
                 if (rand(0, 1)) {
                     CustomerAudit::factory()->create([
@@ -34,7 +34,7 @@ class CustomerAuditSeeder extends Seeder
                         'event' => $event,
                         'user_id' => $users->random()->id,
                         'old_values' => $event === 'created' ? null : json_encode(['key' => 'value']),
-                        'new_values' => json_encode(['key' => 'new_value'])
+                        'new_values' => json_encode(['key' => 'new_value']),
                     ]);
                 }
             }

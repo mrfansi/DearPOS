@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Employee;
 use App\Models\EmployeeDocument;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class EmployeeDocumentFactory extends Factory
 {
@@ -15,9 +14,9 @@ class EmployeeDocumentFactory extends Factory
     {
         $documentTypes = ['id_card', 'passport', 'resume', 'contract', 'certification', 'other'];
         $fileTypes = ['pdf', 'docx', 'jpg', 'png'];
-        
-        $fileName = $this->faker->uuid . '.' . $this->faker->randomElement($fileTypes);
-        $filePath = 'employee_documents/' . $fileName;
+
+        $fileName = $this->faker->uuid.'.'.$this->faker->randomElement($fileTypes);
+        $filePath = 'employee_documents/'.$fileName;
 
         return [
             'employee_id' => Employee::factory(),
@@ -29,14 +28,14 @@ class EmployeeDocumentFactory extends Factory
             'file_size' => $this->faker->numberBetween(1000, 5000000), // 1KB to 5MB
             'issue_date' => $issueDate = $this->faker->dateTimeBetween('-10 years', 'now'),
             'expiry_date' => $this->faker->optional()->dateTimeBetween($issueDate, '+10 years'),
-            'notes' => $this->faker->optional()->paragraph
+            'notes' => $this->faker->optional()->paragraph,
         ];
     }
 
     public function withEmployee(Employee $employee)
     {
         return $this->state([
-            'employee_id' => $employee->id
+            'employee_id' => $employee->id,
         ]);
     }
 
@@ -44,23 +43,23 @@ class EmployeeDocumentFactory extends Factory
     {
         return $this->state([
             'document_type' => 'passport',
-            'document_number' => $this->faker->unique()->regexify('[A-Z]{1}[0-9]{7}')
+            'document_number' => $this->faker->unique()->regexify('[A-Z]{1}[0-9]{7}'),
         ]);
     }
 
     public function resume()
     {
         return $this->state([
-            'document_type' => 'resume'
+            'document_type' => 'resume',
         ]);
     }
 
     private function generateDocumentNumber($documentType)
     {
-        return match($documentType) {
+        return match ($documentType) {
             'id_card' => $this->faker->unique()->regexify('[0-9]{12}'),
             'passport' => $this->faker->unique()->regexify('[A-Z]{1}[0-9]{7}'),
-            'contract' => 'CONTRACT-' . $this->faker->unique()->regexify('[A-Z]{2}[0-9]{6}'),
+            'contract' => 'CONTRACT-'.$this->faker->unique()->regexify('[A-Z]{2}[0-9]{6}'),
             default => null
         };
     }

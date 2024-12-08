@@ -13,7 +13,7 @@ class CreatePurchaseOrdersTable extends Migration
             $table->string('order_number', 50)->unique();
             $table->uuid('supplier_id');
             $table->uuid('warehouse_id');
-            $table->uuid('currency_id');
+            $table->foreignId('currency_id')->constrained('currencies');
             $table->enum('status', ['draft', 'pending', 'approved', 'received', 'cancelled']);
             $table->date('order_date');
             $table->date('expected_date')->nullable();
@@ -26,13 +26,12 @@ class CreatePurchaseOrdersTable extends Migration
             $table->uuid('created_by');
             $table->uuid('approved_by')->nullable();
             $table->timestamp('approved_at')->nullable();
-            
+
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
-            $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('approved_by')->references('id')->on('users');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

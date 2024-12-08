@@ -30,21 +30,21 @@ class StockTransferItemFactory extends Factory
             'unit_id' => $unit->id,
             'lot_number' => $this->faker->optional()->bothify('LOT-####??'),
             'expiry_date' => $this->faker->optional()->dateTimeBetween('+1 month', '+2 years'),
-            'notes' => $this->faker->optional()->sentence
+            'notes' => $this->faker->optional()->sentence,
         ];
     }
 
     public function forTransfer(StockTransfer $transfer)
     {
         return $this->state([
-            'transfer_id' => $transfer->id
+            'transfer_id' => $transfer->id,
         ]);
     }
 
     public function withProduct(Product $product)
     {
         return $this->state([
-            'product_id' => $product->id
+            'product_id' => $product->id,
         ]);
     }
 
@@ -52,14 +52,14 @@ class StockTransferItemFactory extends Factory
     {
         return $this->state([
             'product_id' => $variant->product_id,
-            'product_variant_id' => $variant->id
+            'product_variant_id' => $variant->id,
         ]);
     }
 
     public function withUnit(UnitOfMeasure $unit)
     {
         return $this->state([
-            'unit_id' => $unit->id
+            'unit_id' => $unit->id,
         ]);
     }
 }

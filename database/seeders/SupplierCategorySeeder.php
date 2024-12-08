@@ -15,7 +15,7 @@ class SupplierCategorySeeder extends Seeder
             ['name' => 'Electronics', 'description' => 'Electronic components and equipment suppliers'],
             ['name' => 'Office Supplies', 'description' => 'Stationery and office equipment suppliers'],
             ['name' => 'Packaging', 'description' => 'Packaging materials and solutions'],
-            ['name' => 'Maintenance', 'description' => 'Maintenance and repair suppliers']
+            ['name' => 'Maintenance', 'description' => 'Maintenance and repair suppliers'],
         ];
 
         foreach ($categories as $categoryData) {
@@ -23,7 +23,7 @@ class SupplierCategorySeeder extends Seeder
                 ['name' => $categoryData['name']],
                 [
                     'description' => $categoryData['description'],
-                    'is_active' => true
+                    'is_active' => true,
                 ]
             );
         }
@@ -31,4 +31,4 @@ class SupplierCategorySeeder extends Seeder
         // Add some random additional categories
         SupplierCategory::factory()->count(5)->create();
     }
-};
+}

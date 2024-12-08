@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class GoodsReceiptItem extends Model
 {
@@ -19,13 +19,13 @@ class GoodsReceiptItem extends Model
         'quantity',
         'unit_cost',
         'total_amount',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'quantity' => 'decimal:4',
         'unit_cost' => 'decimal:4',
-        'total_amount' => 'decimal:4'
+        'total_amount' => 'decimal:4',
     ];
 
     public function goodsReceipt()

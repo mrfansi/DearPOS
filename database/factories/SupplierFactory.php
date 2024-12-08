@@ -21,21 +21,21 @@ class SupplierFactory extends Factory
             'website' => $this->faker->optional()->url(),
             'tax_number' => $this->faker->optional()->regexify('[0-9]{10}'),
             'notes' => $this->faker->optional()->paragraph(),
-            'status' => $this->faker->randomElement(['active', 'inactive'])
+            'status' => $this->faker->randomElement(['active', 'inactive']),
         ];
     }
 
     public function active()
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'active'
+            'status' => 'active',
         ]);
     }
 
     public function inactive()
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'inactive'
+            'status' => 'inactive',
         ]);
     }
-};
+}

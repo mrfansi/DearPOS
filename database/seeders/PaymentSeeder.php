@@ -16,13 +16,13 @@ class PaymentSeeder extends Seeder
         $salesTransactions = SalesTransaction::all();
 
         // Ensure we have currencies
-        $currency = Currency::where('code', 'USD')->first() 
-            ?? Currency::first() 
+        $currency = Currency::where('code', 'USD')->first()
+            ?? Currency::first()
             ?? Currency::factory()->create(['code' => 'USD']);
 
         // Create some sample payments
         foreach ($salesTransactions as $transaction) {
-            $paymentMethod = PaymentMethod::inRandomOrder()->first() 
+            $paymentMethod = PaymentMethod::inRandomOrder()->first()
                 ?? PaymentMethod::factory()->create();
 
             Payment::factory()->create([
@@ -32,4 +32,4 @@ class PaymentSeeder extends Seeder
             ]);
         }
     }
-};
+}

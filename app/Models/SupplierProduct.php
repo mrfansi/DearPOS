@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierProduct extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'supplier_id',
@@ -20,14 +20,14 @@ class SupplierProduct extends Model
         'minimum_order_quantity',
         'lead_time_days',
         'is_preferred',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'unit_cost' => 'decimal:4',
         'minimum_order_quantity' => 'decimal:4',
         'lead_time_days' => 'integer',
-        'is_preferred' => 'boolean'
+        'is_preferred' => 'boolean',
     ];
 
     public function supplier()
@@ -39,4 +39,4 @@ class SupplierProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
-};
+}

@@ -21,14 +21,14 @@ class EmployeeAddressFactory extends Factory
             'state' => $this->faker->state,
             'postal_code' => $this->faker->postcode,
             'country' => $this->faker->country,
-            'is_current' => $this->faker->boolean(90)
+            'is_current' => $this->faker->boolean(90),
         ];
     }
 
     public function withEmployee(Employee $employee)
     {
         return $this->state([
-            'employee_id' => $employee->id
+            'employee_id' => $employee->id,
         ]);
     }
 
@@ -36,14 +36,14 @@ class EmployeeAddressFactory extends Factory
     {
         return $this->state([
             'address_type' => 'home',
-            'is_current' => true
+            'is_current' => true,
         ]);
     }
 
     public function mailing()
     {
         return $this->state([
-            'address_type' => 'mailing'
+            'address_type' => 'mailing',
         ]);
     }
 }

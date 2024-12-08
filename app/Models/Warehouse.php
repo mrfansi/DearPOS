@@ -17,11 +17,11 @@ class Warehouse extends Model
         'location_id',
         'manager_id',
         'is_active',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     public function location()

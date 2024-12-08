@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierAddress extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'supplier_id',
@@ -20,12 +20,12 @@ class SupplierAddress extends Model
         'state',
         'postal_code',
         'country',
-        'is_default'
+        'is_default',
     ];
 
     protected $casts = [
         'is_default' => 'boolean',
-        'address_type' => 'string'
+        'address_type' => 'string',
     ];
 
     public function supplier()
@@ -48,4 +48,4 @@ class SupplierAddress extends Model
     {
         return $query->whereIn('address_type', ['shipping', 'both']);
     }
-};
+}

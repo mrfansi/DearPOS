@@ -29,7 +29,7 @@ class EmployeeSeeder extends Seeder
         $users = [];
         $employees = [];
         $defaultPassword = Hash::make('password');
-        
+
         // Generate 10 users and employees
         for ($i = 0; $i < 10; $i++) {
             $userData = User::factory()->make()->toArray();
@@ -38,22 +38,22 @@ class EmployeeSeeder extends Seeder
             // Format email_verified_at to MySQL datetime format
             $userData['email_verified_at'] = now()->format('Y-m-d H:i:s');
             $users[] = $userData;
-            
+
             $employeeData = Employee::factory()->make([
                 'user_id' => $userData['id'],
                 'status' => fake()->randomElement(['active', 'on_leave', 'suspended']), // Exclude 'terminated' for active employees
             ])->toArray();
-            
+
             // Add id for employee
             $employeeData['id'] = fake()->uuid();
-            
+
             // Format dates to MySQL format
             foreach (['birth_date', 'hire_date', 'contract_start_date', 'contract_end_date', 'termination_date'] as $dateField) {
                 if (isset($employeeData[$dateField]) && $employeeData[$dateField]) {
                     $employeeData[$dateField] = \Carbon\Carbon::parse($employeeData[$dateField])->format('Y-m-d H:i:s');
                 }
             }
-            
+
             $employees[] = $employeeData;
         }
 

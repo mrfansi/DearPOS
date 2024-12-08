@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Employee;
-use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +23,7 @@ class LeaveRequestSeeder extends Seeder
             for ($i = 0; $i < 2; $i++) {
                 $startDate = $now->copy()->addDays(rand(1, 30));
                 $endDate = $startDate->copy()->addDays(rand(1, 5));
-                
+
                 $leaveRequests[] = [
                     'id' => fake()->uuid(),
                     'employee_id' => $employee->id,

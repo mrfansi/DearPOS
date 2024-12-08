@@ -18,13 +18,13 @@ class EmployeeShift extends Model
         'actual_start',
         'actual_end',
         'status',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'date' => 'date',
         'actual_start' => 'datetime',
-        'actual_end' => 'datetime'
+        'actual_end' => 'datetime',
     ];
 
     // Relationships

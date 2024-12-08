@@ -17,7 +17,7 @@ class ShiftSeeder extends Seeder
                 'end_time' => '15:00',
                 'break_duration' => 60,
                 'is_overnight' => false,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Afternoon Shift',
@@ -26,7 +26,7 @@ class ShiftSeeder extends Seeder
                 'end_time' => '23:00',
                 'break_duration' => 60,
                 'is_overnight' => false,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Night Shift',
@@ -35,7 +35,7 @@ class ShiftSeeder extends Seeder
                 'end_time' => '07:00',
                 'break_duration' => 60,
                 'is_overnight' => true,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Split Shift',
@@ -44,7 +44,7 @@ class ShiftSeeder extends Seeder
                 'end_time' => '20:00',
                 'break_duration' => 120,
                 'is_overnight' => false,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Weekend Shift',
@@ -53,8 +53,8 @@ class ShiftSeeder extends Seeder
                 'end_time' => '17:00',
                 'break_duration' => 60,
                 'is_overnight' => false,
-                'is_active' => true
-            ]
+                'is_active' => true,
+            ],
         ];
 
         foreach ($shifts as $shift) {

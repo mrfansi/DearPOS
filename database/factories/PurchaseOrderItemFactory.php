@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\PurchaseOrderItem;
-use App\Models\PurchaseOrder;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderItem;
 use App\Models\UnitOfMeasure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,9 +29,10 @@ class PurchaseOrderItemFactory extends Factory
             'received_quantity' => $this->faker->randomFloat(4, 0, $quantity),
             'unit_id' => function () {
                 $unit = UnitOfMeasure::first();
-                if (!$unit) {
+                if (! $unit) {
                     $unit = UnitOfMeasure::factory()->create();
                 }
+
                 return $unit->id;
             },
             'unit_price' => $unitPrice,

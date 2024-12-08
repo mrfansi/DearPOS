@@ -25,7 +25,7 @@ class CustomerAddressSeeder extends Seeder
             CustomerAddress::factory()->create([
                 'customer_id' => $customer->id,
                 'address_type' => 'billing',
-                'is_default' => true
+                'is_default' => true,
             ]);
 
             // Optionally create a shipping address
@@ -33,7 +33,7 @@ class CustomerAddressSeeder extends Seeder
                 CustomerAddress::factory()->create([
                     'customer_id' => $customer->id,
                     'address_type' => 'shipping',
-                    'is_default' => false
+                    'is_default' => false,
                 ]);
             }
         });

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Supplier extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'code',
@@ -21,11 +21,11 @@ class Supplier extends Model
         'website',
         'tax_number',
         'notes',
-        'status'
+        'status',
     ];
 
     protected $casts = [
-        'status' => 'string'
+        'status' => 'string',
     ];
 
     public function products()
@@ -47,4 +47,4 @@ class Supplier extends Model
     {
         return $this->hasMany(PurchaseOrder::class);
     }
-};
+}

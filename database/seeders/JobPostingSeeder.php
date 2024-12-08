@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\JobPosition;
 use App\Models\JobPosting;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class JobPostingSeeder extends Seeder
@@ -15,11 +14,11 @@ class JobPostingSeeder extends Seeder
             [
                 'position_title' => 'Senior Software Engineer',
                 'description' => 'We are seeking a talented and experienced Senior Software Engineer to join our dynamic technology team. The ideal candidate will have strong programming skills and experience in developing scalable software solutions.',
-                'requirements' => "- Bachelors degree in Computer Science or related field
+                'requirements' => '- Bachelors degree in Computer Science or related field
 - 5+ years of software development experience
 - Proficiency in PHP, Laravel, and JavaScript
 - Experience with cloud technologies
-- Strong problem-solving skills"
+- Strong problem-solving skills',
             ],
             [
                 'position_title' => 'HR Recruitment Specialist',
@@ -28,7 +27,7 @@ class JobPostingSeeder extends Seeder
 - 3+ years of recruitment experience
 - Strong communication and interpersonal skills
 - Proficiency in recruitment tools and platforms
-- Ability to assess candidate potential"
+- Ability to assess candidate potential",
             ],
             [
                 'position_title' => 'Financial Analyst',
@@ -37,7 +36,7 @@ class JobPostingSeeder extends Seeder
 - 2+ years of financial analysis experience
 - Advanced Excel skills
 - Understanding of financial modeling
-- Strong analytical and problem-solving skills"
+- Strong analytical and problem-solving skills",
             ],
             [
                 'position_title' => 'Quality Control Specialist',
@@ -46,7 +45,7 @@ class JobPostingSeeder extends Seeder
 - 3+ years of quality control experience
 - Knowledge of quality management systems
 - Attention to detail
-- Strong analytical skills"
+- Strong analytical skills",
             ],
             [
                 'position_title' => 'Cybersecurity Analyst',
@@ -55,13 +54,13 @@ class JobPostingSeeder extends Seeder
 - 4+ years of cybersecurity experience
 - Certifications like CISSP, CEH preferred
 - Knowledge of security frameworks and protocols
-- Strong problem-solving and analytical skills"
-            ]
+- Strong problem-solving and analytical skills",
+            ],
         ];
 
         foreach ($jobPostings as $postingData) {
             // Find a matching job position
-            $jobPosition = JobPosition::where('title', 'like', '%' . $postingData['position_title'] . '%')->first();
+            $jobPosition = JobPosition::where('title', 'like', '%'.$postingData['position_title'].'%')->first();
 
             if ($jobPosition) {
                 JobPosting::create([
@@ -71,7 +70,7 @@ class JobPostingSeeder extends Seeder
                     'requirements' => $postingData['requirements'],
                     'status' => 'open',
                     'posted_date' => now(),
-                    'closing_date' => now()->addDays(30)
+                    'closing_date' => now()->addDays(30),
                 ]);
             }
         }

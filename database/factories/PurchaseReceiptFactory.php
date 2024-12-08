@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\PurchaseReceipt;
 use App\Models\PurchaseOrder;
+use App\Models\PurchaseReceipt;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -14,7 +14,7 @@ class PurchaseReceiptFactory extends Factory
     public function definition()
     {
         return [
-            'receipt_number' => 'PR-' . $this->faker->unique()->numberBetween(1000, 9999),
+            'receipt_number' => 'PR-'.$this->faker->unique()->numberBetween(1000, 9999),
             'purchase_order_id' => PurchaseOrder::factory(),
             'receipt_date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['draft', 'confirmed', 'cancelled']),

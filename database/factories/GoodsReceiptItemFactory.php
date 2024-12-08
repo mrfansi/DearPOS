@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\GoodsReceiptItem;
 use App\Models\GoodsReceipt;
+use App\Models\GoodsReceiptItem;
 use App\Models\PurchaseOrderItem;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GoodsReceiptItemFactory extends Factory
@@ -34,6 +33,7 @@ class GoodsReceiptItemFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $purchaseOrderItem = PurchaseOrderItem::find($attributes['purchase_order_item_id']);
+
             return [
                 'quantity' => $purchaseOrderItem->quantity,
             ];

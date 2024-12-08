@@ -18,22 +18,22 @@ class SupplierAddressSeeder extends Seeder
             SupplierAddress::factory()->create([
                 'supplier_id' => $supplier->id,
                 'address_type' => 'billing',
-                'is_default' => true
+                'is_default' => true,
             ]);
 
             // Create a shipping address
             SupplierAddress::factory()->create([
                 'supplier_id' => $supplier->id,
-                'address_type' => 'shipping'
+                'address_type' => 'shipping',
             ]);
 
             // Add some additional random addresses
             SupplierAddress::factory()->count(rand(0, 2))->create([
-                'supplier_id' => $supplier->id
+                'supplier_id' => $supplier->id,
             ]);
         });
 
         // Add some additional random supplier addresses
         SupplierAddress::factory()->count(10)->create();
     }
-};
+}

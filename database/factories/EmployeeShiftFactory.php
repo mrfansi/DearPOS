@@ -5,8 +5,8 @@ namespace Database\Factories;
 use App\Models\Employee;
 use App\Models\EmployeeShift;
 use App\Models\Shift;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EmployeeShiftFactory extends Factory
 {
@@ -26,7 +26,7 @@ class EmployeeShiftFactory extends Factory
             'status' => $status,
             'actual_start' => $this->generateActualTime($shift, $status, 'start'),
             'actual_end' => $this->generateActualTime($shift, $status, 'end'),
-            'notes' => $this->faker->optional()->sentence
+            'notes' => $this->faker->optional()->sentence,
         ];
     }
 
@@ -46,14 +46,14 @@ class EmployeeShiftFactory extends Factory
     public function withEmployee(Employee $employee)
     {
         return $this->state([
-            'employee_id' => $employee->id
+            'employee_id' => $employee->id,
         ]);
     }
 
     public function withShift(Shift $shift)
     {
         return $this->state([
-            'shift_id' => $shift->id
+            'shift_id' => $shift->id,
         ]);
     }
 
@@ -62,7 +62,7 @@ class EmployeeShiftFactory extends Factory
         return $this->state([
             'status' => 'scheduled',
             'actual_start' => null,
-            'actual_end' => null
+            'actual_end' => null,
         ]);
     }
 
@@ -70,14 +70,14 @@ class EmployeeShiftFactory extends Factory
     {
         return $this->state([
             'status' => 'in_progress',
-            'actual_end' => null
+            'actual_end' => null,
         ]);
     }
 
     public function completed()
     {
         return $this->state([
-            'status' => 'completed'
+            'status' => 'completed',
         ]);
     }
 
@@ -86,7 +86,7 @@ class EmployeeShiftFactory extends Factory
         return $this->state([
             'status' => 'absent',
             'actual_start' => null,
-            'actual_end' => null
+            'actual_end' => null,
         ]);
     }
 
@@ -95,7 +95,7 @@ class EmployeeShiftFactory extends Factory
         return $this->state([
             'status' => 'cancelled',
             'actual_start' => null,
-            'actual_end' => null
+            'actual_end' => null,
         ]);
     }
 }

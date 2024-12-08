@@ -22,28 +22,28 @@ class JobPostingFactory extends Factory
             'requirements' => $this->faker->paragraphs(2, true),
             'status' => $this->faker->randomElement(['draft', 'open', 'closed', 'on_hold']),
             'posted_date' => $postedDate,
-            'closing_date' => $closingDate
+            'closing_date' => $closingDate,
         ];
     }
 
     public function withPosition(JobPosition $position)
     {
         return $this->state([
-            'position_id' => $position->id
+            'position_id' => $position->id,
         ]);
     }
 
     public function open()
     {
         return $this->state([
-            'status' => 'open'
+            'status' => 'open',
         ]);
     }
 
     public function closed()
     {
         return $this->state([
-            'status' => 'closed'
+            'status' => 'closed',
         ]);
     }
 }

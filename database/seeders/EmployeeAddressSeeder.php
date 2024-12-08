@@ -23,7 +23,7 @@ class EmployeeAddressSeeder extends Seeder
             EmployeeAddress::factory()->create([
                 'employee_id' => $employee->id,
                 'address_type' => 'home',
-                'is_current' => true
+                'is_current' => true,
             ]);
 
             // Optionally create a secondary address for some employees
@@ -31,7 +31,7 @@ class EmployeeAddressSeeder extends Seeder
                 EmployeeAddress::factory()->create([
                     'employee_id' => $employee->id,
                     'address_type' => $faker->randomElement(['mailing', 'temporary']),
-                    'is_current' => false
+                    'is_current' => false,
                 ]);
             }
         }

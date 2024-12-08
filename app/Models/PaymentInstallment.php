@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentInstallment extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'payment_id',
@@ -18,17 +18,17 @@ class PaymentInstallment extends Model
         'due_date',
         'paid_date',
         'status',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'amount' => 'decimal:4',
         'due_date' => 'date',
-        'paid_date' => 'date'
+        'paid_date' => 'date',
     ];
 
     public function payment()
     {
         return $this->belongsTo(Payment::class);
     }
-};
+}

@@ -21,14 +21,14 @@ class StockTransferItem extends Model
         'unit_id',
         'lot_number',
         'expiry_date',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'quantity_requested' => 'decimal:4',
         'quantity_sent' => 'decimal:4',
         'quantity_received' => 'decimal:4',
-        'expiry_date' => 'date'
+        'expiry_date' => 'date',
     ];
 
     public function transfer()

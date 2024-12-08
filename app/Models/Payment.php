@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Payment extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'sales_transaction_id',
@@ -21,14 +21,14 @@ class Payment extends Model
         'payment_date',
         'reference_number',
         'notes',
-        'is_partial'
+        'is_partial',
     ];
 
     protected $casts = [
         'amount' => 'decimal:4',
         'exchange_rate' => 'decimal:4',
         'payment_date' => 'datetime',
-        'is_partial' => 'boolean'
+        'is_partial' => 'boolean',
     ];
 
     public function salesTransaction()
@@ -50,4 +50,4 @@ class Payment extends Model
     {
         return $this->hasMany(PaymentInstallment::class);
     }
-};
+}

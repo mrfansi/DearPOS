@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\PurchaseOrder;
 use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptItem;
-use Illuminate\Support\Facades\DB;
+use App\Models\PurchaseOrder;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class GoodsReceiptSeeder extends Seeder
 {
@@ -29,7 +29,7 @@ class GoodsReceiptSeeder extends Seeder
                     $goodsReceipt = GoodsReceipt::create([
                         'id' => $faker->uuid(),
                         'purchase_order_id' => $purchaseOrder->id,
-                        'receipt_number' => 'GR-' . $faker->unique()->numberBetween(1000, 9999),
+                        'receipt_number' => 'GR-'.$faker->unique()->numberBetween(1000, 9999),
                         'receipt_date' => $faker->date(),
                         'status' => $status,
                         'notes' => $faker->optional()->text(200),
@@ -43,8 +43,8 @@ class GoodsReceiptSeeder extends Seeder
                             'goods_receipt_id' => $goodsReceipt->id,
                             'purchase_order_item_id' => $orderItem->id,
                             'product_id' => $orderItem->product_id,
-                            'quantity' => $status === 'confirmed' 
-                                ? $orderItem->quantity 
+                            'quantity' => $status === 'confirmed'
+                                ? $orderItem->quantity
                                 : $faker->randomFloat(4, 0, $orderItem->quantity),
                             'unit_cost' => $faker->randomFloat(4, 10, 500),
                             'total_amount' => $faker->randomFloat(4, 10, 5000),

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeBenefit extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'employee_id',
@@ -20,7 +20,7 @@ class EmployeeBenefit extends Model
         'employee_contribution',
         'effective_date',
         'expiry_date',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
@@ -28,7 +28,7 @@ class EmployeeBenefit extends Model
         'employee_contribution' => 'decimal:2',
         'effective_date' => 'date',
         'expiry_date' => 'date',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     public function employee()
@@ -40,6 +40,6 @@ class EmployeeBenefit extends Model
     {
         return $this->is_active &&
             now()->gte($this->effective_date) &&
-            (!$this->expiry_date || now()->lte($this->expiry_date));
+            (! $this->expiry_date || now()->lte($this->expiry_date));
     }
 }

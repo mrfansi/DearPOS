@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeAddress extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'employee_id',
@@ -20,11 +20,11 @@ class EmployeeAddress extends Model
         'state',
         'postal_code',
         'country',
-        'is_current'
+        'is_current',
     ];
 
     protected $casts = [
-        'is_current' => 'boolean'
+        'is_current' => 'boolean',
     ];
 
     public function employee()
@@ -36,9 +36,10 @@ class EmployeeAddress extends Model
     {
         $address = $this->address_line_1;
         if ($this->address_line_2) {
-            $address .= ', ' . $this->address_line_2;
+            $address .= ', '.$this->address_line_2;
         }
         $address .= ", {$this->city}, {$this->state} {$this->postal_code}, {$this->country}";
+
         return $address;
     }
 }

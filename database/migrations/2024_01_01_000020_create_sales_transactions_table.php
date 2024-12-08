@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('transaction_number', 50)->unique();
             $table->foreignUuid('customer_id')->nullable()->constrained('customers')->nullOnDelete();
             $table->foreignUuid('pos_counter_id')->constrained('pos_counters')->cascadeOnDelete();
-            $table->foreignUuid('currency_id')->constrained('currencies')->cascadeOnDelete();
+            $table->foreignId('currency_id')->constrained('currencies')->cascadeOnDelete();
             $table->dateTime('transaction_date');
             $table->decimal('subtotal', 15, 4);
             $table->decimal('tax_amount', 15, 4);

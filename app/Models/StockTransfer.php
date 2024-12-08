@@ -22,13 +22,13 @@ class StockTransfer extends Model
         'approved_by',
         'approved_at',
         'completed_by',
-        'completed_at'
+        'completed_at',
     ];
 
     protected $casts = [
         'transfer_date' => 'date',
         'approved_at' => 'datetime',
-        'completed_at' => 'datetime'
+        'completed_at' => 'datetime',
     ];
 
     public function sourceWarehouse()

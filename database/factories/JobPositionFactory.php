@@ -17,14 +17,14 @@ class JobPositionFactory extends Factory
             'title' => $this->faker->jobTitle,
             'code' => $this->faker->unique()->regexify('[A-Z]{2}[0-9]{3}'),
             'description' => $this->faker->optional()->paragraph,
-            'is_active' => $this->faker->boolean(90)
+            'is_active' => $this->faker->boolean(90),
         ];
     }
 
     public function withDepartment(Department $department)
     {
         return $this->state([
-            'department_id' => $department->id
+            'department_id' => $department->id,
         ]);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseReceiptItem extends Model
 {
@@ -19,12 +19,12 @@ class PurchaseReceiptItem extends Model
         'quantity_received',
         'lot_number',
         'expiry_date',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'quantity_received' => 'decimal:4',
-        'expiry_date' => 'date'
+        'expiry_date' => 'date',
     ];
 
     public function receipt()

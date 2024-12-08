@@ -60,4 +60,4 @@ class PosCounter extends Model
     {
         return PosCounterFactory::new();
     }
-};
+}

@@ -18,7 +18,7 @@ class Shift extends Model
         'end_time',
         'break_duration',
         'is_overnight',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
@@ -26,7 +26,7 @@ class Shift extends Model
         'end_time' => 'datetime',
         'break_duration' => 'integer',
         'is_overnight' => 'boolean',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     // Relationships

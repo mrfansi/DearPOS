@@ -26,14 +26,14 @@ class PosCounterFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => 'COUNTER-' . fake()->unique()->numberBetween(1, 99),
+            'code' => 'COUNTER-'.fake()->unique()->numberBetween(1, 99),
             'name' => fake()->randomElement([
-                'Main Counter', 
-                'Front Desk', 
-                'Cashier', 
-                'Express Checkout', 
-                'Customer Service Desk'
-            ]) . ' ' . fake()->city(),
+                'Main Counter',
+                'Front Desk',
+                'Cashier',
+                'Express Checkout',
+                'Customer Service Desk',
+            ]).' '.fake()->city(),
             'location_id' => Location::factory(),
             'is_active' => fake()->boolean(80), // 80% chance of being active
         ];
@@ -58,4 +58,4 @@ class PosCounterFactory extends Factory
             'is_active' => false,
         ]);
     }
-};
+}

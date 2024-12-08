@@ -14,7 +14,7 @@ class GoodsReceiptFactory extends Factory
     {
         return [
             'purchase_order_id' => PurchaseOrder::factory(),
-            'receipt_number' => 'GR-' . $this->faker->unique()->numberBetween(1000, 9999),
+            'receipt_number' => 'GR-'.$this->faker->unique()->numberBetween(1000, 9999),
             'receipt_date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['draft', 'confirmed', 'cancelled']),
             'notes' => $this->faker->optional()->text(200),

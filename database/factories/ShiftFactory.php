@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Shift;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShiftFactory extends Factory
 {
@@ -23,7 +23,7 @@ class ShiftFactory extends Factory
             'break_duration' => $this->faker->numberBetween(30, 90),
             'description' => $this->faker->optional()->sentence,
             'is_overnight' => $this->isOvernight($startTime, $endTime),
-            'is_active' => $this->faker->boolean(90)
+            'is_active' => $this->faker->boolean(90),
         ];
     }
 
@@ -35,7 +35,7 @@ class ShiftFactory extends Factory
             'start_time' => '07:00',
             'end_time' => '15:00',
             'break_duration' => 60,
-            'is_overnight' => false
+            'is_overnight' => false,
         ]);
     }
 
@@ -47,7 +47,7 @@ class ShiftFactory extends Factory
             'start_time' => '14:00',
             'end_time' => '22:00',
             'break_duration' => 60,
-            'is_overnight' => false
+            'is_overnight' => false,
         ]);
     }
 
@@ -59,7 +59,7 @@ class ShiftFactory extends Factory
             'start_time' => '22:00',
             'end_time' => '06:00',
             'break_duration' => 60,
-            'is_overnight' => true
+            'is_overnight' => true,
         ]);
     }
 
@@ -71,7 +71,7 @@ class ShiftFactory extends Factory
             'Afternoon Shift',
             'Night Shift',
             'Split Shift',
-            'Rotating Shift'
+            'Rotating Shift',
         ];
 
         return $this->faker->randomElement($shiftNames);
@@ -81,6 +81,7 @@ class ShiftFactory extends Factory
     {
         $hours = $this->faker->numberBetween(0, 23);
         $minutes = $this->faker->randomElement([0, 15, 30, 45]);
+
         return sprintf('%02d:%02d', $hours, $minutes);
     }
 
@@ -88,13 +89,15 @@ class ShiftFactory extends Factory
     {
         $start = Carbon::parse($startTime);
         $end = $start->copy()->addHours(8);
+
         return $end->format('H:i');
     }
 
-    private function generateShiftCode(): string 
+    private function generateShiftCode(): string
     {
         $prefix = 'SH';
         $suffix = strtoupper(substr(uniqid(), -8));
+
         return "{$prefix}-{$suffix}";
     }
 
@@ -102,6 +105,7 @@ class ShiftFactory extends Factory
     {
         $start = Carbon::parse($startTime);
         $end = Carbon::parse($endTime);
+
         return $start->gt($end);
     }
 }

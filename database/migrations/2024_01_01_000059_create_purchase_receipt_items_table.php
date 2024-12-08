@@ -16,10 +16,10 @@ class CreatePurchaseReceiptItemsTable extends Migration
             $table->string('lot_number', 50)->nullable();
             $table->date('expiry_date')->nullable();
             $table->text('notes')->nullable();
-            
+
             $table->foreign('receipt_id')->references('id')->on('purchase_receipts');
             $table->foreign('purchase_order_item_id')->references('id')->on('purchase_order_items');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

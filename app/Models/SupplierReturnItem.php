@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierReturnItem extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'supplier_return_id',
@@ -17,13 +17,13 @@ class SupplierReturnItem extends Model
         'quantity',
         'unit_cost',
         'total_amount',
-        'reason'
+        'reason',
     ];
 
     protected $casts = [
         'quantity' => 'decimal:4',
         'unit_cost' => 'decimal:4',
-        'total_amount' => 'decimal:4'
+        'total_amount' => 'decimal:4',
     ];
 
     public function supplierReturn()
@@ -35,4 +35,4 @@ class SupplierReturnItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
-};
+}

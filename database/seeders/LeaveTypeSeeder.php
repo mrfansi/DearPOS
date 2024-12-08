@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\LeaveType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class LeaveTypeSeeder extends Seeder
 {
@@ -17,7 +16,7 @@ class LeaveTypeSeeder extends Seeder
                 'description' => 'Regular annual leave entitlement',
                 'is_paid' => true,
                 'default_days' => 12,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Sick Leave',
@@ -25,7 +24,7 @@ class LeaveTypeSeeder extends Seeder
                 'description' => 'Leave for medical reasons',
                 'is_paid' => true,
                 'default_days' => 5,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Unpaid Leave',
@@ -33,7 +32,7 @@ class LeaveTypeSeeder extends Seeder
                 'description' => 'Leave without pay',
                 'is_paid' => false,
                 'default_days' => 0,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Maternity Leave',
@@ -41,7 +40,7 @@ class LeaveTypeSeeder extends Seeder
                 'description' => 'Leave for new mothers',
                 'is_paid' => true,
                 'default_days' => 90,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Paternity Leave',
@@ -49,7 +48,7 @@ class LeaveTypeSeeder extends Seeder
                 'description' => 'Leave for new fathers',
                 'is_paid' => true,
                 'default_days' => 14,
-                'is_active' => true
+                'is_active' => true,
             ],
             [
                 'name' => 'Bereavement Leave',
@@ -57,8 +56,8 @@ class LeaveTypeSeeder extends Seeder
                 'description' => 'Leave for family loss',
                 'is_paid' => true,
                 'default_days' => 3,
-                'is_active' => true
-            ]
+                'is_active' => true,
+            ],
         ];
 
         foreach ($leaveTypes as $leaveTypeData) {

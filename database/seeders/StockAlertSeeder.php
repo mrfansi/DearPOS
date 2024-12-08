@@ -6,8 +6,8 @@ use App\Models\Product;
 use App\Models\StockAlert;
 use App\Models\User;
 use App\Models\Warehouse;
-use Illuminate\Database\Seeder;
 use Faker\Factory;
+use Illuminate\Database\Seeder;
 
 class StockAlertSeeder extends Seeder
 {
@@ -42,7 +42,7 @@ class StockAlertSeeder extends Seeder
                     'resolved_at' => $faker->boolean(30) ? now()->subDays(rand(1, 3)) : null,
                     'notes' => $faker->boolean(20) ? $faker->sentence : null,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ];
             }
 
@@ -64,7 +64,7 @@ class StockAlertSeeder extends Seeder
                     'resolved_at' => $faker->boolean(30) ? now()->subDays(rand(1, 3)) : null,
                     'notes' => $faker->boolean(20) ? $faker->sentence : null,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ];
             }
 
@@ -85,7 +85,7 @@ class StockAlertSeeder extends Seeder
                     'resolved_at' => $faker->boolean(30) ? now()->subDays(rand(1, 3)) : null,
                     'notes' => $faker->boolean(20) ? $faker->sentence : null,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ];
             }
         }

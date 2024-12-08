@@ -21,28 +21,28 @@ class SupplierAddressFactory extends Factory
             'state' => $this->faker->state(),
             'postal_code' => $this->faker->postcode(),
             'country' => $this->faker->country(),
-            'is_default' => $this->faker->boolean(20)
+            'is_default' => $this->faker->boolean(20),
         ];
     }
 
     public function defaultAddress()
     {
         return $this->state(fn (array $attributes) => [
-            'is_default' => true
+            'is_default' => true,
         ]);
     }
 
     public function billingAddress()
     {
         return $this->state(fn (array $attributes) => [
-            'address_type' => 'billing'
+            'address_type' => 'billing',
         ]);
     }
 
     public function shippingAddress()
     {
         return $this->state(fn (array $attributes) => [
-            'address_type' => 'shipping'
+            'address_type' => 'shipping',
         ]);
     }
-};
+}

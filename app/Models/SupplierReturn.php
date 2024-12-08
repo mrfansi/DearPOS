@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierReturn extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'supplier_id',
@@ -17,13 +17,13 @@ class SupplierReturn extends Model
         'return_date',
         'status',
         'total_amount',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'return_date' => 'date',
         'status' => 'string',
-        'total_amount' => 'decimal:4'
+        'total_amount' => 'decimal:4',
     ];
 
     public function supplier()
@@ -51,4 +51,4 @@ class SupplierReturn extends Model
     {
         return $query->where('status', 'cancelled');
     }
-};
+}

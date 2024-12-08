@@ -21,14 +21,14 @@ class LeaveRequest extends Model
         'status',
         'approved_by',
         'approved_at',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
         'days_requested' => 'integer',
-        'approved_at' => 'datetime'
+        'approved_at' => 'datetime',
     ];
 
     // Relationships

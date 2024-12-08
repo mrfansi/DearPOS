@@ -31,20 +31,20 @@ class PerformanceReviewSeeder extends Seeder
                         'Strong communication skills',
                         'Consistently meets project deadlines',
                         'Demonstrates leadership potential',
-                        'Excellent problem-solving abilities'
+                        'Excellent problem-solving abilities',
                     ]),
                     'improvements' => implode('. ', [
                         'Needs to improve time management',
                         'Could benefit from additional technical training',
-                        'Develop more proactive approach to team collaboration'
+                        'Develop more proactive approach to team collaboration',
                     ]),
                     'goals' => implode('. ', [
                         'Complete advanced certification',
                         'Lead a cross-departmental project',
                         'Mentor junior team members',
-                        'Improve technical skills in emerging technologies'
+                        'Improve technical skills in emerging technologies',
                     ]),
-                    'status' => ['draft', 'in_progress', 'reviewed', 'finalized'][rand(0, 3)]
+                    'status' => ['draft', 'in_progress', 'reviewed', 'finalized'][rand(0, 3)],
                 ]);
             }
         }

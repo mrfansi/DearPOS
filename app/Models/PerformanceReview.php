@@ -20,13 +20,13 @@ class PerformanceReview extends Model
         'strengths',
         'improvements',
         'goals',
-        'status'
+        'status',
     ];
 
     protected $casts = [
         'review_period_start' => 'date',
         'review_period_end' => 'date',
-        'overall_rating' => 'decimal:1'
+        'overall_rating' => 'decimal:1',
     ];
 
     // Relationships

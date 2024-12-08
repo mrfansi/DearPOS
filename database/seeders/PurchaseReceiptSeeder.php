@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseReceipt;
 use App\Models\PurchaseReceiptItem;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseReceiptSeeder extends Seeder
 {
@@ -42,9 +42,9 @@ class PurchaseReceiptSeeder extends Seeder
                         PurchaseReceiptItem::factory()->create([
                             'receipt_id' => $receipt->id,
                             'purchase_order_item_id' => $orderItem->id,
-                            'quantity_received' => $status === 'confirmed' 
-                                ? $orderItem->quantity 
-                                : $faker->randomFloat(4, 0, $orderItem->quantity)
+                            'quantity_received' => $status === 'confirmed'
+                                ? $orderItem->quantity
+                                : $faker->randomFloat(4, 0, $orderItem->quantity),
                         ]);
                     }
                 }

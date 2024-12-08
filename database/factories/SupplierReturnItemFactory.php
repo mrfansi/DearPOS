@@ -23,7 +23,7 @@ class SupplierReturnItemFactory extends Factory
             'quantity' => $quantity,
             'unit_cost' => $unitCost,
             'total_amount' => $totalAmount,
-            'reason' => $this->faker->optional()->sentence()
+            'reason' => $this->faker->optional()->sentence(),
         ];
     }
-};
+}

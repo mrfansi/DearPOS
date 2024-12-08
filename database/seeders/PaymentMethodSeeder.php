@@ -17,7 +17,7 @@ class PaymentMethodSeeder extends Seeder
                 'description' => 'Direct cash payment',
                 'is_cash' => true,
                 'is_card' => false,
-                'is_digital' => false
+                'is_digital' => false,
             ],
             [
                 'code' => 'CCARD001',
@@ -25,7 +25,7 @@ class PaymentMethodSeeder extends Seeder
                 'description' => 'Credit card payment',
                 'is_cash' => false,
                 'is_card' => true,
-                'is_digital' => false
+                'is_digital' => false,
             ],
             [
                 'code' => 'DCARD001',
@@ -33,7 +33,7 @@ class PaymentMethodSeeder extends Seeder
                 'description' => 'Debit card payment',
                 'is_cash' => false,
                 'is_card' => true,
-                'is_digital' => false
+                'is_digital' => false,
             ],
             [
                 'code' => 'BANK001',
@@ -41,7 +41,7 @@ class PaymentMethodSeeder extends Seeder
                 'description' => 'Direct bank transfer',
                 'is_cash' => false,
                 'is_card' => false,
-                'is_digital' => true
+                'is_digital' => true,
             ],
             [
                 'code' => 'EWALLET001',
@@ -49,8 +49,8 @@ class PaymentMethodSeeder extends Seeder
                 'description' => 'Digital wallet payment',
                 'is_cash' => false,
                 'is_card' => false,
-                'is_digital' => true
-            ]
+                'is_digital' => true,
+            ],
         ];
 
         foreach ($methods as $methodData) {
@@ -63,4 +63,4 @@ class PaymentMethodSeeder extends Seeder
         // Add some random additional payment methods
         PaymentMethod::factory()->count(3)->create();
     }
-};
+}

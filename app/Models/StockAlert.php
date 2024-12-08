@@ -23,7 +23,7 @@ class StockAlert extends Model
         'notification_date',
         'resolved_by',
         'resolved_at',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
@@ -31,7 +31,7 @@ class StockAlert extends Model
         'current_quantity' => 'decimal:4',
         'is_notification_sent' => 'boolean',
         'notification_date' => 'datetime',
-        'resolved_at' => 'datetime'
+        'resolved_at' => 'datetime',
     ];
 
     public function product()

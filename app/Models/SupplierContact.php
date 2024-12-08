@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierContact extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'supplier_id',
@@ -19,11 +19,11 @@ class SupplierContact extends Model
         'phone',
         'mobile',
         'is_primary',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
-        'is_primary' => 'boolean'
+        'is_primary' => 'boolean',
     ];
 
     public function supplier()
@@ -36,4 +36,4 @@ class SupplierContact extends Model
     {
         return $query->where('is_primary', true);
     }
-};
+}

@@ -28,7 +28,7 @@ class ProductAuditFactory extends Factory
     {
         $product = Product::factory()->create();
         $event = fake()->randomElement(['created', 'updated', 'deleted', 'status_changed', 'price_changed']);
-        
+
         return [
             'auditable_type' => Product::class,
             'auditable_id' => $product->id,

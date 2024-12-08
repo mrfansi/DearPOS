@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('sales_transaction_id');
             $table->uuid('payment_method_id');
             $table->decimal('amount', 15, 4);
-            $table->uuid('currency_id');
+            $table->foreignId('currency_id')->constrained('currencies');
             $table->decimal('exchange_rate', 15, 4)->default(1);
             $table->string('status', 20);
             $table->dateTime('payment_date');
@@ -25,7 +25,6 @@ return new class extends Migration
 
             $table->foreign('sales_transaction_id')->references('id')->on('sales_transactions');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods');
-            $table->foreign('currency_id')->references('id')->on('currencies');
         });
     }
 

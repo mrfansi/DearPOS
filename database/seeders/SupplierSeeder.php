@@ -17,7 +17,7 @@ class SupplierSeeder extends Seeder
                 'company_name' => 'Global Materials Corporation',
                 'email' => 'contact@globalmaterials.com',
                 'phone' => '+1-555-123-4567',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'code' => 'SUP002',
@@ -25,7 +25,7 @@ class SupplierSeeder extends Seeder
                 'company_name' => 'Tech Components Limited',
                 'email' => 'sales@techcomponents.com',
                 'phone' => '+1-555-987-6543',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'code' => 'SUP003',
@@ -33,8 +33,8 @@ class SupplierSeeder extends Seeder
                 'company_name' => 'Office Supplies Direct Inc.',
                 'email' => 'orders@officesupplies.com',
                 'phone' => '+1-555-246-8101',
-                'status' => 'active'
-            ]
+                'status' => 'active',
+            ],
         ];
 
         foreach ($suppliers as $supplierData) {
@@ -47,4 +47,4 @@ class SupplierSeeder extends Seeder
         // Add some random additional suppliers
         Supplier::factory()->count(10)->create();
     }
-};
+}

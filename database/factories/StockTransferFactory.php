@@ -19,7 +19,7 @@ class StockTransferFactory extends Factory
         $status = $this->faker->randomElement(['draft', 'pending', 'in_transit', 'completed', 'cancelled']);
 
         return [
-            'transfer_number' => 'TRF-' . strtoupper(substr(uniqid(), -8)),
+            'transfer_number' => 'TRF-'.strtoupper(substr(uniqid(), -8)),
             'source_warehouse_id' => $sourceWarehouse->id,
             'destination_warehouse_id' => $destinationWarehouse->id,
             'status' => $status,
@@ -29,7 +29,7 @@ class StockTransferFactory extends Factory
             'approved_by' => in_array($status, ['in_transit', 'completed']) ? User::factory()->create()->id : null,
             'approved_at' => in_array($status, ['in_transit', 'completed']) ? now() : null,
             'completed_by' => $status === 'completed' ? User::factory()->create()->id : null,
-            'completed_at' => $status === 'completed' ? now() : null
+            'completed_at' => $status === 'completed' ? now() : null,
         ];
     }
 
@@ -40,7 +40,7 @@ class StockTransferFactory extends Factory
             'approved_by' => null,
             'approved_at' => null,
             'completed_by' => null,
-            'completed_at' => null
+            'completed_at' => null,
         ]);
     }
 
@@ -51,7 +51,7 @@ class StockTransferFactory extends Factory
             'approved_by' => null,
             'approved_at' => null,
             'completed_by' => null,
-            'completed_at' => null
+            'completed_at' => null,
         ]);
     }
 
@@ -59,12 +59,13 @@ class StockTransferFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $approver = User::factory()->create();
+
             return [
                 'status' => 'in_transit',
                 'approved_by' => $approver->id,
                 'approved_at' => now(),
                 'completed_by' => null,
-                'completed_at' => null
+                'completed_at' => null,
             ];
         });
     }
@@ -74,12 +75,13 @@ class StockTransferFactory extends Factory
         return $this->state(function (array $attributes) {
             $approver = User::factory()->create();
             $completer = User::factory()->create();
+
             return [
                 'status' => 'completed',
                 'approved_by' => $approver->id,
                 'approved_at' => now()->subHours(2),
                 'completed_by' => $completer->id,
-                'completed_at' => now()
+                'completed_at' => now(),
             ];
         });
     }
@@ -91,7 +93,7 @@ class StockTransferFactory extends Factory
             'approved_by' => null,
             'approved_at' => null,
             'completed_by' => null,
-            'completed_at' => null
+            'completed_at' => null,
         ]);
     }
 }

@@ -17,13 +17,13 @@ class LeaveType extends Model
         'description',
         'is_paid',
         'default_days',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
         'is_paid' => 'boolean',
         'default_days' => 'integer',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     // Relationships

@@ -21,12 +21,12 @@ class CreatePurchaseOrderItemsTable extends Migration
             $table->decimal('discount_amount', 15, 4);
             $table->decimal('total_amount', 15, 4);
             $table->text('notes')->nullable();
-            
+
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('variant_id')->references('id')->on('product_variants');
             $table->foreign('unit_id')->references('id')->on('units_of_measures');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

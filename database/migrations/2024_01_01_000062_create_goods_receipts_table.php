@@ -15,9 +15,9 @@ class CreateGoodsReceiptsTable extends Migration
             $table->date('receipt_date');
             $table->enum('status', ['draft', 'confirmed', 'cancelled']);
             $table->text('notes')->nullable();
-            
+
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

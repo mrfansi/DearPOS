@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeDocument extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'employee_id',
@@ -21,13 +21,13 @@ class EmployeeDocument extends Model
         'file_size',
         'issue_date',
         'expiry_date',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'issue_date' => 'date',
         'expiry_date' => 'date',
-        'file_size' => 'integer'
+        'file_size' => 'integer',
     ];
 
     public function employee()
@@ -37,7 +37,7 @@ class EmployeeDocument extends Model
 
     public function getFullFilePathAttribute()
     {
-        return storage_path('app/' . $this->file_path);
+        return storage_path('app/'.$this->file_path);
     }
 
     public function isExpired()

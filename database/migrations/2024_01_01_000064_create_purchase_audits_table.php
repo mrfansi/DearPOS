@@ -16,9 +16,9 @@ class CreatePurchaseAuditsTable extends Migration
             $table->json('old_values')->nullable();
             $table->json('new_values')->nullable();
             $table->uuid('user_id');
-            
+
             $table->foreign('user_id')->references('id')->on('users');
-            
+
             $table->timestamp('created_at')->useCurrent();
         });
     }

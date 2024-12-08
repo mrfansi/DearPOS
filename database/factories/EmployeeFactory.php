@@ -7,7 +7,6 @@ use App\Models\Employee;
 use App\Models\JobPosition;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class EmployeeFactory extends Factory
 {
@@ -17,7 +16,7 @@ class EmployeeFactory extends Factory
     {
         $firstName = $this->faker->firstName;
         $lastName = $this->faker->lastName;
-        $email = strtolower($firstName . '.' . $lastName . '@' . $this->faker->domainName);
+        $email = strtolower($firstName.'.'.$lastName.'@'.$this->faker->domainName);
 
         return [
             'user_id' => User::factory(),
@@ -37,28 +36,28 @@ class EmployeeFactory extends Factory
             'status' => $this->faker->randomElement(['active', 'on_leave', 'terminated', 'suspended']),
             'emergency_contact_name' => $this->faker->optional()->name,
             'emergency_contact_phone' => $this->faker->optional()->phoneNumber,
-            'notes' => $this->faker->optional()->paragraph
+            'notes' => $this->faker->optional()->paragraph,
         ];
     }
 
     public function withDepartment(Department $department)
     {
         return $this->state([
-            'department_id' => $department->id
+            'department_id' => $department->id,
         ]);
     }
 
     public function withPosition(JobPosition $position)
     {
         return $this->state([
-            'position_id' => $position->id
+            'position_id' => $position->id,
         ]);
     }
 
     public function active()
     {
         return $this->state([
-            'status' => 'active'
+            'status' => 'active',
         ]);
     }
 
@@ -66,7 +65,7 @@ class EmployeeFactory extends Factory
     {
         return $this->state([
             'status' => 'terminated',
-            'termination_date' => $this->faker->dateTimeBetween('-1 year', 'now')
+            'termination_date' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ]);
     }
 }

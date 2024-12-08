@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -29,7 +29,7 @@ class Employee extends Model
         'status',
         'emergency_contact_name',
         'emergency_contact_phone',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
@@ -37,7 +37,7 @@ class Employee extends Model
         'hire_date' => 'date',
         'contract_start_date' => 'date',
         'contract_end_date' => 'date',
-        'termination_date' => 'date'
+        'termination_date' => 'date',
     ];
 
     public function user()

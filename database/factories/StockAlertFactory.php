@@ -32,7 +32,7 @@ class StockAlertFactory extends Factory
             'notification_date' => $this->faker->optional()->dateTimeBetween('-1 month', 'now'),
             'resolved_by' => $this->faker->boolean(30) ? User::factory()->create()->id : null,
             'resolved_at' => $this->faker->optional()->dateTimeBetween('-1 month', 'now'),
-            'notes' => $this->faker->optional()->sentence
+            'notes' => $this->faker->optional()->sentence,
         ];
     }
 
@@ -40,7 +40,7 @@ class StockAlertFactory extends Factory
     {
         return $this->state([
             'alert_type' => 'low_stock',
-            'current_quantity' => $this->faker->randomFloat(4, 0, 10)
+            'current_quantity' => $this->faker->randomFloat(4, 0, 10),
         ]);
     }
 
@@ -48,14 +48,14 @@ class StockAlertFactory extends Factory
     {
         return $this->state([
             'alert_type' => 'overstock',
-            'current_quantity' => $this->faker->randomFloat(4, 100, 200)
+            'current_quantity' => $this->faker->randomFloat(4, 100, 200),
         ]);
     }
 
     public function expiring()
     {
         return $this->state([
-            'alert_type' => 'expiring'
+            'alert_type' => 'expiring',
         ]);
     }
 
@@ -64,7 +64,7 @@ class StockAlertFactory extends Factory
         return $this->state([
             'status' => 'active',
             'resolved_by' => null,
-            'resolved_at' => null
+            'resolved_at' => null,
         ]);
     }
 
@@ -72,10 +72,11 @@ class StockAlertFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $user = User::factory()->create();
+
             return [
                 'status' => 'resolved',
                 'resolved_by' => $user->id,
-                'resolved_at' => now()
+                'resolved_at' => now(),
             ];
         });
     }
@@ -84,10 +85,11 @@ class StockAlertFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $user = User::factory()->create();
+
             return [
                 'status' => 'ignored',
                 'resolved_by' => $user->id,
-                'resolved_at' => now()
+                'resolved_at' => now(),
             ];
         });
     }

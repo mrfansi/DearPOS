@@ -14,21 +14,21 @@ class PaymentMethodFactory extends Factory
         return [
             'code' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{2}'),
             'name' => $this->faker->randomElement([
-                'Cash', 'Credit Card', 'Debit Card', 
-                'Bank Transfer', 'E-Wallet', 'PayPal'
+                'Cash', 'Credit Card', 'Debit Card',
+                'Bank Transfer', 'E-Wallet', 'PayPal',
             ]),
             'description' => $this->faker->optional()->sentence(),
             'is_cash' => $this->faker->boolean(30),
             'is_card' => $this->faker->boolean(40),
             'is_digital' => $this->faker->boolean(50),
-            'is_active' => $this->faker->boolean(80)
+            'is_active' => $this->faker->boolean(80),
         ];
     }
 
     public function inactive()
     {
         return $this->state(fn (array $attributes) => [
-            'is_active' => false
+            'is_active' => false,
         ]);
     }
-};
+}

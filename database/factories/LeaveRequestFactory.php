@@ -5,8 +5,8 @@ namespace Database\Factories;
 use App\Models\Employee;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LeaveRequestFactory extends Factory
 {
@@ -31,21 +31,21 @@ class LeaveRequestFactory extends Factory
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected', 'cancelled']),
             'reason' => $this->faker->sentence,
             'notes' => $this->faker->optional()->sentence,
-            'approved_at' => $this->faker->optional()->dateTimeBetween($startDate, $endDate)
+            'approved_at' => $this->faker->optional()->dateTimeBetween($startDate, $endDate),
         ];
     }
 
     public function withEmployee(Employee $employee)
     {
         return $this->state([
-            'employee_id' => $employee->id
+            'employee_id' => $employee->id,
         ]);
     }
 
     public function withLeaveType(LeaveType $leaveType)
     {
         return $this->state([
-            'leave_type_id' => $leaveType->id
+            'leave_type_id' => $leaveType->id,
         ]);
     }
 
@@ -53,7 +53,7 @@ class LeaveRequestFactory extends Factory
     {
         return $this->state([
             'status' => 'pending',
-            'approved_at' => null
+            'approved_at' => null,
         ]);
     }
 
@@ -61,7 +61,7 @@ class LeaveRequestFactory extends Factory
     {
         return $this->state([
             'status' => 'approved',
-            'approved_at' => now()
+            'approved_at' => now(),
         ]);
     }
 
@@ -69,7 +69,7 @@ class LeaveRequestFactory extends Factory
     {
         return $this->state([
             'status' => 'rejected',
-            'notes' => $this->faker->paragraph
+            'notes' => $this->faker->paragraph,
         ]);
     }
 }

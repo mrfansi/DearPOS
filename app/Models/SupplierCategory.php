@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupplierCategory extends Model
 {
-    use HasUuids, SoftDeletes, HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'name',
         'description',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     // Relationships can be added as needed
-};
+}

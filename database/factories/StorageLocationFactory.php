@@ -16,31 +16,31 @@ class StorageLocationFactory extends Factory
 
         return [
             'warehouse_id' => $warehouse->id,
-            'name' => $this->faker->words(2, true) . ' Location',
-            'code' => 'LOC-' . strtoupper(substr(uniqid(), -8)),
+            'name' => $this->faker->words(2, true).' Location',
+            'code' => 'LOC-'.strtoupper(substr(uniqid(), -8)),
             'description' => $this->faker->optional()->sentence,
-            'is_active' => $this->faker->boolean(90)
+            'is_active' => $this->faker->boolean(90),
         ];
     }
 
     public function forWarehouse(Warehouse $warehouse)
     {
         return $this->state([
-            'warehouse_id' => $warehouse->id
+            'warehouse_id' => $warehouse->id,
         ]);
     }
 
     public function active()
     {
         return $this->state([
-            'is_active' => true
+            'is_active' => true,
         ]);
     }
 
     public function inactive()
     {
         return $this->state([
-            'is_active' => false
+            'is_active' => false,
         ]);
     }
 }

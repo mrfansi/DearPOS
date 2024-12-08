@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Currency;
 use App\Models\PurchaseOrder;
 use App\Models\Supplier;
-use App\Models\Warehouse;
-use App\Models\Currency;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PurchaseOrderFactory extends Factory
@@ -20,11 +20,14 @@ class PurchaseOrderFactory extends Factory
         $discountAmount = $totalAmount * 0.05;
         $shippingAmount = $this->faker->randomFloat(4, 10, 100);
 
+        // Get the default currency (USD or first available currency)
+        $defaultCurrency = Currency::where('code', 'USD')->first() ?? Currency::first();
+
         return [
-            'order_number' => 'PO-' . $this->faker->unique()->numberBetween(1000, 9999),
+            'order_number' => 'PO-'.$this->faker->unique()->numberBetween(1000, 9999),
             'supplier_id' => Supplier::factory(),
             'warehouse_id' => Warehouse::factory(),
-            'currency_id' => Currency::factory(),
+            'currency_id' => $defaultCurrency->id,
             'status' => $this->faker->randomElement(['draft', 'pending', 'approved', 'received', 'cancelled']),
             'order_date' => $this->faker->date(),
             'expected_date' => $this->faker->optional()->date(),

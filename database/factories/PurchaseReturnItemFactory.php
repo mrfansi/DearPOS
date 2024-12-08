@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\PurchaseReturnItem;
-use App\Models\PurchaseReturn;
 use App\Models\PurchaseOrderItem;
+use App\Models\PurchaseReturn;
+use App\Models\PurchaseReturnItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PurchaseReturnItemFactory extends Factory
@@ -33,6 +33,7 @@ class PurchaseReturnItemFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $purchaseOrderItem = PurchaseOrderItem::find($attributes['purchase_order_item_id']);
+
             return [
                 'quantity' => $purchaseOrderItem->quantity,
             ];

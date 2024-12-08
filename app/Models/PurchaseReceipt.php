@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseReceipt extends Model
 {
@@ -19,11 +19,11 @@ class PurchaseReceipt extends Model
         'receipt_date',
         'status',
         'notes',
-        'received_by'
+        'received_by',
     ];
 
     protected $casts = [
-        'receipt_date' => 'date'
+        'receipt_date' => 'date',
     ];
 
     public function purchaseOrder()
