@@ -33,8 +33,20 @@ class CustomerAuditFactory extends Factory
                 'status_changed',
                 'credit_changed',
             ]),
-            'old_values' => fake()->optional(0.7)->json(),
-            'new_values' => fake()->optional(0.7)->json(),
+            'old_values' => fake()->optional(0.7, function() {
+                return json_encode([
+                    'name' => fake()->name(),
+                    'status' => fake()->randomElement(['active', 'inactive']),
+                    'credit_limit' => fake()->randomFloat(2, 0, 10000)
+                ]);
+            }),
+            'new_values' => fake()->optional(0.7, function() {
+                return json_encode([
+                    'name' => fake()->name(),
+                    'status' => fake()->randomElement(['active', 'inactive']),
+                    'credit_limit' => fake()->randomFloat(2, 0, 10000)
+                ]);
+            }),
             'user_id' => User::factory(),
             'created_at' => fake()->dateTimeThisYear(),
         ];
