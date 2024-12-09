@@ -6,17 +6,18 @@ use App\Helpers\Generator;
 use App\Models\Tenant;
 use Illuminate\Console\Command;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
-class TenantSetup extends Command
+class TenantsSetup extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tenant:setup';
+    protected $signature = 'tenants:setup';
 
     /**
      * The console command description.
@@ -35,9 +36,29 @@ class TenantSetup extends Command
             placeholder: 'ex. Dear POS',
             default: 'My Brand Name',
             required: true,
-            validate: fn (string $value) => strlen($value) < 3 ? 'The brand name must be at least 3 characters.' : null,
+            validate: fn(string $value) => strlen($value) < 3 ? 'The brand name must be at least 3 characters.' : null,
             hint: 'This will be displayed as your brand name'
         );
+
+        $isCustomDomain = confirm(
+            label: 'Do you want to use a custom domain?',
+            default: false,
+            yes: 'Yes',
+            no: 'No',
+            hint: 'If you want to use a custom domain, you can enter it here'
+        );
+
+        $domain = str()->slug($name);
+
+        if ($isCustomDomain) {
+            $domain = text(
+                label: 'Type your custom domain',
+                placeholder: 'ex. mydomain.com',
+                validate: fn(string $value) => strlen($value) < 3 ? 'The domain name must be at least 3 characters.' : null,
+                required: true,
+                hint: 'This will be displayed as your custom domain',
+            );
+        }
 
         $timezone = select(
             label: 'Select your timezone',
@@ -71,8 +92,12 @@ class TenantSetup extends Command
             'language' => $language,
         ]);
 
+
+
         $tenant->domains()->create([
-            'domain' => str()->slug($name),
+            'domain' => $domain,
+            'is_primary' => $tenant->domains()->count() === 0,
+            'is_custom_domain' => $isCustomDomain
         ]);
 
     }
