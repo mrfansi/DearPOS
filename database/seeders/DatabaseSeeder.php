@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,6 +18,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Administrator',
             'email' => 'admin@dearpos.com',
         ]);
+
+        Tenant::factory(10)->create();
 
     }
 }
