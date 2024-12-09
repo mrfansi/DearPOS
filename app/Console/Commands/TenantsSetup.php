@@ -34,9 +34,16 @@ class TenantsSetup extends Command
         $name = text(
             label: 'Type your brand name',
             placeholder: 'ex. Dear POS',
-            default: 'My Brand Name',
             required: true,
-            validate: fn(string $value) => strlen($value) < 3 ? 'The brand name must be at least 3 characters.' : null,
+            validate: function (string $value) {
+                if (strlen($value) < 3) {
+                    return 'The brand name must be at least 3 characters.';
+                }
+                if (Tenant::where('name', $value)->exists()) {
+                    return 'This brand name is already taken.';
+                }
+                return null;
+            },
             hint: 'This will be displayed as your brand name'
         );
 
@@ -90,6 +97,9 @@ class TenantsSetup extends Command
             'timezone' => $timezone,
             'currency' => $currency,
             'language' => $language,
+            'tenancy_db_name' => 'dearpos_' . str()->slug($name),
+            'tenancy_db_username' => str()->slug($name),
+            'tenancy_db_password' => Generator::generateUniquePassword(),
         ]);
 
 

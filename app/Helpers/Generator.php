@@ -103,4 +103,36 @@ class Generator
 
         return $languages;
     }
+
+    /**
+     * Generate a random unique password
+     *
+     * @param int $length The length of the password (default: 12)
+     * @return string The generated password
+     */
+    public static function generateUniquePassword(int $length = 12): string
+    {
+        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        $numbers = '0123456789';
+        $specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+        $allChars = "$uppercase$lowercase$numbers$specialChars";
+        $password = '';
+
+        // Ensure at least one character from each set
+        $password .= $uppercase[random_int(0, strlen($uppercase) - 1)];
+        $password .= $lowercase[random_int(0, strlen($lowercase) - 1)];
+        $password .= $numbers[random_int(0, strlen($numbers) - 1)];
+        $password .= $specialChars[random_int(0, strlen($specialChars) - 1)];
+
+        // Fill the rest of the password
+        for ($i = strlen($password); $i < $length; $i++) {
+            $password .= $allChars[random_int(0, strlen($allChars) - 1)];
+        }
+
+        // Shuffle the password to make it more random
+        return str_shuffle($password);
+    }
+
 }
