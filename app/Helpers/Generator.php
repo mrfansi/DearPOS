@@ -103,6 +103,4 @@ class Generator
 
         return $languages;
     }
-
-
 }
