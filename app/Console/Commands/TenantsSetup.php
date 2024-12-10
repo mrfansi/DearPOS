@@ -42,6 +42,7 @@ class TenantsSetup extends Command
                 if (Tenant::where('name', $value)->exists()) {
                     return 'This brand name is already taken.';
                 }
+
                 return null;
             },
             hint: 'This will be displayed as your brand name'
@@ -61,7 +62,7 @@ class TenantsSetup extends Command
             $domain = text(
                 label: 'Type your custom domain',
                 placeholder: 'ex. mydomain.com',
-                validate: fn(string $value) => strlen($value) < 3 ? 'The domain name must be at least 3 characters.' : null,
+                validate: fn (string $value) => strlen($value) < 3 ? 'The domain name must be at least 3 characters.' : null,
                 required: true,
                 hint: 'This will be displayed as your custom domain',
             );
@@ -97,17 +98,15 @@ class TenantsSetup extends Command
             'timezone' => $timezone,
             'currency' => $currency,
             'language' => $language,
-            'tenancy_db_name' => 'dearpos_' . str()->slug($name),
+            'tenancy_db_name' => 'dearpos_'.str()->slug($name),
             'tenancy_db_username' => str()->slug($name),
             'tenancy_db_password' => Generator::generateUniquePassword(),
         ]);
 
-
-
         $tenant->domains()->create([
             'domain' => $domain,
             'is_primary' => $tenant->domains()->count() === 0,
-            'is_custom_domain' => $isCustomDomain
+            'is_custom_domain' => $isCustomDomain,
         ]);
 
     }

@@ -107,7 +107,7 @@ class Generator
     /**
      * Generate a random unique password
      *
-     * @param int $length The length of the password (default: 12)
+     * @param  int  $length  The length of the password (default: 12)
      * @return string The generated password
      */
     public static function generateUniquePassword(int $length = 12): string
@@ -134,5 +134,4 @@ class Generator
         // Shuffle the password to make it more random
         return str_shuffle($password);
     }
-
 }
