@@ -1,0 +1,9 @@
+1. Saya menggunakan laravel 11.
+2. Semua model yang dibuat harus berdasarkan folder documents/03-design/database-tables.
+3. Semua migration yang dibuat harus berdasarkan folder documents/03-design/database-tables.
+4. Semua seeder yang dibuat harus berdasarkan folder documents/03-design/database-tables.
+5. Gunakan php artisan untuk membuat model, migration, dan seeder.
+6. Gunakan artisan migrate untuk melakukan migrasi.
+7. Gunakan artisan db:seed untuk melakukan seeder.
+8. Abaikan file documents/03-design/database-tables/01-core-system.md karena ini bawaan dari laravel.
+9. Setiap membuat model baru, tambahkan traits HasUuids, HasFactory, dan SoftDeletes ke model tersebut.
